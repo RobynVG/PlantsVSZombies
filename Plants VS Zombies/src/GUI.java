@@ -62,13 +62,33 @@ public class GUI {
 //	
 //	}
 	
-	public static GridObject toTheLeft(Zombie zombie) {
+	public static GridObject toTheLeft(GridObject zombie) { //mostly just called by zombies but no need to specify
 		int j = getX(zombie);
 		if (j - 1 == 0) //Beginning of board, Plants LOSE! Also returning null is not the same as NullSpace
 			return null;
 		int i = getY(zombie);
-		return (grid[i][j-1]);			
+		try {
+			return (grid[i][j-1]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Index out of bounds in To the left int i = " + i + "  j = " + j);
+			System.exit(1);
+		}
+		return null;
 	}
+	
+	public static GridObject toTheRight(GridObject plant) {
+		int j = getX(plant);
+		int i = getY(plant);
+		//Remember plants cannont be placed in zombie spawn			
+		try {
+			return (grid[i][j+1]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Index out of bounds in To the Right int i = " + i + "  j = " + j);
+			System.exit(1);
+		}
+		return null;
+	}
+	
 	
 	public static void move(GridObject gridObject, NullSpace nullSpace){
 		int j = getX(gridObject);
@@ -77,7 +97,6 @@ public class GUI {
 		int inext = getY(nullSpace);
 		grid[inext][jnext] = gridObject;
 		grid[i][j] = nullSpace;
-		printGrid();
 	}
 	
 	public static void remove(GridObject gridObject) {
@@ -117,8 +136,12 @@ public class GUI {
 		return grid[i][j];	
 	}
 	
-	
-	
-	
-	
+	private static GridObject castToSubclass(GridObject gridObject) {
+		if (gridObject.toShortString().equals("S"))
+			return (Sunflower)gridObject;
+		else if (gridObject.toShortString().equals("V"))
+			return (VenusFlyTrap)gridObject;
+	System.out.println("This code in cast to subclass shouldn't be reached");
+	return null;
+	}
 }

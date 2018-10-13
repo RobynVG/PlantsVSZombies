@@ -3,15 +3,18 @@ import java.util.ArrayList;
 public class Level {
 	static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
 	static ArrayList<Zombie> allZombies; //Actually all zombies
-	static int coins = 0; //0 to start but keep throughout different levels
+	static int coins = 10; 
 	
 	//Not ideal to code every level but good for now
 	public static void level1() {	
 		startLevel();
 
-		//available plants keeps 1 instance of each type available in level
+		
+		int previousCoins = coins; //The constructors below will take away coins must account for this
+		//available plants keeps ONLY 1  instance of each type available in level
 		allPlants.add(new Sunflower());
 		allPlants.add(new VenusFlyTrap());
+		coins = previousCoins;
 		
 		//zombies type/amount needs to be generated/level
 		for (int i = 0; i < 4; i++)
@@ -29,7 +32,7 @@ public class Level {
 			if (plant instanceof Sunflower) {
 				String availability = "";
 				if (Sunflower.currentTime == 0)
-					availability = "---available";
+					availability = "---available (" + Sunflower.price + " coins)";
 				else
 					availability = "---wait " + Sunflower.currentTime + " more turns";
 				System.out.print("(S)Sunflower       " + availability);
@@ -38,7 +41,7 @@ public class Level {
 			if (plant instanceof VenusFlyTrap) {
 				String availability = "";
 				if (VenusFlyTrap.currentTime == 0)
-					availability = "---available";
+					availability = "---available (" + VenusFlyTrap.price + " coins)";
 				else
 					availability = "---wait " + VenusFlyTrap.currentTime + " more turns";
 				System.out.print("(V)VenusFlyTrap    " + availability);

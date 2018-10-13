@@ -35,7 +35,13 @@ public class Main {
 			
 			System.out.println();
 			//zombieTurn();
+			
 			boardTurn();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			prepareNewTurn();
 		}
 	}
@@ -52,8 +58,18 @@ public class Main {
 				zombiesOnBoard.add((Zombie)gridObject);
 		} 
 		
-		for (Zombie zombie: zombiesOnBoard) {
-			zombie.go();
+		if (!zombiesOnBoard.isEmpty()) {
+			System.out.println("Time for the attacks");
+			System.out.println();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			for (Zombie zombie: zombiesOnBoard) {
+				zombie.go();
+			}
+			GUI.printGrid();
 		}
 		
 		spawnZombies();
@@ -65,16 +81,25 @@ public class Main {
 		while (true) {
 			Level.printAllPlants();
 			System.out.println();
+			System.out.println("You have " + Level.coins + " coins");
+			System.out.println();
 			
-			boolean noAvailablePlants = true;
-			for (Plant plant: Level.allPlants) {
-				if (plant.isAvailable()) {
-					noAvailablePlants = false;
-					break;
+			
+			if (!(plantAvailable())||!(plantAffordable())) {
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-			}
-			if (noAvailablePlants) {
-				System.out.println("There are no available plants. You must forfeit your turn");
+				if (!(plantAvailable()))
+					System.out.println("There are no available plants. You must forfeit your turn....");
+				else
+					System.out.println("You cannot afford any plants. You must forfeit your turn");
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				break;
 			}
 				
@@ -86,6 +111,7 @@ public class Main {
 				printHelp();
 			Plant plantChoice = createPlant(pChoice);
 			while (plantChoice == null) {
+				System.out.print("Pick a Plant: ");
 				pChoice = reader.next();
 				if (pChoice.equals("h"))
 					printHelp();
@@ -130,6 +156,9 @@ public class Main {
 				plantChoice.resetTime(); //Count down to use this plant restarts
 				break;
 			}
+			//BUG HERE!!!!! Coins are not returned to player and chosen plant's timer has been reset
+			//Solution1 allow player to reset only XY values (easier)
+			//Solution2 somehow create plants only after XY is chosen then allow player to completely reset choice (preferred)
 			System.out.println("You may only place your plant on an available space. Please try again.");
 		}
 		
@@ -138,6 +167,18 @@ public class Main {
 	private static void spawnZombies() {
 		if (Level.allZombies.isEmpty())
 			return;
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Zombies are spawning....");
+		System.out.println();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		int yPos = ThreadLocalRandom.current().nextInt(0, 3);
 		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.allZombies.size()); //zombies are filled in order of type need to pick randomly
 		Zombie zombie = Level.allZombies.remove(randZombie); //Unlike plant this contains all zombies for the level. Must remove to place on board.
@@ -146,35 +187,43 @@ public class Main {
 	}
 	
 	private static Plant createPlant(String choice) {
-		if (choice.equals("S")) {
-			for (Plant plant: Level.allPlants) {
-				if (plant instanceof Sunflower) {
-					if (((Sunflower)plant).isAvailable())
-						return new Sunflower(); //available plants has types that are available not number
+		for (Plant plant: Level.allPlants) {
+			if (choice.equals(plant.toShortString())){
+				if (!(plant.isAvailable())) {
 					System.out.println("This plant is not available yet");
 					return null;
 				}
-			}
-		}
-		if (choice.equals("V")) {
-			for (Plant plant: Level.allPlants) {
-				if (plant instanceof VenusFlyTrap) {
-					if (((VenusFlyTrap)plant).isAvailable())
-						return new VenusFlyTrap(); //available plants has types that are available not number
-					System.out.println("This plant is not available yet");
+				else if (!(plant.isAffordable())) {
+					System.out.println("You cannot afford this plant");
 					return null;
+				}
+				else {
+					if (choice.equals("S"))
+						return new Sunflower();
+					else if (choice.equals("V"))
+						return new VenusFlyTrap();
+					///PUT MORE PLANTS HERE
+					else 
+						System.out.println("MUST DEFINE THIS PLANT IN CREATE FUNCTION");
 				}
 			}
 		}
 		System.out.println("Not a plant name. Try again: ");
 		return null;
 	}
-	
+
+		
 	
 	//Seems redundant atm but thinking there may be more actions to be performed at the end of board turn later.
 	private static void prepareNewTurn() {
-		for (Plant plant : Level.allPlants)
-			plant.newTurn(); //This function just decreases the wait time for all plant types
+		for (Plant plant : Level.allPlants) //This function just decreases the wait time for all plant types. Does this to one of each plant
+			plant.newTurn(); 
+		for (GridObject plant : GUI.gridObjects) { //Possibility to extend this to other objects and call a method they all inherit instead of instance of.
+			if (plant instanceof Sunflower) {
+				Level.coins += Sunflower.coinBonus;
+			}
+				
+		}
 	}
 	
 	private static void printHelp() {
@@ -182,7 +231,22 @@ public class Main {
 		System.out.println();
 	}
 
-
-
+	private static boolean plantAvailable() {
+		for (Plant plant: Level.allPlants) {
+			if (plant.isAvailable()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static boolean plantAffordable() {
+		for (Plant plant: Level.allPlants) {
+			if (plant.isAffordable()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 

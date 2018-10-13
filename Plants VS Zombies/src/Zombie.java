@@ -1,6 +1,7 @@
 
 public abstract class Zombie extends GridObject {
-	protected int strength; //The amount of health taken off from 1 attack
+	protected int strength; //The amount of health taken off a plant from 1 attack
+	protected int health;
 	
 	public void go() {
 		GridObject left = GUI.toTheLeft(this);
@@ -12,6 +13,12 @@ public abstract class Zombie extends GridObject {
 			
 		//else
 			//another zombie;  //Should theoretically only happen if the zombie before this one is attacking a plant
+	}
+	
+	public void loseHealth(int plantStrength) {
+		health = health - plantStrength;
+		if (health <= 0)
+			GUI.remove(this);
 	}
 	
 	//All attacks should be different -Override

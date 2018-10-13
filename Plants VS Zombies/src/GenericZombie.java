@@ -1,9 +1,8 @@
 
 public class GenericZombie extends Zombie{
+	private int strength = 100;
+	private int health = 250;
 	
-	public GenericZombie() {
-		strength = 100;
-	}
 	
 	@Override
 	public String toString() {
@@ -13,5 +12,11 @@ public class GenericZombie extends Zombie{
 	@Override
 	public void attack(Plant plant) {
 		plant.loseHealth(strength);
+	}
+	
+	public void loseHealth(int plantStrength) {
+		health = health - plantStrength;
+		if (health <= 0)
+			GUI.remove(this);
 	}
 }

@@ -5,6 +5,10 @@ public abstract class GridObject {
 		return "";
 	}
 	
+	public String toShortString() {
+		return toString().substring(2,3);
+	}
+	
 	public boolean nextToAttacker() {
 		if (this instanceof Zombie) {
 			
