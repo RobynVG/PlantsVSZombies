@@ -71,6 +71,7 @@ public class GUI {
 			return (grid[i][j-1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("Index out of bounds in To the left int i = " + i + "  j = " + j);
+			printGrid();
 			System.exit(1);
 		}
 		return null;
@@ -84,6 +85,7 @@ public class GUI {
 			return (grid[i][j+1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("Index out of bounds in To the Right int i = " + i + "  j = " + j);
+			printGrid();
 			System.exit(1);
 		}
 		return null;
@@ -98,6 +100,7 @@ public class GUI {
 		grid[inext][jnext] = gridObject;
 		grid[i][j] = nullSpace;
 	}
+	
 	
 	public static void remove(GridObject gridObject) {
 		int j = getX(gridObject);
@@ -114,7 +117,7 @@ public class GUI {
 					return j;
 			}
 		}
-		return 0;
+		return -1;
 	}
 	
 	private static int getY(GridObject gridObject) {
@@ -125,7 +128,7 @@ public class GUI {
 					return i;
 			}
 		}
-		return 0;
+		return -1;
 	}
 	
 	public static boolean isEmpty(int posY, int posX) {
@@ -134,14 +137,5 @@ public class GUI {
 	
 	private static GridObject getObject(int i, int j) {
 		return grid[i][j];	
-	}
-	
-	private static GridObject castToSubclass(GridObject gridObject) {
-		if (gridObject.toShortString().equals("S"))
-			return (Sunflower)gridObject;
-		else if (gridObject.toShortString().equals("V"))
-			return (VenusFlyTrap)gridObject;
-	System.out.println("This code in cast to subclass shouldn't be reached");
-	return null;
 	}
 }

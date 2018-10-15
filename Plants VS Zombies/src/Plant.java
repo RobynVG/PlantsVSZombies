@@ -26,6 +26,9 @@ public abstract class Plant extends GridObject{
 	//object, it will execute here not in the subclass. Objects are taken out of the grid as
 	//grid objects then cast to Plant or Zombie. Here it is a problem...
 	public void loseHealth(int zombieStrength) {
+		health = health - zombieStrength;
+		if (health <= 0)
+			GUI.remove(this);
 	}
 	
 	public void resetTime() { //when a plant is placed

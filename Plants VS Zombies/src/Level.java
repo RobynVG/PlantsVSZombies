@@ -32,7 +32,7 @@ public class Level {
 			if (plant instanceof Sunflower) {
 				String availability = "";
 				if (Sunflower.currentTime == 0)
-					availability = "---available (" + Sunflower.price + " coins)";
+					availability = "---available (" + Sunflower.PRICE + " coins)";
 				else
 					availability = "---wait " + Sunflower.currentTime + " more turns";
 				System.out.print("(S)Sunflower       " + availability);
@@ -41,7 +41,7 @@ public class Level {
 			if (plant instanceof VenusFlyTrap) {
 				String availability = "";
 				if (VenusFlyTrap.currentTime == 0)
-					availability = "---available (" + VenusFlyTrap.price + " coins)";
+					availability = "---available (" + VenusFlyTrap.PRICE + " coins)";
 				else
 					availability = "---wait " + VenusFlyTrap.currentTime + " more turns";
 				System.out.print("(V)VenusFlyTrap    " + availability);

@@ -47,18 +47,20 @@ public class Main {
 	}
 	
 	public static void boardTurn() {
-		ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
 		ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
-		
-		//This is a work around for a "ConcurrentModificationException" error. Maybe the above arrays should be stored/created somewhere elsewhere
+		ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>(); //These two arraylists are defined to avoid concurrent modification exception. Can't iterate through
+		//zombies and plants at the same time in case one dies.
 		for (GridObject gridObject: GUI.gridObjects) {
 			if (gridObject instanceof Plant)
 				plantsOnBoard.add((Plant)gridObject);
-			else if (gridObject instanceof Zombie)
-				zombiesOnBoard.add((Zombie)gridObject);
-		} 
+		}
 		
-		if (!zombiesOnBoard.isEmpty()) {
+		for (GridObject gridObject: GUI.gridObjects) {
+			if (gridObject instanceof Zombie)
+				zombiesOnBoard.add((Zombie)gridObject);
+		}  // This is just to check if zombies are empty at start. Array will need to be reconstructed for the zombies turn in case one dies.
+		
+		if (!zombiesOnBoard.isEmpty()) { //This should be checked elsewhere instead of the set up above
 			System.out.println("Time for the attacks");
 			System.out.println();
 			try {
@@ -66,12 +68,19 @@ public class Main {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			for (Zombie zombie: zombiesOnBoard) {
+			for (Plant plant: plantsOnBoard) { //Plants attack first. Need to iterate through twice in case a zombie dies.
+				plant.go();
+			}
+			zombiesOnBoard = new ArrayList<Zombie>();
+			for (GridObject gridObject: GUI.gridObjects) {
+				if (gridObject instanceof Zombie)
+					zombiesOnBoard.add((Zombie)gridObject);
+			} // Reconstruct array in case a zombie was killed by a plant
+			for (Zombie zombie: zombiesOnBoard) { //Plants attack first. Need to iterate through twice in case a zombie dies.
 				zombie.go();
 			}
 			GUI.printGrid();
 		}
-		
 		spawnZombies();
 	} 
 	
@@ -183,7 +192,8 @@ public class Main {
 		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.allZombies.size()); //zombies are filled in order of type need to pick randomly
 		Zombie zombie = Level.allZombies.remove(randZombie); //Unlike plant this contains all zombies for the level. Must remove to place on board.
 		
-		GUI.placeZombie(zombie, GUI.GRID_WIDTH-1 , yPos);
+		if (GUI.isEmpty(GUI.GRID_WIDTH-1 , yPos))  //Just doesn't happen if the intended position is occupied. This should be fixed
+			GUI.placeZombie(zombie, GUI.GRID_WIDTH-1 , yPos);
 	}
 	
 	private static Plant createPlant(String choice) {
@@ -220,7 +230,7 @@ public class Main {
 			plant.newTurn(); 
 		for (GridObject plant : GUI.gridObjects) { //Possibility to extend this to other objects and call a method they all inherit instead of instance of.
 			if (plant instanceof Sunflower) {
-				Level.coins += Sunflower.coinBonus;
+				Level.coins += Sunflower.COIN_BONUS;
 			}
 				
 		}

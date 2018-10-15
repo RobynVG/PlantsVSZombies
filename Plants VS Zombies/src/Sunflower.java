@@ -1,11 +1,12 @@
 
 public class Sunflower extends Plant {
-	static int fullTime = 2;	//Actually this # - 1. So if 3, its 2 turns.
-	static int currentTime = 0; //Time until another Sunflower may be spawned
-	protected int health = 100; //1 Hit, weak flower
-	protected int strength = 0; //Can't hurt anyone :(
-	protected static int price = 2;
-	public static final int coinBonus = 1; 
+	protected static final int FULL_TIME = 2;	//Actually this # - 1. So if 3, its 2 turns.
+	protected static final int STRENGTH = 0;
+	protected static final int FULL_HEALTH = 100;
+	protected static final int PRICE = 2;
+	public static final int COIN_BONUS = 1;
+	
+	static int currentTime = 0;
 	
 	public Sunflower() {
 		currentTime = fullTime;//Should reset in parent. This constructor probably not needed

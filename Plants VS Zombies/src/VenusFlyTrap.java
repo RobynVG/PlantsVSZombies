@@ -1,14 +1,19 @@
 
 public class VenusFlyTrap extends Plant {
-	static final int fullTime = 3;	//Actually this # - 1. So if 3, its 2 turns.
-	static int currentTime = 0; //Time until another Sunflower may be spawned
-	protected final int strength = 150; //BEAST
-	protected int health = 300;
-	protected static int price = 5;
+	protected static final int FULL_TIME = 3;	//Actually this # - 1. So if 3, its 2 turns.
+	protected static final int STRENGTH = 150; //BEAST
+	protected static final int FULL_HEALTH = 320;
+	protected static final int PRICE = 5;
+	
+	static int currentTime = 0;
 	
 	
 	public VenusFlyTrap() {
-		currentTime = fullTime;
+		fullTime = FULL_TIME;
+		currentTime = fullTime; //new object created - reset static timer
+		strength = STRENGTH;
+		health = FULL_HEALTH;
+		price = PRICE;
 	}
 
 	//VenusFlyTraps only zombies in front of them
@@ -42,11 +47,11 @@ public class VenusFlyTrap extends Plant {
 		Level.coins -= price;
 	}
 	
-	public void loseHealth(int zombieStrength) {
-		health = health - zombieStrength;
-		if (health <= 0)
-			GUI.remove(this);
-	}
+//	public void loseHealth(int zombieStrength) {
+//		health = health - zombieStrength;
+//		if (health <= 0)
+//			GUI.remove(this);
+//	}
 	
 	
 }
