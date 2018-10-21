@@ -6,7 +6,8 @@ public class Main {
 	static Scanner reader = new Scanner(System.in); //need to declare here because it must stay open most of the game and player
 	//turn must have access. when a scanner is closed so is it's input stream.
 	
-
+	private int num;
+	
 	public static void main(String[] args) {
 		System.out.println("At any point in the game enter 'h' for game options\n");
 		try {
@@ -16,6 +17,7 @@ public class Main {
 		}
 		Level.level1();
 		GUI gui = new GUI();
+
 		
 		
 		while(true) {
