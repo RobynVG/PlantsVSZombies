@@ -8,11 +8,36 @@ public class GUI {
 	public static final String GRID_Y[] = { "1", "2", "3", "4" };
 	public static GridObject[][] grid;
 	public static ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
-	// public static ArrayList<Plant> boardPlant = new ArrayList<Plant>();
-	// public static ArrayList<Zombie> boardZombie = new ArrayList<Zombie>();
 
 	public GUI() {
 		setupGrid();
+	}
+	
+	/*
+	 * This method checks if there are any zombies left on the board
+	 */
+	public boolean zombiesLeft() {
+		for(GridObject[] g: grid) {
+			for(GridObject obj: g) {
+				if(obj instanceof Zombie) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	/*
+	 * This method checks if there are any Zombies in the first column
+	 */
+	public static boolean endLevel() {
+		for(int i = 0; i < GRID_Y.length; i++) {
+			if(getObject(i,0) instanceof Zombie) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/*
@@ -85,17 +110,9 @@ public class GUI {
 		printGrid();
 	}
 
-//	public int getXPos(GridObject object) {
-//		
-//	}
-//
-//	public int getYPos(GridObject object) {
-//	
-//	}
-
 	public static GridObject toTheLeft(GridObject zombie) { // mostly just called by zombies but no need to specify
 		int j = getX(zombie);
-		if (j - 1 == 0) // Beginning of board, Plants LOSE! Also returning null is not the same as
+		if (j - 1 == -1) // Beginning of board, Plants LOSE! Also returning null is not the same as
 						// NullSpace
 			return null;
 		int i = getY(zombie);
@@ -164,7 +181,7 @@ public class GUI {
 	public static boolean isEmpty(int posY, int posX) {
 		return (getObject(posX, posY) instanceof NullSpace);
 	}
-
+	
 	private static GridObject getObject(int i, int j) {
 		return grid[i][j];
 	}

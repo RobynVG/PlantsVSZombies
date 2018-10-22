@@ -13,7 +13,7 @@ public class Sunflower extends Plant {
 	}
 	
 	public void purchase() { //Static var (price) must redefine function here
-		Level.coins -= price;
+		Level.coins -= PRICE;
 	}
 
 	public String toString() {

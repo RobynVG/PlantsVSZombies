@@ -8,6 +8,7 @@ public class Level {
 	//Not ideal to code every level but good for now
 	public static void level1() {	
 		startLevel();
+		int numOfZombies = 2;
 
 		
 		int previousCoins = coins; //The constructors below will take away coins must account for this
@@ -17,7 +18,7 @@ public class Level {
 		coins = previousCoins;
 		
 		//zombies type/amount needs to be generated/level
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < numOfZombies; i++)
 			allZombies.add(new GenericZombie());
 		
 		for(Plant plant: allPlants)

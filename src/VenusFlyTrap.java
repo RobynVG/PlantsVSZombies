@@ -44,7 +44,7 @@ public class VenusFlyTrap extends Plant {
 	}
 	
 	public void purchase() { //Static var (price) must redefine function here
-		Level.coins -= price;
+		Level.coins -= PRICE;
 	}
 	
 //	public void loseHealth(int zombieStrength) {

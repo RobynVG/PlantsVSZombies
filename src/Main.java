@@ -8,9 +8,34 @@ public class Main {
 	// turn must have access. when a scanner is closed so is it's input stream.
 
 	public static void main(String[] args) {
+		startGame();
+	}
+
+	/*
+	 * This method asks if the player wants to restart the game
+	 */
+	public static void reStart() {
+		char reply;
+		do {
+			System.out.println("Would you like to Re-Start the Level? y/n");
+			reply = reader.next().charAt(0);
+		} while (reply != 'y' && reply != 'n');
+
+		if (reply == 'y') {
+			startGame();
+		} else {
+			System.out.println("GAME OVER----------------------------------------------------");
+			System.exit(0);
+		}
+	}
+
+	/*
+	 * This method starts the game
+	 */
+	public static void startGame() {
 		System.out.println("At any point in the game enter 'h' for game options\n");
 		try {
-			Thread.sleep(500);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -20,29 +45,35 @@ public class Main {
 		while (true) {
 			playerTurn();
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			// boardTurn();
-			// System.out.println("Zombies are coming..."); //Next few lines to be replaced
-			// with a pause
-//			try {
-//				Thread.sleep(5000);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
 
 			System.out.println();
-			// zombieTurn();
 
+			// Call this multiple times if you want the zombies to move multiple space /
+			// more to spawn at a time
 			boardTurn();
+			
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			prepareNewTurn();
+
+			// If Player Loses the Level
+			if (GUI.endLevel()) {
+				System.out.println("LOST LEVEL!-------------------------------------------------------" + "\n");
+				reStart();
+			}
+
+			// If Player Wins the Level
+			if (Level.allZombies.isEmpty() && !gui.zombiesLeft()) {
+				System.out.print("WON LEVEL!----------------------------------------------------------" + "\n");
+				reStart();
+			}
 		}
 	}
 
@@ -79,6 +110,7 @@ public class Main {
 				if (gridObject instanceof Zombie)
 					zombiesOnBoard.add((Zombie) gridObject);
 			} // Reconstruct array in case a zombie was killed by a plant
+
 			for (Zombie zombie : zombiesOnBoard) { // Plants attack first. Need to iterate through twice in case a
 													// zombie dies.
 				zombie.go();
@@ -131,21 +163,24 @@ public class Main {
 			boolean notAllowedLocation = true;
 			String sxPos = "";
 			String syPos = "";
-			
-			//loop checks if the location specified by the player is allowed
+
+			// loop checks if the location specified by the player is allowed
 			while (notAllowedLocation) {
 				System.out.print("Pick Position: ");
 				String location = reader.next();
-				System.out.println(location.charAt(0) + "   " + location.charAt(1));
-				if ((location.charAt(0) >= 'A' && location.charAt(0) <= 'G') && ((Character.getNumericValue(location.charAt(1)) >= 1) && (Character.getNumericValue(location.charAt(1)) <= 4) )) {
-					// check if entered column (Letter) is in between A and G
-					// check if entered row (number) is in between 1 and 4
-					sxPos += location.charAt(0);
-					syPos += location.charAt(1);
-					notAllowedLocation = false;
+				if (location.length() == 2) {
+					if ((location.charAt(0) >= 'A' && location.charAt(0) <= 'G')
+							&& ((Character.getNumericValue(location.charAt(1)) >= 1)
+									&& (Character.getNumericValue(location.charAt(1)) <= 4))) {
+						// check if entered column (Letter) is in between A and G
+						// check if entered row (number) is in between 1 and 4
+						sxPos += location.charAt(0);
+						syPos += location.charAt(1);
+						notAllowedLocation = false;
+					}
 				}
 			}
-			
+
 			if (GUI.isEmpty(GUI.getGridX(sxPos), GUI.getGridY(syPos))) {
 				GUI.placePlant(plantChoice, GUI.getGridX(sxPos), GUI.getGridY(syPos));
 				plantChoice.resetTime(); // Count down to use this plant restarts
@@ -199,6 +234,7 @@ public class Main {
 					return null;
 				} else {
 					if (choice.equals("S"))
+
 						return new Sunflower();
 					else if (choice.equals("V"))
 						return new VenusFlyTrap();
