@@ -4,36 +4,67 @@ import java.util.ArrayList;
 public class GUI {
 	public static final int GRID_HEIGHT = 4;
 	public static final int GRID_WIDTH = 7;
-	public static final String GRID_X[] = {"A","B","C","D","E","F","G"};  //Must be same length as GRID_WIDTH
-	public static final String GRID_Y[] = {"1","2","3","4"};
+	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G" }; // Must be same length as GRID_WIDTH
+	public static final String GRID_Y[] = { "1", "2", "3", "4" };
 	public static GridObject[][] grid;
 	public static ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
-	//public static ArrayList<Plant> boardPlant = new ArrayList<Plant>();
-	//public static ArrayList<Zombie> boardZombie = new ArrayList<Zombie>();
-	
+	// public static ArrayList<Plant> boardPlant = new ArrayList<Plant>();
+	// public static ArrayList<Zombie> boardZombie = new ArrayList<Zombie>();
+
 	public GUI() {
 		setupGrid();
 	}
 	
+	/*
+	 * This method returns the index at which the given character (its really a string) is at
+	 * 
+	 * @Param String c, a single valued string
+	 * @Return the index at which the String c was found first.
+	 */
+	public static int getGridX(String c) {
+		for (int i = 0; i < GRID_X.length; i++) {
+			if(c.equals(GRID_X[i])) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/*
+	 * This method returns the index at which the given character (its really a string) is at
+	 * 
+	 * @Param String c, a single valued string
+	 * @Return the index at which the String c was found first.
+	 */
+	public static int getGridY(String c) {
+		for (int i = 0; i < GRID_Y.length; i++) {
+			if(c.equals(GRID_Y[i])) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	public static void setupGrid() {
 		grid = new GridObject[GRID_HEIGHT][GRID_WIDTH];
-		
+
 		for (int i = 0; i < GRID_HEIGHT; i++) {
 			for (int j = 0; j < GRID_WIDTH; j++) {
 				grid[i][j] = new NullSpace();
 			}
-		} printGrid();
+		}
+		printGrid();
 	}
-	
+
 	public static void printGrid() {
 		System.out.print("   ");
-		for (String s: GRID_X) {
+		for (String s : GRID_X) {
 			System.out.print(s + "    ");
 		}
 		System.out.println();
 		for (int i = 0; i < GRID_HEIGHT; i++) {
 			for (int j = 0; j < GRID_WIDTH; j++) {
-				if (j==0)
+				if (j == 0)
 					System.out.print(i + 1);
 				System.out.print(grid[i][j]);
 			}
@@ -41,7 +72,7 @@ public class GUI {
 		}
 		System.out.println();
 	}
-	
+
 	public static void placePlant(Plant plant, int posY, int posX) {
 		grid[posX][posY] = plant;
 		gridObjects.add(plant);
@@ -53,7 +84,7 @@ public class GUI {
 		gridObjects.add(zombie);
 		printGrid();
 	}
-	
+
 //	public int getXPos(GridObject object) {
 //		
 //	}
@@ -61,14 +92,15 @@ public class GUI {
 //	public int getYPos(GridObject object) {
 //	
 //	}
-	
-	public static GridObject toTheLeft(GridObject zombie) { //mostly just called by zombies but no need to specify
+
+	public static GridObject toTheLeft(GridObject zombie) { // mostly just called by zombies but no need to specify
 		int j = getX(zombie);
-		if (j - 1 == 0) //Beginning of board, Plants LOSE! Also returning null is not the same as NullSpace
+		if (j - 1 == 0) // Beginning of board, Plants LOSE! Also returning null is not the same as
+						// NullSpace
 			return null;
 		int i = getY(zombie);
 		try {
-			return (grid[i][j-1]);
+			return (grid[i][j - 1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("Index out of bounds in To the left int i = " + i + "  j = " + j);
 			printGrid();
@@ -76,13 +108,13 @@ public class GUI {
 		}
 		return null;
 	}
-	
+
 	public static GridObject toTheRight(GridObject plant) {
 		int j = getX(plant);
 		int i = getY(plant);
-		//Remember plants cannont be placed in zombie spawn			
+		// Remember plants cannont be placed in zombie spawn
 		try {
-			return (grid[i][j+1]);
+			return (grid[i][j + 1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("Index out of bounds in To the Right int i = " + i + "  j = " + j);
 			printGrid();
@@ -90,9 +122,8 @@ public class GUI {
 		}
 		return null;
 	}
-	
-	
-	public static void move(GridObject gridObject, NullSpace nullSpace){
+
+	public static void move(GridObject gridObject, NullSpace nullSpace) {
 		int j = getX(gridObject);
 		int i = getY(gridObject);
 		int jnext = getX(nullSpace);
@@ -100,17 +131,16 @@ public class GUI {
 		grid[inext][jnext] = gridObject;
 		grid[i][j] = nullSpace;
 	}
-	
-	
+
 	public static void remove(GridObject gridObject) {
 		int j = getX(gridObject);
 		int i = getY(gridObject);
 		grid[i][j] = new NullSpace();
 		gridObjects.remove(gridObject);
 	}
-	
+
 	private static int getX(GridObject gridObject) {
-		int i,j = 0;
+		int i, j = 0;
 		for (i = 0; i < GRID_HEIGHT; i++) {
 			for (j = 0; j < GRID_WIDTH; j++) {
 				if (grid[i][j].equals(gridObject))
@@ -119,9 +149,9 @@ public class GUI {
 		}
 		return -1;
 	}
-	
+
 	private static int getY(GridObject gridObject) {
-		int i,j = 0;
+		int i, j = 0;
 		for (i = 0; i < GRID_HEIGHT; i++) {
 			for (j = 0; j < GRID_WIDTH; j++) {
 				if (grid[i][j].equals(gridObject))
@@ -130,12 +160,12 @@ public class GUI {
 		}
 		return -1;
 	}
-	
+
 	public static boolean isEmpty(int posY, int posX) {
-		return (getObject(posX,posY) instanceof NullSpace);
+		return (getObject(posX, posY) instanceof NullSpace);
 	}
-	
+
 	private static GridObject getObject(int i, int j) {
-		return grid[i][j];	
+		return grid[i][j];
 	}
 }
