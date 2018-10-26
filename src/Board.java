@@ -1,7 +1,7 @@
-import java.awt.Dimension;
+
 import java.util.ArrayList;
 
-public class GUI {
+public class Board {
 	public static final int GRID_HEIGHT = 4;
 	public static final int GRID_WIDTH = 7;
 	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G" }; // Must be same length as GRID_WIDTH
@@ -9,46 +9,48 @@ public class GUI {
 	public static GridObject[][] grid;
 	public static ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
 
-	public GUI() {
+	public Board() {
 		setupGrid();
 	}
-	
+
 	/*
 	 * This method checks if there are any zombies left on the board
 	 */
 	public boolean zombiesLeft() {
-		for(GridObject[] g: grid) {
-			for(GridObject obj: g) {
-				if(obj instanceof Zombie) {
+		for (GridObject[] g : grid) {
+			for (GridObject obj : g) {
+				if (obj instanceof Zombie) {
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/*
 	 * This method checks if there are any Zombies in the first column
 	 */
 	public static boolean endLevel() {
-		for(int i = 0; i < GRID_Y.length; i++) {
-			if(getObject(i,0) instanceof Zombie) {
+		for (int i = 0; i < GRID_Y.length; i++) {
+			if (getObject(i, 0) instanceof Zombie) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/*
-	 * This method returns the index at which the given character (its really a string) is at
+	 * This method returns the index at which the given character (its really a
+	 * string) is at
 	 * 
 	 * @Param String c, a single valued string
+	 * 
 	 * @Return the index at which the String c was found first.
 	 */
 	public static int getGridX(String c) {
 		for (int i = 0; i < GRID_X.length; i++) {
-			if(c.equals(GRID_X[i])) {
+			if (c.equals(GRID_X[i])) {
 				return i;
 			}
 		}
@@ -56,20 +58,22 @@ public class GUI {
 	}
 
 	/*
-	 * This method returns the index at which the given character (its really a string) is at
+	 * This method returns the index at which the given character (its really a
+	 * string) is at
 	 * 
 	 * @Param String c, a single valued string
+	 * 
 	 * @Return the index at which the String c was found first.
 	 */
 	public static int getGridY(String c) {
 		for (int i = 0; i < GRID_Y.length; i++) {
-			if(c.equals(GRID_Y[i])) {
+			if (c.equals(GRID_Y[i])) {
 				return i;
 			}
 		}
 		return -1;
 	}
-	
+
 	public static void setupGrid() {
 		grid = new GridObject[GRID_HEIGHT][GRID_WIDTH];
 
@@ -113,7 +117,7 @@ public class GUI {
 	public static GridObject toTheLeft(GridObject zombie) { // mostly just called by zombies but no need to specify
 		int j = getX(zombie);
 		if (j - 1 == -1) // Beginning of board, Plants LOSE! Also returning null is not the same as
-						// NullSpace
+							// NullSpace
 			return null;
 		int i = getY(zombie);
 		try {
@@ -129,13 +133,8 @@ public class GUI {
 	public static GridObject toTheRight(GridObject plant) {
 		int j = getX(plant);
 		int i = getY(plant);
-		// Remember plants cannont be placed in zombie spawn
-		try {
-			return (grid[i][j + 1]);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Index out of bounds in To the Right int i = " + i + "  j = " + j);
-			printGrid();
-			System.exit(1);
+		if(i != -1 || j != -1) {
+			return grid[i][j+1];
 		}
 		return null;
 	}
@@ -154,6 +153,23 @@ public class GUI {
 		int i = getY(gridObject);
 		grid[i][j] = new NullSpace();
 		gridObjects.remove(gridObject);
+	}
+
+	/*
+	 * Removes the plant at specified Column and Row
+	 * 
+	 * @Param Column the plant is in
+	 * 
+	 * @Param Row the plant is in
+	 * 
+	 * @Return True if plant is removed, false otherwise
+	 */
+	public static boolean removePlant(int col, int row) {
+		grid[col][row] = new NullSpace();
+		if(grid[col][row] instanceof NullSpace) {
+			return true;
+		}
+		return false;
 	}
 
 	private static int getX(GridObject gridObject) {
@@ -181,8 +197,15 @@ public class GUI {
 	public static boolean isEmpty(int posY, int posX) {
 		return (getObject(posX, posY) instanceof NullSpace);
 	}
-	
+
 	private static GridObject getObject(int i, int j) {
 		return grid[i][j];
+	}
+	
+	public static boolean isPlant(int posY, int posX) {
+		if(grid[posY][posX] instanceof Plant) {
+			return true;
+		}
+		return false;
 	}
 }

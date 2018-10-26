@@ -4,7 +4,7 @@ public abstract class Zombie extends GridObject {
 	protected int health;
 	
 	public void go() {
-		GridObject left = GUI.toTheLeft(this);
+		GridObject left = Board.toTheLeft(this);
 		if (left instanceof Plant )
 			attack((Plant)left);
 		else if (left instanceof NullSpace)
@@ -18,7 +18,7 @@ public abstract class Zombie extends GridObject {
 	public void loseHealth(int plantStrength) {
 		health = health - plantStrength;
 		if (health <= 0)
-			GUI.remove(this);
+			Board.remove(this);
 	}
 	
 	//All attacks should be different -Override
@@ -26,7 +26,7 @@ public abstract class Zombie extends GridObject {
 	
 	//For now zombies only move one space -eventually this must be overridden
 	public void advance(NullSpace nullSpace) {
-		GUI.move(this, nullSpace);
+		Board.move(this, nullSpace);
 	}
 
 	//This class is abstract, no need for a string.

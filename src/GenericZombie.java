@@ -17,6 +17,6 @@ public class GenericZombie extends Zombie{
 	public void loseHealth(int plantStrength) {
 		health = health - plantStrength;
 		if (health <= 0)
-			GUI.remove(this);
+			Board.remove(this);
 	}
 }

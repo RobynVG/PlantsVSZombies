@@ -3,9 +3,7 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
-	static Scanner reader = new Scanner(System.in); // need to declare here because it must stay open most of the game
-													// and player
-	// turn must have access. when a scanner is closed so is it's input stream.
+	static Scanner reader = new Scanner(System.in);
 
 	public static void main(String[] args) {
 		startGame();
@@ -33,14 +31,13 @@ public class Main {
 	 * This method starts the game
 	 */
 	public static void startGame() {
-		System.out.println("At any point in the game enter 'h' for game options\n");
 		try {
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		Level.level1();
-		GUI gui = new GUI();
+		Board gui = new Board();
 
 		while (true) {
 			playerTurn();
@@ -52,10 +49,8 @@ public class Main {
 
 			System.out.println();
 
-			// Call this multiple times if you want the zombies to move multiple space /
-			// more to spawn at a time
 			boardTurn();
-			
+
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
@@ -64,7 +59,7 @@ public class Main {
 			prepareNewTurn();
 
 			// If Player Loses the Level
-			if (GUI.endLevel()) {
+			if (Board.endLevel()) {
 				System.out.println("LOST LEVEL!-------------------------------------------------------" + "\n");
 				reStart();
 			}
@@ -82,12 +77,12 @@ public class Main {
 		ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>(); // These two arraylists are defined to avoid concurrent
 																	// modification exception. Can't iterate through
 		// zombies and plants at the same time in case one dies.
-		for (GridObject gridObject : GUI.gridObjects) {
+		for (GridObject gridObject : Board.gridObjects) {
 			if (gridObject instanceof Plant)
 				plantsOnBoard.add((Plant) gridObject);
 		}
 
-		for (GridObject gridObject : GUI.gridObjects) {
+		for (GridObject gridObject : Board.gridObjects) {
 			if (gridObject instanceof Zombie)
 				zombiesOnBoard.add((Zombie) gridObject);
 		} // This is just to check if zombies are empty at start. Array will need to be
@@ -106,7 +101,7 @@ public class Main {
 				plant.go();
 			}
 			zombiesOnBoard = new ArrayList<Zombie>();
-			for (GridObject gridObject : GUI.gridObjects) {
+			for (GridObject gridObject : Board.gridObjects) {
 				if (gridObject instanceof Zombie)
 					zombiesOnBoard.add((Zombie) gridObject);
 			} // Reconstruct array in case a zombie was killed by a plant
@@ -115,48 +110,53 @@ public class Main {
 													// zombie dies.
 				zombie.go();
 			}
-			GUI.printGrid();
+			Board.printGrid();
 		}
 		spawnZombies();
 	}
 
 	public static void playerTurn() {
-		while (true) {
-			Level.printAllPlants();
-			System.out.println();
-			System.out.println("You have " + Level.coins + " coins");
-			System.out.println();
+		Level.printAllPlants();
+		System.out.println();
+		System.out.println("You have " + Level.coins + " coins");
+		System.out.println();
 
-			if (!(plantAvailable()) || !(plantAffordable())) {
-				try {
-					Thread.sleep(1500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				if (!(plantAvailable()))
-					System.out.println("There are no available plants. You must forfeit your turn....");
-				else
-					System.out.println("You cannot afford any plants. You must forfeit your turn");
-				try {
-					Thread.sleep(1500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				break;
+		if (!(plantAvailable()) || !(plantAffordable())) {
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+			if (!(plantAvailable()))
+				System.out.println("There are no available plants. You must forfeit your turn....");
+			else
+				System.out.println("You cannot afford any plants. You must forfeit your turn");
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
-			System.out.print("Pick a Plant: ");
-			String pChoice = reader.next();
-			if (pChoice.equals("h"))
-				printHelp();
-			Plant plantChoice = createPlant(pChoice);
+		// Player Choice
+		String reply = "";
+		System.out.print("Would you like to Skip The Turn? Place a plant skip/place" + "\n");
+		while (!reply.equals("skip") && !reply.equals("place") && !reply.equals("shovel")) {
+			System.out.print("Choice: ");
+			reply = reader.next();
+		}
+
+		// Player decides to skip the turn
+		if (reply.equals("skip")) {
+			return;
+		} else if (reply.equals("place")) {
+			Plant plantChoice = null;
+			String pChoice;
+
 			while (plantChoice == null) {
 				System.out.print("Pick a Plant: ");
 				pChoice = reader.next();
-				if (pChoice.equals("h"))
-					printHelp();
-				else
-					plantChoice = createPlant(pChoice);
+				plantChoice = createPlant(pChoice);
 				System.out.println();
 			}
 
@@ -166,13 +166,13 @@ public class Main {
 
 			// loop checks if the location specified by the player is allowed
 			while (notAllowedLocation) {
-				System.out.print("Pick Position: ");
+				System.out.print("Place Location at COLROW, example 'A1'" + "\n" + "Pick Position: ");
 				String location = reader.next();
 				if (location.length() == 2) {
-					if ((location.charAt(0) >= 'A' && location.charAt(0) <= 'G')
+					if ((location.charAt(0) >= 'A' && location.charAt(0) <= 'F')
 							&& ((Character.getNumericValue(location.charAt(1)) >= 1)
 									&& (Character.getNumericValue(location.charAt(1)) <= 4))) {
-						// check if entered column (Letter) is in between A and G
+						// check if entered column (Letter) is in between A and F
 						// check if entered row (number) is in between 1 and 4
 						sxPos += location.charAt(0);
 						syPos += location.charAt(1);
@@ -181,19 +181,42 @@ public class Main {
 				}
 			}
 
-			if (GUI.isEmpty(GUI.getGridX(sxPos), GUI.getGridY(syPos))) {
-				GUI.placePlant(plantChoice, GUI.getGridX(sxPos), GUI.getGridY(syPos));
+			// If the board location is empty specified by the Player, place the plant
+			if (Board.isEmpty(Board.getGridX(sxPos), Board.getGridY(syPos))) {
+				Board.placePlant(plantChoice, Board.getGridX(sxPos), Board.getGridY(syPos));
 				plantChoice.resetTime(); // Count down to use this plant restarts
-				break;
-			}
-			// BUG HERE!!!!! Coins are not returned to player and chosen plant's timer has
-			// been reset
-			// Solution1 allow player to reset only XY values (easier)
-			// Solution2 somehow create plants only after XY is chosen then allow player to
-			// completely reset choice (preferred)
-			System.out.println("You may only place your plant on an available space. Please try again.");
-		}
+			} else
+				// If board location not empty, cannot place plant, display message
+				System.out.println("You may only place your plant on an available space. Please try again." + "\n");
+		} else if (reply.equals("shovel")) {
 
+			boolean notAllowedLocation = true;
+			String sxPos = "";
+			String syPos = "";
+			String location = "";
+			// loop checks if the location specified by the player is allowed
+			while (notAllowedLocation || !location.equals("exit")) {
+				System.out.print("Shovel Location at COLROW, example 'A1'" + "\n" + "Pick Position: ");
+				location = reader.next();
+				if (location.length() == 2) {
+					if ((location.charAt(0) >= 'A' && location.charAt(0) <= 'F')
+							&& ((Character.getNumericValue(location.charAt(1)) >= 1)
+									&& (Character.getNumericValue(location.charAt(1)) <= 4))) {
+						// check if entered column (Letter) is in between A and F
+						// check if entered row (number) is in between 1 and 4
+						sxPos += location.charAt(0);
+						syPos += location.charAt(1);
+
+						// If the board location is empty specified by the Player, place the plant
+						if (Board.isPlant(Board.getGridX(sxPos), Board.getGridY(syPos))) {
+							Board.removePlant(Board.getGridX(sxPos), Board.getGridY(syPos));
+							System.out.println("Shoveled plant at location : " + location);
+							return;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private static void spawnZombies() {
@@ -218,9 +241,9 @@ public class Main {
 		Zombie zombie = Level.allZombies.remove(randZombie); // Unlike plant this contains all zombies for the level.
 																// Must remove to place on board.
 
-		if (GUI.isEmpty(GUI.GRID_WIDTH - 1, yPos)) // Just doesn't happen if the intended position is occupied. This
-													// should be fixed
-			GUI.placeZombie(zombie, GUI.GRID_WIDTH - 1, yPos);
+		if (Board.isEmpty(Board.GRID_WIDTH - 1, yPos)) // Just doesn't happen if the intended position is occupied. This
+														// should be fixed
+			Board.placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
 	}
 
 	private static Plant createPlant(String choice) {
@@ -235,7 +258,7 @@ public class Main {
 				} else {
 					if (choice.equals("S"))
 
-						return new Sunflower();
+						return new SunFlower();
 					else if (choice.equals("V"))
 						return new VenusFlyTrap();
 					/// PUT MORE PLANTS HERE
@@ -254,18 +277,14 @@ public class Main {
 		for (Plant plant : Level.allPlants) // This function just decreases the wait time for all plant types. Does this
 											// to one of each plant
 			plant.newTurn();
-		for (GridObject plant : GUI.gridObjects) { // Possibility to extend this to other objects and call a method they
-													// all inherit instead of instance of.
-			if (plant instanceof Sunflower) {
-				Level.coins += Sunflower.COIN_BONUS;
+		for (GridObject plant : Board.gridObjects) { // Possibility to extend this to other objects and call a method
+														// they
+														// all inherit instead of instance of.
+			if (plant instanceof SunFlower) {
+				Level.coins += SunFlower.COIN_BONUS;
 			}
 
 		}
-	}
-
-	private static void printHelp() {
-		System.out.println("THIS IS THE HELP TEXT, WILL SHOW YOU PLANT ZOMBIE TYPES ETC");
-		System.out.println();
 	}
 
 	private static boolean plantAvailable() {
