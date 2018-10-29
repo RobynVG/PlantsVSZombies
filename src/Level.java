@@ -13,7 +13,7 @@ public class Level {
 		
 		int previousCoins = coins; //The constructors below will take away coins must account for this
 		//available plants keeps ONLY 1  instance of each type available in level
-		allPlants.add(new Sunflower());
+		allPlants.add(new SunFlower());
 		allPlants.add(new VenusFlyTrap());
 		coins = previousCoins;
 		
@@ -30,12 +30,12 @@ public class Level {
 	public static void printAllPlants() {
 		System.out.println("All Plants: ");
 		for (Plant plant : allPlants) {
-			if (plant instanceof Sunflower) {
+			if (plant instanceof SunFlower) {
 				String availability = "";
-				if (Sunflower.currentTime == 0)
-					availability = "---available (" + Sunflower.PRICE + " coins)";
+				if (SunFlower.currentTime == 0)
+					availability = "---available (" + SunFlower.PRICE + " coins)";
 				else
-					availability = "---wait " + Sunflower.currentTime + " more turns";
+					availability = "---wait " + SunFlower.currentTime + " more turns";
 				System.out.print("(S)Sunflower       " + availability);
 				System.out.println();
 			}

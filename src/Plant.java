@@ -12,7 +12,7 @@ public abstract class Plant extends GridObject{
 	}
 	
 	public void go() {
-		GridObject right = GUI.toTheRight(this);
+		GridObject right = Board.toTheRight(this);
 		if (right instanceof Zombie)
 			attack((Zombie)right);
 	}
@@ -28,7 +28,7 @@ public abstract class Plant extends GridObject{
 	public void loseHealth(int zombieStrength) {
 		health = health - zombieStrength;
 		if (health <= 0)
-			GUI.remove(this);
+			Board.remove(this);
 	}
 	
 	public void resetTime() { //when a plant is placed

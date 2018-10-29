@@ -1,5 +1,5 @@
 
-public class Sunflower extends Plant {
+public class SunFlower extends Plant {
 	protected static final int FULL_TIME = 2;	//Actually this # - 1. So if 3, its 2 turns.
 	protected static final int STRENGTH = 0;
 	protected static final int FULL_HEALTH = 100;
@@ -8,7 +8,7 @@ public class Sunflower extends Plant {
 	
 	static int currentTime = 0;
 	
-	public Sunflower() {
+	public SunFlower() {
 		currentTime = fullTime;//Should reset in parent. This constructor probably not needed
 	}
 	
@@ -41,6 +41,6 @@ public class Sunflower extends Plant {
 	public void loseHealth(int zombieStrength) {
 		health = health - zombieStrength;
 		if (health <= 0)
-			GUI.remove(this);
+			Board.remove(this);
 	}
 }
