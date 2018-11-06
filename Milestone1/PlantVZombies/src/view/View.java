@@ -3,8 +3,12 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -34,6 +38,14 @@ public class View extends JFrame {
 	private JPanel plantLayout;
 	private JButton[] plantButtons;
 	
+
+	public JButton[] getPlantButtons() {
+		return plantButtons;
+	}
+
+	public void setPlantButtons(JButton[] plantButtons) {
+		this.plantButtons = plantButtons;
+	}
 
 	public View() {
 		// Sets the main layout as a BorderLayout.
@@ -85,6 +97,7 @@ public class View extends JFrame {
 		for(int i = 0; i < plantButtons.length; i++) {
 			plantButtons[i] = new JButton("");
 			plantButtons[i].setEnabled(true);
+			plantButtons[i].setPreferredSize(new Dimension(50,54));
 			plantLayout.add(plantButtons[i]);	
 		}
 		//Adding Plant Panel to Main Panel
