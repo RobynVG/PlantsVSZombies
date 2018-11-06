@@ -1,3 +1,4 @@
+package model;
 
 public abstract class Zombie extends GridObject {
 	protected int strength; //The amount of health taken off a plant from 1 attack

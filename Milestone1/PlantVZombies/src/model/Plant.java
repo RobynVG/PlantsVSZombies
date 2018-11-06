@@ -1,3 +1,4 @@
+package model;
 
 public abstract class Plant extends GridObject{
 	public int fullTime; 
