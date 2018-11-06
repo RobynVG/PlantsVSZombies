@@ -1,9 +1,17 @@
 package controller;
 
 import model.Level;
+
+import java.awt.Dimension;
+import java.awt.Image;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
 import model.Board;
-import model.Plant;
+import model.GridObject;
 import view.View;
 
 public class Controller {
@@ -128,8 +136,22 @@ public class Controller {
 	}
 
 	public static void addPlant(int i, int j) {
-
 		System.out.println("You may only place your plant on an available space. Please try again.");
 	}
+	
+	private static void updateButton(JButton button, GridObject o) {
+		System.out.println(button.getSize());
+		Dimension d = button.getSize();
+		try {
+			 Image img = ImageIO.read(view.getClass().getResource("/" + o.getImageTitle()));
+			 Image newimg = img.getScaledInstance(d.width, d.height, java.awt.Image.SCALE_SMOOTH );
+			 button.setIcon(new ImageIcon(newimg));
+		 } catch (Exception ex) {
+			 System.out.println(ex);
+		 }
+		 view.revalidate();
+		 view.repaint();
+	}
+	
 
 }
