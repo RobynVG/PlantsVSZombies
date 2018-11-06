@@ -1,3 +1,4 @@
+package model;
 
 public class GenericZombie extends Zombie{
 	private int strength = 100;

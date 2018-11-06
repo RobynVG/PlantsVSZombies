@@ -1,3 +1,4 @@
+package model;
 
 public class VenusFlyTrap extends Plant {
 	protected static final int FULL_TIME = 3;	//Actually this # - 1. So if 3, its 2 turns.
