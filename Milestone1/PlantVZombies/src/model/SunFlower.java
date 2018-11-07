@@ -62,12 +62,6 @@ public class SunFlower extends Plant {
 		return (price <= Level.coins);
 	}
 	
-	/**
-	 * This method makes the sunflower available to the player.
-	 */
-	public void makeAvailable() { //Not used but might need at some point? 
-		currentTime = 0;
-	}
 	
 	/**
 	 * This method reduces the sunflower's health when a zombie has attack the sunflower.
