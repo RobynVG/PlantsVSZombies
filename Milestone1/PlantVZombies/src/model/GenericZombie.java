@@ -1,13 +1,19 @@
 package model;
 
 public class GenericZombie extends Zombie{
-	private int strength = 100;
-	private int health = 250;
+	private int STRENGTH = 100;
+	private int FULL_HEALTH = 250;
 	
 	/**
 	 * This method prints out a generic zombie string on the grid. 
 	 * @return A String, this method returns a generic zombie string equivalent.
 	 */
+	public GenericZombie() {
+		strength = STRENGTH;
+		health = FULL_HEALTH;
+		imageTitle = "GenericZombie.png";
+	}
+	
 	@Override
 	public String toString() {
 		return "[ g ]";

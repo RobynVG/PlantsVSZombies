@@ -16,6 +16,7 @@ public class VenusFlyTrap extends Plant {
 		strength = STRENGTH;
 		health = FULL_HEALTH;
 		price = PRICE;
+		imageTitle = "VenusFlyTrap.png";
 	}
 
 	//VenusFlyTraps only zombies in front of them

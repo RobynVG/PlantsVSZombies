@@ -2,7 +2,7 @@ package model;
 
 public class SunFlower extends Plant {
 
-	protected static final int FULL_TIME = 2;	//Actually this # - 1. So if 3, its 2 turns.
+	protected static final int FULL_TIME = 1;	//Actually this # - 1. So if 3, its 2 turns.
 	protected static final int STRENGTH = 0;
 	protected static final int FULL_HEALTH = 100;
 	protected static final int PRICE = 2;
@@ -13,7 +13,12 @@ public class SunFlower extends Plant {
 	 * This constructs a sunflower.
 	 */
 	public SunFlower() {
-		currentTime = fullTime;//Should reset in parent. This constructor probably not needed
+		fullTime = FULL_TIME;
+		currentTime = fullTime; //new object created - reset static timer
+		strength = STRENGTH;
+		health = FULL_HEALTH;
+		price = PRICE;
+		imageTitle = "SunFlower.png";
 	}
 	
 	/**
