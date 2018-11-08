@@ -44,6 +44,7 @@ public class Controller {
 				else {
 					buttonsEnable(false);
 				}
+				disableGrid();
 			}
 		}
 
@@ -164,10 +165,18 @@ public class Controller {
 		for (int i = 0; i < NUMOFROWS; i++) {
 			for (int j = 0; j < NUMOFCOLS; j++) {
 				updateButton(view.getButtons()[i][j], Board.grid[i][j]);
-				if (Board.grid[i][j]!=null)
-					view.getButtons()[i][i].setEnabled(false);
+				if (Board.grid[i][j]!=null || j == NUMOFCOLS - 1)
+					view.getButtons()[i][j].setEnabled(false);
 				else
-					view.getButtons()[i][i].setEnabled(true);
+					view.getButtons()[i][j].setEnabled(true);
+			}
+		}
+	}
+	
+	private static void disableGrid() {
+		for (int i = 0; i < NUMOFROWS; i++) {
+			for (int j = 0; j < NUMOFCOLS; j++) {
+				view.getButtons()[i][j].setEnabled(false);
 			}
 		}
 	}
