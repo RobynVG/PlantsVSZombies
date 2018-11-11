@@ -1,9 +1,15 @@
+package model;
 import java.util.ArrayList;
 
 public class Level {
-	static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
+	public static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
 	static ArrayList<Zombie> allZombies; //Actually all zombies
-	static int coins = 10; 
+	public static int coins = 10; 
+	
+	
+	public static boolean isEmpty() {
+		return (allZombies.isEmpty());
+	}
 	
 	//Not ideal to code every level but good for now
 	/**
@@ -28,33 +34,6 @@ public class Level {
 			plant.makeAvailable();
 	}
 	
-	
-	/**
-	 * This method prints all the plants.
-	 */
-	public static void printAllPlants() {
-		System.out.println("All Plants: ");
-		for (Plant plant : allPlants) {
-			if (plant instanceof SunFlower) {
-				String availability = "";
-				if (SunFlower.currentTime == 0)
-					availability = "---available (" + SunFlower.PRICE + " coins)";
-				else
-					availability = "---wait " + SunFlower.currentTime + " more turns";
-				System.out.print("(S)Sunflower       " + availability);
-				System.out.println();
-			}
-			if (plant instanceof VenusFlyTrap) {
-				String availability = "";
-				if (VenusFlyTrap.currentTime == 0)
-					availability = "---available (" + VenusFlyTrap.PRICE + " coins)";
-				else
-					availability = "---wait " + VenusFlyTrap.currentTime + " more turns";
-				System.out.print("(V)VenusFlyTrap    " + availability);
-				System.out.println();
-			}
-		}	
-	}
 	
 	//function should be called on every level
 	/**

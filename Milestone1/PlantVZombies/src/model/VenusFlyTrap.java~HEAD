@@ -1,3 +1,4 @@
+package model;
 
 public class VenusFlyTrap extends Plant {
 	protected static final int FULL_TIME = 3;	//Actually this # - 1. So if 3, its 2 turns.
@@ -15,6 +16,7 @@ public class VenusFlyTrap extends Plant {
 		strength = STRENGTH;
 		health = FULL_HEALTH;
 		price = PRICE;
+		imageTitle = "VenusFlyTrap.png";
 	}
 
 	//VenusFlyTraps only zombies in front of them
@@ -30,7 +32,7 @@ public class VenusFlyTrap extends Plant {
 	 * @return A String, this method returns a venus flytrap string equivalent.
 	 */
 	public String toString() {
-		return "[ V ]";
+		return "VenusFlyTrap";
 	}
 	
 	//Can't inherit the function since this one deals with static vars. Can override though

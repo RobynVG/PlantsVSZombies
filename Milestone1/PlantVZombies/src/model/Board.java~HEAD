@@ -142,6 +142,7 @@ public class Board {
 	public static void placePlant(Plant plant, int posY, int posX) {
 		grid[posX][posY] = plant;
 		gridObjects.add(plant);
+		System.out.println("Plant: " + plant.toString() + "Placed at: " + "ROW: " + posY + "COL: " + posX);
 	}
 
 	/**

@@ -2,6 +2,7 @@ package controller;
 
 import model.Level;
 import model.NullSpace;
+<<<<<<< HEAD
 import model.Plant;
 import model.SunFlower;
 import model.VenusFlyTrap;
@@ -10,14 +11,22 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+=======
+
+import java.awt.Dimension;
+import java.awt.Image;
+>>>>>>> origin/master
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+<<<<<<< HEAD
 import javax.swing.JLabel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+=======
+>>>>>>> origin/master
 
 import model.Board;
 import model.GridObject;
@@ -30,17 +39,25 @@ public class Controller {
 	static int col;
 	static final int NUMOFROWS = 4;
 	static final int NUMOFCOLS = 7;
+<<<<<<< HEAD
 	public boolean pickedPlant = false;
+=======
+>>>>>>> origin/master
 
 	public Controller(View view) {
 		this.view = view;
 		startGame();
+<<<<<<< HEAD
+=======
+		Board.setupGrid();
+>>>>>>> origin/master
 	}
 
 	/**
 	 * Initialize GUI's Action Listeners
 	 */
 	public void initController() {
+<<<<<<< HEAD
 		gridCond(false);
 		view.getPlants().addListSelectionListener(new ListSelectionListener() {
 
@@ -67,11 +84,29 @@ public class Controller {
 						gridCond(false);
 					}
 				});
+=======
+		for (row = 0; row < NUMOFROWS; row++) {
+			for (col = 0; col < NUMOFCOLS; col++) {
+				// add action listeners to all grid buttons
+				System.out.println(row);
+				View.buttons[row][col].addActionListener(e -> playerTurn(row, col));
+				if (Board.isEmpty(col, row)) {
+					buttonsEnable(true);
+				}
+				else {
+					buttonsEnable(false);
+				}
+				disableGrid();
+>>>>>>> origin/master
 			}
 		}
 
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> origin/master
 	/**
 	 * Enable Buttons
 	 */
@@ -85,6 +120,18 @@ public class Controller {
 	public static void startGame() {
 		Level.level1();
 		Board.setupGrid();
+<<<<<<< HEAD
+=======
+
+//		while (true) {
+//			playerTurn(row, col);
+//			addDelay(500);
+//			Board.boardTurn();
+//			addDelay(2000);
+//			Board.prepareNewTurn();
+//			playerWinLose();
+//		}
+>>>>>>> origin/master
 	}
 
 	/**
@@ -141,6 +188,7 @@ public class Controller {
 	/**
 	 * This method allows the player to have a turn.
 	 */
+<<<<<<< HEAD
 	public static void startTurn(String plantName) {
 
 		if (!(Board.plantAffordable())) {
@@ -163,11 +211,29 @@ public class Controller {
 		}
 	}
 
+=======
+	public static void playerTurn(int i, int j) {
+		while (true) {
+			
+			if (!(Board.plantAffordable())) {
+				addDelay(1500);
+				break;
+			}
+			addPlant(i, j);
+		}
+	}
+
+	public static void addPlant(int i, int j) {
+		System.out.println("You may only place your plant on an available space. Please try again.");
+	}
+	
+>>>>>>> origin/master
 	private static void updateButton(JButton button, GridObject o) {
 		if (o instanceof NullSpace) {
 			button.setIcon(null);
 			return;
 		}
+<<<<<<< HEAD
 		if (o instanceof VenusFlyTrap) {
 			System.out.println("Venus");
 		}
@@ -184,17 +250,37 @@ public class Controller {
 		view.repaint();
 	}
 
+=======
+		System.out.println(button.getSize());
+		Dimension d = button.getSize();
+		try {
+			 Image img = ImageIO.read(view.getClass().getResource("/" + o.getImageTitle()));
+			 Image newimg = img.getScaledInstance(d.width, d.height, java.awt.Image.SCALE_SMOOTH );
+			 button.setIcon(new ImageIcon(newimg));
+		 } catch (Exception ex) {
+			 System.out.println(ex);
+		 }
+		 view.revalidate();
+		 view.repaint();
+	}
+	
+>>>>>>> origin/master
 	private static void updateView() {
 		for (int i = 0; i < NUMOFROWS; i++) {
 			for (int j = 0; j < NUMOFCOLS; j++) {
 				updateButton(view.getButtons()[i][j], Board.grid[i][j]);
+<<<<<<< HEAD
 				if (Board.grid[i][j] != null || j == NUMOFCOLS - 1)
+=======
+				if (Board.grid[i][j]!=null || j == NUMOFCOLS - 1)
+>>>>>>> origin/master
 					view.getButtons()[i][j].setEnabled(false);
 				else
 					view.getButtons()[i][j].setEnabled(true);
 			}
 		}
 	}
+<<<<<<< HEAD
 
 	private static void gridCond(boolean cond) {
 		for (int i = 0; i < NUMOFROWS; i++) {
@@ -203,5 +289,16 @@ public class Controller {
 			}
 		}
 	}
+=======
+	
+	private static void disableGrid() {
+		for (int i = 0; i < NUMOFROWS; i++) {
+			for (int j = 0; j < NUMOFCOLS; j++) {
+				view.getButtons()[i][j].setEnabled(false);
+			}
+		}
+	}
+	
+>>>>>>> origin/master
 
 }

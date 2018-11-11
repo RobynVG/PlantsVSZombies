@@ -32,7 +32,7 @@ public class VenusFlyTrap extends Plant {
 	 * @return A String, this method returns a venus flytrap string equivalent.
 	 */
 	public String toString() {
-		return "VenusFlyTrap";
+		return "[ V ]";
 	}
 	
 	//Can't inherit the function since this one deals with static vars. Can override though

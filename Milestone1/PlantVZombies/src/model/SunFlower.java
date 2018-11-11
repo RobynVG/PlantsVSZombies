@@ -34,7 +34,7 @@ public class SunFlower extends Plant {
 	 * @return A String, this method returns a sunflower string equivalent.
 	 */
 	public String toString() {
-		return "SunFlower";
+		return "[ S ]";
 	}
 	
 	//Can't inherit the function since this one deals with static vars. Can override though
