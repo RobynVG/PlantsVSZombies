@@ -11,7 +11,7 @@ public class GenericZombie extends Zombie{
 	public GenericZombie() {
 		strength = STRENGTH;
 		health = FULL_HEALTH;
-		imageTitle = "GenericZombie.png";
+		objectTitle = "GenericZombie";
 	}
 	
 	@Override

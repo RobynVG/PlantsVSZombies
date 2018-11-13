@@ -2,7 +2,7 @@ package model;
 
 
 public abstract class GridObject {
-	String imageTitle;
+	String objectTitle;
 	/**
 	 * This method returns an empty string (Will be overridden by the child class).
 	 */
@@ -18,8 +18,8 @@ public abstract class GridObject {
 		return toString().substring(2,3);
 	}
 	
-	public String getImageTitle() {
-		return imageTitle;
+	public String getObjectTitle() {
+		return objectTitle;
 	}
 	
 }
