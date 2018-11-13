@@ -101,7 +101,15 @@ public class View extends JFrame {
 		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		menuList.setLayoutOrientation(JList.VERTICAL);
 
-		add(menuList, BorderLayout.WEST);
+		JLabel coins = new JLabel("Sun Points: 2");
+		coins.setPreferredSize(new Dimension(30,30));
+		JPanel plantsAndCoins = new JPanel();
+		plantsAndCoins.setLayout(new BorderLayout());
+
+		plantsAndCoins.add(menuList, BorderLayout.NORTH);
+		plantsAndCoins.add(coins, BorderLayout.SOUTH);
+		
+		add(plantsAndCoins, BorderLayout.WEST);
 
 		// Setting the minimum size of the main frame
 		setMinimumSize(new Dimension(1000, 500));
