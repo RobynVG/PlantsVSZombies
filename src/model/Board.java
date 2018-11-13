@@ -36,13 +36,12 @@ public class Board {
 			for (Zombie zombie : zombiesOnBoard)			
 				zombie.go();
 		}
-		spawnZombies();
 	}
 	
 	/**
 	 * This method spawns the zombies on the board.
 	 */
-	private static void spawnZombies() {
+	public static void spawnZombies() {
 		if (Level.allZombies.isEmpty())
 			return;
 		

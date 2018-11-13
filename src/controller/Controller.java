@@ -64,25 +64,37 @@ public class Controller {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						gridCond(false);
+						flowerButtonsEnabled(false);
 						String s = e.getActionCommand();
 						System.out.println(s);
 						String[] rowcol = s.split(" ");
 						JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
 						view.getPlants().clearSelection();
 						addPlant(j.getText(), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
-						Board.boardTurn();
 						gridCond(false);
+						addDelay(500);
+						boardTurn();
+						flowerButtonsEnabled(true);
 					}
 				});
 			}
 		}
 	}
-
-	/**
-	 * Enable Buttons
-	 */
-	public static void buttonsEnable(boolean cond) {
-		View.buttons[row][col].setEnabled(cond);
+	
+	private static void boardTurn() {
+		//Advance or attack
+		Board.boardTurn();
+		
+		gridCond(false);
+		addDelay(500);
+		//Spawn
+		Board.spawnZombies();
+		
+		gridCond(false);
+	}
+	
+	private static void flowerButtonsEnabled(boolean enabled) {
+		view.getPlants().setEnabled(enabled);	
 	}
 
 	/**
