@@ -176,16 +176,11 @@ public class Controller {
 			button.setIcon(null);
 			return;
 		}
-
-		if (o instanceof VenusFlyTrap) {
-			System.out.println("Venus");
-		}
-		System.out.println(button.getSize());
-		Dimension d = button.getSize();
 		try {
 			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getImageTitle()).getImage()
 					.getScaledInstance(50, 50, Image.SCALE_AREA_AVERAGING));
 			button.setIcon(image);
+			button.setDisabledIcon(image);
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
