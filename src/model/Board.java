@@ -10,6 +10,8 @@ public class Board {
 	public static final String GRID_Y[] = { "1", "2", "3", "4" };
 	public static GridObject[][] grid;
 	public static ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
+	public static ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
+	public static ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
 
 	/**
 	 * This method sets up and prints the grid.
@@ -27,62 +29,38 @@ public class Board {
 	 * This method allows the zombies to have a turn.
 	 */
 	public static void boardTurn() {
-		ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
-		ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>(); // These two arraylists are defined to avoid concurrent
-																	// modification exception. Can't iterate through
-		// zombies and plants at the same time in case one dies.
-		for (GridObject gridObject : Board.gridObjects) {
-			if (gridObject instanceof Plant)
-				plantsOnBoard.add((Plant) gridObject);
-		}
-
-		for (GridObject gridObject : Board.gridObjects) {
-			if (gridObject instanceof Zombie)
-				zombiesOnBoard.add((Zombie) gridObject);
-		} // This is just to check if zombies are empty at start. Array will need to be
-			// reconstructed for the zombies turn in case one dies.
-
-		if (!zombiesOnBoard.isEmpty()) { // This should be checked elsewhere instead of the set up above
-			System.out.println("Time for the attacks");
-			System.out.println();
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			for (Plant plant : plantsOnBoard) { // Plants attack first. Need to iterate through twice in case a zombie
-												// dies.
+		if (!zombiesOnBoard.isEmpty()) {
+			for (Plant plant : plantsOnBoard)
 				plant.go();
-			}
-			zombiesOnBoard = new ArrayList<Zombie>();
-			for (GridObject gridObject : Board.gridObjects) {
-				if (gridObject instanceof Zombie)
-					zombiesOnBoard.add((Zombie) gridObject);
-			} // Reconstruct array in case a zombie was killed by a plant
 
-			for (Zombie zombie : zombiesOnBoard) { // Plants attack first. Need to iterate through twice in case a
-													// zombie dies.
+			for (Zombie zombie : zombiesOnBoard)			
 				zombie.go();
-			}
 		}
 		spawnZombies();
 	}
+	
+	/**
+	 * This method spawns the zombies on the board.
+	 */
+	private static void spawnZombies() {
+		if (Level.allZombies.isEmpty())
+			return;
+		
+		int yPos = ThreadLocalRandom.current().nextInt(0, 3);
+		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.allZombies.size());
+		Zombie zombie = Level.allZombies.remove(randZombie); 
 
+		if (Board.isEmpty(yPos, Board.GRID_WIDTH - 1))
+			Board.placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
+	}
+	
 	/**
 	 * This method checks if there is any zombies left on the board
 	 * 
 	 * @return A boolean, true if there is zombies left otherwise false.
 	 */
 	public static boolean zombiesLeft() {
-		for (GridObject[] g : grid) {
-			for (GridObject obj : g) {
-				if (obj instanceof Zombie) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return !zombiesOnBoard.isEmpty();
 	}
 
 	/**
@@ -141,6 +119,7 @@ public class Board {
 	 */
 	public static void placePlant(Plant plant, int posY, int posX) {
 		grid[posX][posY] = plant;
+		plantsOnBoard.add(plant);
 		gridObjects.add(plant);
 	}
 
@@ -153,6 +132,7 @@ public class Board {
 	 */
 	public static void placeZombie(Zombie zombie, int posY, int posX) {
 		grid[posX][posY] = zombie;
+		zombiesOnBoard.add(zombie);
 		gridObjects.add(zombie);
 	}
 
@@ -217,7 +197,13 @@ public class Board {
 		int j = getX(gridObject);
 		int i = getY(gridObject);
 		grid[i][j] = new NullSpace();
+		
 		gridObjects.remove(gridObject);
+		if (gridObject instanceof Zombie)
+			zombiesOnBoard.remove(gridObject);
+		if (gridObject instanceof Plant)
+			plantsOnBoard.remove(gridObject);
+		
 		if(grid[i][j] instanceof NullSpace) {
 			return true;
 		}
@@ -280,7 +266,7 @@ public class Board {
 	 * @param posX (int), the x-coordinate on the grid.
 	 * @return A boolean, true if the position is empty otherwise false.
 	 */
-	public static boolean isEmpty(int posY, int posX) {
+	public static boolean isEmpty(int posX, int posY) {
 		return (getObject(posX, posY) instanceof NullSpace);
 	}
 
@@ -346,32 +332,7 @@ public class Board {
 	}
 
 
-	/**
-	 * This method spawns the zombies on the board.
-	 */
-	private static void spawnZombies() {
-		if (Level.allZombies.isEmpty())
-			return;
-		
-		System.out.println("Zombies are spawning....");
-		System.out.println();
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		int yPos = ThreadLocalRandom.current().nextInt(0, 3);
-		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.allZombies.size()); // zombies are filled in order
-																							// of type need to pick
-																							// randomly
-		Zombie zombie = Level.allZombies.remove(randZombie); // Unlike plant this contains all zombies for the level.
-																// Must remove to place on board.
 
-		if (Board.isEmpty(Board.GRID_WIDTH - 1, yPos)) // Just doesn't happen if the intended position is occupied. This
-														// should be fixed
-			Board.placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
-	}
 
 	// Seems redundant atm but thinking there may be more actions to be performed at
 	// the end of board turn later.

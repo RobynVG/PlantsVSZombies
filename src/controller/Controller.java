@@ -34,14 +34,11 @@ public class Controller {
 	static final int NUMOFROWS = 4;
 	static final int NUMOFCOLS = 7;
 
-	public boolean pickedPlant = false;
-
 	public Controller(View view) {
 		this.view = view;
 		startGame();
 
 		Board.setupGrid();
-
 	}
 
 	/**
@@ -59,19 +56,20 @@ public class Controller {
 				}
 			}
 		});
+		
 		for (int i = 0; i < NUMOFROWS; i++) {
 			for (int j = 0; j < NUMOFCOLS; j++) {
 				view.getButtons()[i][j].addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						gridCond(false);
 						String s = e.getActionCommand();
 						System.out.println(s);
 						String[] rowcol = s.split(" ");
 						JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
 						addPlant(j.getText(), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 						Board.boardTurn();
-						updateView();
 						gridCond(false);
 					}
 				});
@@ -172,20 +170,6 @@ public class Controller {
 		}
 	}
 
-	public static void playerTurn(int i, int j) {
-		while (true) {
-
-			if (!(Board.plantAffordable())) {
-				addDelay(1500);
-				break;
-			}
-			addPlant(i, j);
-		}
-	}
-
-	public static void addPlant(int i, int j) {
-		System.out.println("You may only place your plant on an available space. Please try again.");
-	}
 
 	private static void updateButton(JButton button, GridObject o) {
 		if (o instanceof NullSpace) {
@@ -209,36 +193,23 @@ public class Controller {
 		view.repaint();
 	}
 
-	private static void updateView() {
+	private static void gridCond(boolean gridEnabled) {
 		for (int i = 0; i < NUMOFROWS; i++) {
 			for (int j = 0; j < NUMOFCOLS; j++) {
 				updateButton(view.getButtons()[i][j], Board.grid[i][j]);
-
-				if (Board.grid[i][j] != null || j == NUMOFCOLS - 1)
-
-					if (Board.grid[i][j] != null || j == NUMOFCOLS - 1)
-
-						view.getButtons()[i][j].setEnabled(false);
-					else
-						view.getButtons()[i][j].setEnabled(true);
+				if (!Board.isEmpty(i,j) || j == NUMOFCOLS - 1)
+					view.getButtons()[i][j].setEnabled(false);
+				else
+					view.getButtons()[i][j].setEnabled(gridEnabled);
 			}
 		}
 	}
 
-	private static void gridCond(boolean cond) {
-		for (int i = 0; i < NUMOFROWS; i++) {
-			for (int j = 0; j < NUMOFCOLS; j++) {
-				view.getButtons()[i][j].setEnabled(cond);
-			}
-		}
-	}
-
-	private static void disableGrid() {
-		for (int i = 0; i < NUMOFROWS; i++) {
-			for (int j = 0; j < NUMOFCOLS; j++) {
-				view.getButtons()[i][j].setEnabled(false);
-			}
-		}
-	}
-
+//	private static void gridCond(boolean cond) {
+//		for (int i = 0; i < NUMOFROWS; i++) {
+//			for (int j = 0; j < NUMOFCOLS; j++) {
+//				view.getButtons()[i][j].setEnabled(cond);
+//			}
+//		}
+//	}
 }
