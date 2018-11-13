@@ -53,6 +53,13 @@ public class Board {
 			Board.placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
 	}
 	
+	public static void prepareNextTurn() {
+		for (Plant plant: plantsOnBoard) {
+			if (plant instanceof SunFlower)
+				Level.coins += SunFlower.COIN_BONUS;
+		}
+		
+	}
 	/**
 	 * This method checks if there is any zombies left on the board
 	 * 

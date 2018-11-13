@@ -74,6 +74,7 @@ public class Controller {
 						gridCond(false);
 						addDelay(500);
 						boardTurn();
+						view.getCoins().setText("Sun Points: " + Level.coins);
 						flowerButtonsEnabled(true);
 					}
 				});
@@ -86,11 +87,12 @@ public class Controller {
 		Board.boardTurn();
 		
 		gridCond(false);
-		addDelay(500);
 		//Spawn
 		Board.spawnZombies();
 		
 		gridCond(false);
+		
+		Board.prepareNextTurn();
 	}
 	
 	private static void flowerButtonsEnabled(boolean enabled) {
@@ -212,12 +214,4 @@ public class Controller {
 			}
 		}
 	}
-
-//	private static void gridCond(boolean cond) {
-//		for (int i = 0; i < NUMOFROWS; i++) {
-//			for (int j = 0; j < NUMOFCOLS; j++) {
-//				view.getButtons()[i][j].setEnabled(cond);
-//			}
-//		}
-//	}
 }

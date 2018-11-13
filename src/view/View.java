@@ -102,7 +102,7 @@ public class View extends JFrame {
 		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		menuList.setLayoutOrientation(JList.VERTICAL);
 
-		coins = new JLabel("Sun Points: 2");
+		coins = new JLabel("Sun Points: 10");
 		coins.setPreferredSize(new Dimension(30,30));
 		JPanel plantsAndCoins = new JPanel();
 		plantsAndCoins.setLayout(new BorderLayout());
