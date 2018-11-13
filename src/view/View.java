@@ -23,7 +23,8 @@ public class View extends JFrame {
 	private JMenuItem start; // Menu item to start the game
 	private JMenuItem restart; // Menu item to restart the game.
 	private JMenuItem help; // Menu item for game help
-
+	private JLabel coins;
+	
 	// Buttons(Plant VS Zombies Grid)
 	private JPanel gridLayoutButtons;
 	public static JButton[][] buttons; // A Button Array that retains the Buttons
@@ -101,7 +102,7 @@ public class View extends JFrame {
 		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		menuList.setLayoutOrientation(JList.VERTICAL);
 
-		JLabel coins = new JLabel("Sun Points: 2");
+		coins = new JLabel("Sun Points: 2");
 		coins.setPreferredSize(new Dimension(30,30));
 		JPanel plantsAndCoins = new JPanel();
 		plantsAndCoins.setLayout(new BorderLayout());
@@ -133,5 +134,9 @@ public class View extends JFrame {
 
 	public JList<JPanel> getPlants() {
 		return menuList;
+	}
+	
+	public JLabel getCoins() {
+		return coins;
 	}
 }
