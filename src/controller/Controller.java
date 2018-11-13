@@ -68,6 +68,7 @@ public class Controller {
 						System.out.println(s);
 						String[] rowcol = s.split(" ");
 						JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
+						view.getPlants().clearSelection();
 						addPlant(j.getText(), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 						Board.boardTurn();
 						gridCond(false);
