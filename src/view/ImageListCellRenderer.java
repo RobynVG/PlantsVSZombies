@@ -19,4 +19,4 @@ public class ImageListCellRenderer implements ListCellRenderer<Object> {
 		}
 	}
 
-}
+} 
