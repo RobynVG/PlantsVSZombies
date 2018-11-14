@@ -64,15 +64,6 @@ public class Board {
 		for (Plant plant: Level.allPlants)
 			plant.newTurn();
 	}
-	
-	/**
-	 * This method checks if there is any zombies left on the board
-	 * 
-	 * @return A boolean, true if there is zombies left otherwise false.
-	 */
-	public static boolean zombiesLeft() {
-		return !zombiesOnBoard.isEmpty();
-	}
 
 	/**
 	 * This method checks if there is any zombies in the first column.
@@ -252,10 +243,4 @@ public class Board {
 	 * @param posX (int), the x-coordinate.
 	 * @return A boolean, true if the object is a plant otherwise false.
 	 */
-	public static boolean isPlant(int posY, int posX) {
-		if (grid[posY][posX] instanceof Plant) {
-			return true;
-		}
-		return false;
-	}
 }

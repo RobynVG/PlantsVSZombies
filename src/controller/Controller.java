@@ -179,7 +179,7 @@ public class Controller {
 	 */
 	public static void playerWinLose() {
 		// If Player Wins the Level
-		if (Level.isEmpty() && !Board.zombiesLeft()) {
+		if (Level.isEmpty() && !Board.zombiesOnBoard.isEmpty()) {
 			System.out.print("WON LEVEL!----------------------------------------------------------" + "\n");
 			reStart();
 			return;
@@ -196,15 +196,6 @@ public class Controller {
 	/**
 	 * This method allows the player to have a turn.
 	 */
-
-	public static void startTurn(String plantName) {
-
-		if (!(Board.plantAffordable())) {
-			System.out.println("Cannot Afford Plants");
-			return;
-		}
-
-	}
 
 	public static void addPlant(String plantName, int i, int j) {
 		Plant p = null;
