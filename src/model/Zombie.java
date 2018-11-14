@@ -51,4 +51,21 @@ public abstract class Zombie extends GridObject {
 	public void advance(NullSpace nullSpace) {
 		Board.move(this, nullSpace);
 	}
+
+	public int getStrength() {
+		return strength;
+	}
+
+	public void setStrength(int strength) {
+		this.strength = strength;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+	
 }
