@@ -192,7 +192,7 @@ public class Controller {
 			return;
 		}
 		try {
-			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getImageTitle()).getImage()
+			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle()+".png").getImage()
 					.getScaledInstance(50, 50, Image.SCALE_AREA_AVERAGING));
 			button.setIcon(image);
 			button.setDisabledIcon(image);
