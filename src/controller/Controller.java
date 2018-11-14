@@ -70,7 +70,7 @@ public class Controller {
 								return;
 							}
 							if (!plant.isAvailable()) {
-								JOptionPane.showMessageDialog(null,"This plant is not available yet");
+								JOptionPane.showMessageDialog(null,"This plant is available in " + plant.getCurrentTime() + " turn(s)");
 								gridCond(false);
 								view.getPlants().clearSelection();
 								return;
@@ -99,9 +99,19 @@ public class Controller {
 						view.getPlants().clearSelection();
 						addPlant(j.getText(), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 						gridCond(false);
-						addDelay(500);
-						boardTurn();
-						view.getCoins().setText("Sun Points: " + Level.coins);
+						//If player cannot buy plants, board turn restarts
+						for(;;) {
+							System.out.println(Level.coins + "beginning for loop");
+							addDelay(500);
+							boardTurn();
+							view.getCoins().setText("Sun Points: " + Level.coins);
+							view.repaint();
+							view.revalidate();
+							System.out.println(Level.coins + "end for loop");
+
+							if(Level.plantAffordable())
+								break;
+						}
 						flowerButtonsEnabled(true);
 					}
 				});
