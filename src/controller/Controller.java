@@ -93,7 +93,6 @@ public class Controller {
 						gridCond(false);
 						flowerButtonsEnabled(false);
 						String s = e.getActionCommand();
-						System.out.println(s);
 						String[] rowcol = s.split(" ");
 						JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
 						view.getPlants().clearSelection();
@@ -104,8 +103,7 @@ public class Controller {
 							addDelay(500);
 							boardTurn();
 							view.getCoins().setText("Sun Points: " + Level.coins);
-							view.repaint();
-							view.revalidate();
+							playerWinLose();
 							if(Level.plantAffordable())
 								break;
 						}
@@ -148,7 +146,7 @@ public class Controller {
 	public static void reStart() {
 		char reply;
 		do {
-			System.out.println("Would you like to Re-Start the Level? y/n");
+			//System.out.println("Would you like to Re-Start the Level? y/n");
 			reply = reader.next().charAt(0);
 		} while (reply != 'y' && reply != 'n');
 
@@ -179,14 +177,16 @@ public class Controller {
 	 */
 	public static void playerWinLose() {
 		// If Player Wins the Level
-		if (Level.isEmpty() && !Board.zombiesOnBoard.isEmpty()) {
-			System.out.print("WON LEVEL!----------------------------------------------------------" + "\n");
+		if (Level.isEmpty() && Board.zombiesOnBoard.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "!!!!!!!YOU WON!!!!!!!!");
+			view.dispose();
 			reStart();
 			return;
 		}
 		// If Player Loses the Level
 		if (Board.zombiesInFirstColumn()) {
-			System.out.println("LOST LEVEL!-------------------------------------------------------" + "\n");
+			JOptionPane.showMessageDialog(null, "You Lost....");
+			view.dispose();
 			reStart();
 			return;
 		}
