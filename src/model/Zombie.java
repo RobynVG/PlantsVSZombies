@@ -4,6 +4,12 @@ public abstract class Zombie extends GridObject {
 	protected int strength; //The amount of health taken off a plant from 1 attack
 	protected int health;
 	
+	public Zombie(int strength, int health, String objectTitle) {
+		this.strength = strength;
+		this.health = health;
+		this.objectTitle = objectTitle;
+	}
+	
 	/**
 	 * This method allows the zombies to move on the board.
 	 */
@@ -46,11 +52,20 @@ public abstract class Zombie extends GridObject {
 		Board.move(this, nullSpace);
 	}
 
-	//This class is abstract, no need for a string.
-	/**
-	 * This method returns an empty string (Will be overridden by the child class).
-	 */
-	public String toString() {
-		return "";
+	public int getStrength() {
+		return strength;
 	}
+
+	public void setStrength(int strength) {
+		this.strength = strength;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+	
 }

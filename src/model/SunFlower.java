@@ -2,7 +2,7 @@ package model;
 
 public class SunFlower extends Plant {
 
-	protected static final int FULL_TIME = 1;	//Actually this # - 1. So if 3, its 2 turns.
+	protected static final int FULL_TIME = 0;	//Actually this # - 1. So if 3, its 2 turns.
 	protected static final int STRENGTH = 0;
 	protected static final int FULL_HEALTH = 100;
 	protected static final int PRICE = 2;
@@ -13,30 +13,10 @@ public class SunFlower extends Plant {
 	 * This constructs a sunflower.
 	 */
 	public SunFlower() {
-		fullTime = FULL_TIME;
+		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"SunFlower");
 		currentTime = fullTime; //new object created - reset static timer
-		strength = STRENGTH;
-		health = FULL_HEALTH;
-		price = PRICE;
-		objectTitle = "SunFlower";
 	}
-	
-	/**
-	 * This method is when a player wants to purchase a sunflower. 
-	 * The player can only purchase the sunflower if they have enough coins.
-	 */
-	public void purchase() { //Static var (price) must redefine function here
-		Level.coins -= PRICE;
-	}
-	
-	/**
-	 * This method prints out a sunflower string on the grid. 
-	 * @return A String, this method returns a sunflower string equivalent.
-	 */
-	public String toString() {
-		return "[ S ]";
-	}
-	
+		
 	//Can't inherit the function since this one deals with static vars. Can override though
 	/**
 	 * This method keeps track of the turns for when the sunflower is available again.
@@ -55,14 +35,6 @@ public class SunFlower extends Plant {
 	}
 	
 	/**
-	 * This method checks if the player can afford the sunflower.
-	 * @return A boolean, true if it is affordable otherwise false.
-	 */
-	public boolean isAffordable() {
-		return (price <= Level.coins);
-	}
-	
-	/**
 	 * This method makes the sunflower available to the player.
 	 */
 	public void makeAvailable() { //Not used but might need at some point? 
@@ -70,13 +42,10 @@ public class SunFlower extends Plant {
 	}
 	
 	/**
-	 * This method reduces the sunflower's health when a zombie has attack the sunflower.
-	 * If the sunflower's health is zero it is removed from the board.
-	 * @param zombieStrength (int), the zombie's strength for attacking a sunflower.
+	 * This method gets the current time (Will be overridden by the child class).
+	 * @return A int, returns the current time.
 	 */
-	public void loseHealth(int zombieStrength) {
-		health = health - zombieStrength;
-		if (health <= 0)
-			Board.remove(this);
+	public int getCurrentTime() {
+		return currentTime;
 	}
 }

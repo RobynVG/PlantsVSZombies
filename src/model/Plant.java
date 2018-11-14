@@ -10,7 +10,13 @@ public abstract class Plant extends GridObject{
 	/**
 	 * This constructs a plant.
 	 */
-	public Plant() {
+	public Plant(int fullTime, int strength, int health, int price, String objectTitle) {
+		this.fullTime = fullTime;
+		this.strength = strength;
+		this.health = health;
+		this.objectTitle = objectTitle;
+		this.price = price;
+		
 		purchase();
 		resetTime(); //Reset for particular plant when they are born (Wait until you can plant another)
 	}
@@ -27,14 +33,9 @@ public abstract class Plant extends GridObject{
 	/**
 	 * This method keeps track of the game turn.
 	 */
-	public void newTurn() { //on every turn should only be called ONCE per plant type.
-		if (currentTime != 0)
-			currentTime -- ;		
+	public void newTurn() { //on every turn should only be called ONCE per plant type.		
 	}
 	
-	//tough lesson on inheritance here :( if loose Health is called on a Plant (not subclass)
-	//object, it will execute here not in the subclass. Objects are taken out of the grid as
-	//grid objects then cast to Plant or Zombie. Here it is a problem...
 	/**
 	 * This method reduces the plant's health when a zombie has attack the plant.
 	 * If the plant's health is zero it is removed from the board.
@@ -50,7 +51,6 @@ public abstract class Plant extends GridObject{
 	 * This method resets the time (Will be overridden by the child class).
 	 */
 	public void resetTime() { //when a plant is placed
-		currentTime = fullTime;
 	}
 	
 	/**
@@ -62,17 +62,9 @@ public abstract class Plant extends GridObject{
 	}
 	
 	/**
-	 * This method returns an empty string (Will be overridden by the child class).
-	 */
-	public String toString() {
-		return "";
-	}
-	
-	/**
 	 * This method makes the plant available (Will be overridden by the child class).
 	 */
 	public void makeAvailable() {
-		currentTime = 0;
 	}
 	
 	/**
@@ -89,8 +81,7 @@ public abstract class Plant extends GridObject{
 	 * @return A boolean, true if it is affordable otherwise false.
 	 */
 	public boolean isAffordable() {
-		System.out.println("This method should have been overridden by my children");
-		return false;
+		return price <= Level.coins;
 	}
 	
 	/**
@@ -98,7 +89,7 @@ public abstract class Plant extends GridObject{
 	 * The player can only purchase the  plant if they have enough coins (Will be overridden by the child class).
 	 */
 	public void purchase() {
-		System.out.println("This method should have been overridden by my children");
+		Level.coins -= price;
 	}
 	
 	/**
@@ -106,5 +97,42 @@ public abstract class Plant extends GridObject{
 	 * @param zombie (Zombie), a zombie that is being attacked.
 	 */
 	public void attack(Zombie zombie) {
+	}
+	
+	
+	public int getFullTime() {
+		return fullTime;
+	}
+
+	public void setFullTime(int fullTime) {
+		this.fullTime = fullTime;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	public int getStrength() {
+		return strength;
+	}
+
+	public void setStrength(int strength) {
+		this.strength = strength;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public void setCurrentTime(int currentTime) {
+		this.currentTime = currentTime;
 	}
 }

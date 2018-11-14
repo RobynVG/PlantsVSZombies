@@ -2,7 +2,7 @@ package model;
 import java.util.ArrayList;
 
 public class Level {
-	static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
+	public static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
 	static ArrayList<Zombie> allZombies; //Actually all zombies
 	public static int coins = 10; 
 	
@@ -47,12 +47,12 @@ public class Level {
 	
 	//Checks to make sure player can play at least 1 plant
 	/**
-	 * This method checks that a player has a plant.
-	 * @return A boolean, true if the player has a plant available or false if there is no available plants.
+	 * This method checks that a player has a plant they can play.
+	 * @return A boolean, true if the player can affod a plant or false if there if they are all too expensive.
 	 */
-	public boolean plantAvailable() {
+	public static boolean plantAffordable() {
 		for (Plant plant: allPlants) {
-			if (plant.isAvailable())
+			if (plant.isAffordable())
 				return true;
 		}
 		return false;

@@ -19,6 +19,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -51,8 +53,33 @@ public class Controller {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
+				if (arg0.getValueIsAdjusting())
+					return;
 				if (!arg0.getValueIsAdjusting()) {
-					gridCond(true);
+					if (view.getPlants().getSelectedValue()== null)
+						return;
+					JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
+					for (Plant plant: Level.allPlants) {
+						if (j.getText() != plant.getObjectTitle())
+							continue;
+						else {
+							if (!plant.isAffordable()) {
+								JOptionPane.showMessageDialog(null,"You cannot afford this plant");
+								gridCond(false);
+								view.getPlants().clearSelection();
+								return;
+							}
+							if (!plant.isAvailable()) {
+								JOptionPane.showMessageDialog(null,"This plant is available in " + plant.getCurrentTime() + " turn(s)");
+								gridCond(false);
+								view.getPlants().clearSelection();
+								return;
+							}
+							
+							gridCond(true);
+							return;
+						}	
+					}	
 				}
 			}
 		});
@@ -66,15 +93,20 @@ public class Controller {
 						gridCond(false);
 						flowerButtonsEnabled(false);
 						String s = e.getActionCommand();
-						System.out.println(s);
 						String[] rowcol = s.split(" ");
 						JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
 						view.getPlants().clearSelection();
 						addPlant(j.getText(), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 						gridCond(false);
-						addDelay(500);
-						boardTurn();
-						view.getCoins().setText("Sun Points: " + Level.coins);
+						//If player cannot buy plants, board turn restarts
+						for(;;) {
+							addDelay(500);
+							boardTurn();
+							view.getCoins().setText("Sun Points: " + Level.coins);
+							playerWinLose();
+							if(Level.plantAffordable())
+								break;
+						}
 						flowerButtonsEnabled(true);
 					}
 				});
@@ -114,7 +146,7 @@ public class Controller {
 	public static void reStart() {
 		char reply;
 		do {
-			System.out.println("Would you like to Re-Start the Level? y/n");
+			//System.out.println("Would you like to Re-Start the Level? y/n");
 			reply = reader.next().charAt(0);
 		} while (reply != 'y' && reply != 'n');
 
@@ -145,14 +177,16 @@ public class Controller {
 	 */
 	public static void playerWinLose() {
 		// If Player Wins the Level
-		if (Level.isEmpty() && !Board.zombiesLeft()) {
-			System.out.print("WON LEVEL!----------------------------------------------------------" + "\n");
+		if (Level.isEmpty() && Board.zombiesOnBoard.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "!!!!!!!YOU WON!!!!!!!!");
+			view.dispose();
 			reStart();
 			return;
 		}
 		// If Player Loses the Level
 		if (Board.zombiesInFirstColumn()) {
-			System.out.println("LOST LEVEL!-------------------------------------------------------" + "\n");
+			JOptionPane.showMessageDialog(null, "You Lost....");
+			view.dispose();
 			reStart();
 			return;
 		}
@@ -162,15 +196,6 @@ public class Controller {
 	/**
 	 * This method allows the player to have a turn.
 	 */
-
-	public static void startTurn(String plantName) {
-
-		if (!(Board.plantAffordable())) {
-			System.out.println("Cannot Afford Plants");
-			return;
-		}
-
-	}
 
 	public static void addPlant(String plantName, int i, int j) {
 		Plant p = null;
