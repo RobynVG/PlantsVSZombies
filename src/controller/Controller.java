@@ -101,14 +101,11 @@ public class Controller {
 						gridCond(false);
 						//If player cannot buy plants, board turn restarts
 						for(;;) {
-							System.out.println(Level.coins + "beginning for loop");
 							addDelay(500);
 							boardTurn();
 							view.getCoins().setText("Sun Points: " + Level.coins);
 							view.repaint();
 							view.revalidate();
-							System.out.println(Level.coins + "end for loop");
-
 							if(Level.plantAffordable())
 								break;
 						}

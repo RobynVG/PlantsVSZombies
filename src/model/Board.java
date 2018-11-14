@@ -53,13 +53,18 @@ public class Board {
 			Board.placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
 	}
 	
+	/**
+	 * This method prepares for the upcomming turn
+	 */
 	public static void prepareNextTurn() {
 		for (Plant plant: plantsOnBoard) {
 			if (plant instanceof SunFlower)
 				Level.coins += SunFlower.COIN_BONUS;
 		}
-		
+		for (Plant plant: Level.allPlants)
+			plant.newTurn();
 	}
+	
 	/**
 	 * This method checks if there is any zombies left on the board
 	 * 
@@ -82,38 +87,6 @@ public class Board {
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * This method determines the equivalent x-coordinate integer of the
-	 * x-coordinate character.
-	 * 
-	 * @param c (String), a single valued string.
-	 * @return A (int), the index at which c was found first.
-	 */
-	public static int getGridX(String c) {
-		for (int i = 0; i < GRID_X.length; i++) {
-			if (c.equals(GRID_X[i])) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * This method determines the equivalent y-coordinate integer of the
-	 * y-coordinate character.
-	 * 
-	 * @param c (String), a single valued string.
-	 * @return A (int), the index at which c was found first.
-	 */
-	public static int getGridY(String c) {
-		for (int i = 0; i < GRID_Y.length; i++) {
-			if (c.equals(GRID_Y[i])) {
-				return i;
-			}
-		}
-		return -1;
 	}
 
 	/**
@@ -217,21 +190,6 @@ public class Board {
 	}
 
 	/**
-	 * This method removes the plant on the grid.
-	 * 
-	 * @param col (int), y-coordinate.
-	 * @param row (int), x-coordinate.
-	 * @return A boolean, true if the plant was removed otherwise false.
-	 */
-	public static boolean removePlant(int col, int row) {
-		grid[col][row] = new NullSpace();
-		if (grid[col][row] instanceof NullSpace) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * This method gets the x-coordinate of the gridObject.
 	 * 
 	 * @param gridObject (Grid Object), the object on the grid.
@@ -272,8 +230,8 @@ public class Board {
 	 * @param posX (int), the x-coordinate on the grid.
 	 * @return A boolean, true if the position is empty otherwise false.
 	 */
-	public static boolean isEmpty(int posX, int posY) {
-		return (getObject(posX, posY) instanceof NullSpace);
+	public static boolean isEmpty(int posY, int posX) {
+		return (getObject(posY, posX) instanceof NullSpace);
 	}
 
 	/**
@@ -300,63 +258,4 @@ public class Board {
 		}
 		return false;
 	}
-
-	/**
-	 * This method checks if a plant is available.
-	 * 
-	 * @return A boolean, true is plant is a available otherwise false.
-	 */
-	public static boolean plantAvailable() {
-		for (Plant plant : Level.allPlants) {
-			if (plant.isAvailable()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * This method prints out the information if the player needs help.
-	 */
-	public void printHelp() {
-		System.out.println("THIS IS THE HELP TEXT, WILL SHOW YOU PLANT ZOMBIE TYPES ETC");
-		System.out.println();
-	}
-
-	/**
-	 * This method checks if the plant is affordable.
-	 * 
-	 * @return A boolean, true if plant is affordable otherwise false.
-	 */
-	public static boolean plantAffordable() {
-		for (Plant plant : Level.allPlants) {
-			if (plant.isAffordable()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-
-
-
-	// Seems redundant atm but thinking there may be more actions to be performed at
-	// the end of board turn later.
-	/**
-	 * This method prepares each turns.
-	 */
-	public static void prepareNewTurn() {
-		for (Plant plant : Level.allPlants) // This function just decreases the wait time for all plant types. Does this
-											// to one of each plant
-			plant.newTurn();
-		for (GridObject plant : Board.gridObjects) { // Possibility to extend this to other objects and call a method
-														// they
-														// all inherit instead of instance of.
-			if (plant instanceof SunFlower) {
-				Level.coins += SunFlower.COIN_BONUS;
-			}
-
-		}
-	}
-
 }
