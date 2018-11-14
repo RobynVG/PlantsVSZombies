@@ -11,12 +11,8 @@ public class VenusFlyTrap extends Plant {
 	 * This construct a venus flytrap.
 	 */
 	public VenusFlyTrap() {
-		fullTime = FULL_TIME;
+		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"VenusFlyTrap");
 		currentTime = fullTime; //new object created - reset static timer
-		strength = STRENGTH;
-		health = FULL_HEALTH;
-		price = PRICE;
-		objectTitle = "VenusFlyTrap";
 	}
 
 	//VenusFlyTraps only zombies in front of them
@@ -27,13 +23,6 @@ public class VenusFlyTrap extends Plant {
 		zombie.loseHealth(strength);
 	}
 	
-	/**
-	 * This method prints out a venus flytrap string on the grid. 
-	 * @return A String, this method returns a venus flytrap string equivalent.
-	 */
-	public String toString() {
-		return "[ V ]";
-	}
 	
 	//Can't inherit the function since this one deals with static vars. Can override though
 	/**
@@ -54,33 +43,11 @@ public class VenusFlyTrap extends Plant {
 	}
 	
 	/**
-	 * This method checks if the player can afford the venus flytrap.
-	 * @return A boolean, true if it is affordable otherwise false.
-	 */
-	public boolean isAffordable() {
-		return (price <= Level.coins);
-	}
-	
-	/**
 	 * This method makes the venus flytrap available to the player.
 	 */
 	public void makeAvailable() {
 		currentTime = 0;
 	}
-	
-	/**
-	 * This method is when a player wants to purchase a venus flytrap. 
-	 * The player can only purchase the venus flytrap if they have enough coins.
-	 */
-	public void purchase() { //Static var (price) must redefine function here
-		Level.coins -= PRICE;
-	}
-	
-//	public void loseHealth(int zombieStrength) {
-//		health = health - zombieStrength;
-//		if (health <= 0)
-//			GUI.remove(this);
-//	}
 	
 	/**
 	 * This method gets the current time (Will be overridden by the child class).
