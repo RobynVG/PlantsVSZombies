@@ -198,8 +198,4 @@ public class View extends JFrame {
 	public JLabel getCoins() {
 		return coins;
 	}
-	
-	public static void main(String[] args) {
-		View theView = new View();
-	}
 }
