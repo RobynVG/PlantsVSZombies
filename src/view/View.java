@@ -152,7 +152,7 @@ public class View extends JFrame {
 	}
 	
 	//creates the information frame that views the plants prices
-	private void makeInfoFrame()
+	public void makeInfoFrame()
 	{
 		this.InfoFrame = new JFrame("INFO");
 		this.InfoFrame.setSize(230,90);
@@ -197,5 +197,9 @@ public class View extends JFrame {
 	
 	public JLabel getCoins() {
 		return coins;
+	}
+	
+	public JMenuItem getHelp() {
+		return help;
 	}
 }

@@ -47,6 +47,14 @@ public class Controller {
 	 * Initialize GUI's Action Listeners
 	 */
 	public void initController() {
+		view.getHelp().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e){
+				view.makeInfoFrame();
+			}
+		});
+		
 
 		gridCond(false);
 		view.getPlants().addListSelectionListener(new ListSelectionListener() {
