@@ -2,7 +2,7 @@ package model;
 import java.util.ArrayList;
 
 public class Level {
-	static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
+	public static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
 	static ArrayList<Zombie> allZombies; //Actually all zombies
 	public static int coins = 10; 
 	
