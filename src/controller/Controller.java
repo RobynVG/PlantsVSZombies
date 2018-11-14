@@ -64,24 +64,39 @@ public class Controller {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						gridCond(false);
+						flowerButtonsEnabled(false);
 						String s = e.getActionCommand();
 						System.out.println(s);
 						String[] rowcol = s.split(" ");
 						JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
+						view.getPlants().clearSelection();
 						addPlant(j.getText(), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
-						Board.boardTurn();
 						gridCond(false);
+						addDelay(500);
+						boardTurn();
+						view.getCoins().setText("Sun Points: " + Level.coins);
+						flowerButtonsEnabled(true);
 					}
 				});
 			}
 		}
 	}
-
-	/**
-	 * Enable Buttons
-	 */
-	public static void buttonsEnable(boolean cond) {
-		View.buttons[row][col].setEnabled(cond);
+	
+	private static void boardTurn() {
+		//Advance or attack
+		Board.boardTurn();
+		
+		gridCond(false);
+		//Spawn
+		Board.spawnZombies();
+		
+		gridCond(false);
+		
+		Board.prepareNextTurn();
+	}
+	
+	private static void flowerButtonsEnabled(boolean enabled) {
+		view.getPlants().setEnabled(enabled);	
 	}
 
 	/**
@@ -176,16 +191,11 @@ public class Controller {
 			button.setIcon(null);
 			return;
 		}
-
-		if (o instanceof VenusFlyTrap) {
-			System.out.println("Venus");
-		}
-		System.out.println(button.getSize());
-		Dimension d = button.getSize();
 		try {
 			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getImageTitle()).getImage()
 					.getScaledInstance(50, 50, Image.SCALE_AREA_AVERAGING));
 			button.setIcon(image);
+			button.setDisabledIcon(image);
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
@@ -204,12 +214,4 @@ public class Controller {
 			}
 		}
 	}
-
-//	private static void gridCond(boolean cond) {
-//		for (int i = 0; i < NUMOFROWS; i++) {
-//			for (int j = 0; j < NUMOFCOLS; j++) {
-//				view.getButtons()[i][j].setEnabled(cond);
-//			}
-//		}
-//	}
 }
