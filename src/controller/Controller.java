@@ -19,6 +19,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -51,8 +53,33 @@ public class Controller {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
+				if (arg0.getValueIsAdjusting())
+					return;
 				if (!arg0.getValueIsAdjusting()) {
-					gridCond(true);
+					if (view.getPlants().getSelectedValue()== null)
+						return;
+					JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
+					for (Plant plant: Level.allPlants) {
+						if (j.getText() != plant.getObjectTitle())
+							continue;
+						else {
+							if (!plant.isAffordable()) {
+								JOptionPane.showMessageDialog(null,"You cannot afford this plant");
+								gridCond(false);
+								view.getPlants().clearSelection();
+								return;
+							}
+							if (!plant.isAvailable()) {
+								JOptionPane.showMessageDialog(null,"This plant is not available yet");
+								gridCond(false);
+								view.getPlants().clearSelection();
+								return;
+							}
+							
+							gridCond(true);
+							return;
+						}	
+					}	
 				}
 			}
 		});
