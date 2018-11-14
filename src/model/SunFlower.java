@@ -79,4 +79,12 @@ public class SunFlower extends Plant {
 		if (health <= 0)
 			Board.remove(this);
 	}
+	
+	/**
+	 * This method gets the current time (Will be overridden by the child class).
+	 * @return A int, returns the current time.
+	 */
+	public int getCurrentTime() {
+		return currentTime;
+	}
 }

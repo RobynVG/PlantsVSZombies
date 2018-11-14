@@ -49,6 +49,7 @@ public class VenusFlyTrap extends Plant {
 	 * @return A boolean, true if it is available otherwise false.
 	 */
 	public boolean isAvailable() {
+		System.out.println(currentTime);
 		return (currentTime == 0);
 	}
 	
@@ -80,6 +81,14 @@ public class VenusFlyTrap extends Plant {
 //		if (health <= 0)
 //			GUI.remove(this);
 //	}
+	
+	/**
+	 * This method gets the current time (Will be overridden by the child class).
+	 * @return A int, returns the current time.
+	 */
+	public int getCurrentTime() {
+		return currentTime;
+	}
 	
 	
 }
