@@ -2,7 +2,7 @@ package model;
 
 public class SunFlower extends Plant {
 
-	protected static final int FULL_TIME = 1;	//Actually this # - 1. So if 3, its 2 turns.
+	protected static final int FULL_TIME = 0;	//Actually this # - 1. So if 3, its 2 turns.
 	protected static final int STRENGTH = 0;
 	protected static final int FULL_HEALTH = 100;
 	protected static final int PRICE = 2;
