@@ -18,7 +18,7 @@ public class SunFlower extends Plant {
 		strength = STRENGTH;
 		health = FULL_HEALTH;
 		price = PRICE;
-		imageTitle = "SunFlower.png";
+		objectTitle = "SunFlower";
 	}
 	
 	/**
