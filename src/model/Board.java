@@ -26,19 +26,6 @@ public class Board {
 	}
 	
 	/**
-	 * This method allows the zombies to have a turn.
-	 */
-	public static void boardTurn() {
-		if (!zombiesOnBoard.isEmpty()) {
-			for (Plant plant : plantsOnBoard)
-				plant.go();
-
-			for (Zombie zombie : zombiesOnBoard)			
-				zombie.go();
-		}
-	}
-	
-	/**
 	 * This method spawns the zombies on the board.
 	 */
 	public static void spawnZombies() {
@@ -59,7 +46,7 @@ public class Board {
 	public static void prepareNextTurn() {
 		for (Plant plant: plantsOnBoard) {
 			if (plant instanceof SunFlower)
-				Level.coins += SunFlower.COIN_BONUS;
+				Level.coins = Level.coins + SunFlower.COIN_BONUS;
 		}
 		for (Plant plant: Level.allPlants)
 			plant.newTurn();
@@ -114,16 +101,9 @@ public class Board {
 	 */
 	public static GridObject toTheLeft(GridObject zombie) { // mostly just called by zombies but no need to specify
 		int j = getX(zombie);
-		if (j - 1 == -1) // Beginning of board, Plants LOSE! Also returning null is not the same as
-							// NullSpace
-			return null;
 		int i = getY(zombie);
-		try {
+		if ((i != -1 || j != -1) && j!=0)
 			return (grid[i][j - 1]);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Index out of bounds in To the left int i = " + i + "  j = " + j);
-			System.exit(1);
-		}
 		return null;
 	}
 
@@ -136,7 +116,7 @@ public class Board {
 	public static GridObject toTheRight(GridObject plant) {
 		int j = getX(plant);
 		int i = getY(plant);
-		if (i != -1 || j != -1) {
+		if ((i != -1 || j != -1) && j!= Board.GRID_WIDTH-1) {
 			return grid[i][j + 1];
 		}
 		return null;
@@ -232,7 +212,7 @@ public class Board {
 	 * @param j (int), this is the y coordinate of the grid.
 	 * @return A GridObject, the item on the grid.
 	 */
-	private static GridObject getObject(int i, int j) {
+	public static GridObject getObject(int i, int j) {
 		return grid[i][j];
 	}
 

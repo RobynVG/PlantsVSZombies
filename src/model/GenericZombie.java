@@ -1,8 +1,8 @@
 package model;
 
 public class GenericZombie extends Zombie{
-	private static final int STRENGTH = 100;
-	private static final int FULL_HEALTH = 250;
+	public static final int STRENGTH = 100;
+	public static final int FULL_HEALTH = 250;
 	
 	/**
 	 * This method prints out a generic zombie string on the grid. 
