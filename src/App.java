@@ -8,5 +8,7 @@ public class App {
 		Controller c = new Controller(v);
 		
 		c.initController();
+		
+		System.out.println("Hello");
 	}
 }
