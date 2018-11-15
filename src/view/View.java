@@ -166,7 +166,7 @@ public class View extends JFrame {
 		j1.setForeground(Color.GREEN); 
 		InfoPanel.add(j1); 
 		
-		JLabel j2 = new JLabel("3 coins");
+		JLabel j2 = new JLabel("5 coins");
 		j2.setForeground(Color.CYAN);
 		InfoPanel.add(j2);
 		
