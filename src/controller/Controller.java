@@ -5,6 +5,7 @@ import model.NullSpace;
 import model.Plant;
 import model.SunFlower;
 import model.VenusFlyTrap;
+import model.Zombie;
 
 import java.awt.Dimension;
 import java.awt.Image;
@@ -47,6 +48,14 @@ public class Controller {
 	 * Initialize GUI's Action Listeners
 	 */
 	public void initController() {
+		view.getHelp().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e){
+				view.makeInfoFrame();
+			}
+		});
+		
 
 		gridCond(false);
 		view.getPlants().addListSelectionListener(new ListSelectionListener() {
@@ -116,7 +125,13 @@ public class Controller {
 	
 	private static void boardTurn() {
 		//Advance or attack
-		Board.boardTurn();
+		if (!Board.zombiesOnBoard.isEmpty()) {
+			for (Plant plant : Board.plantsOnBoard)
+				plant.go();
+
+			for (Zombie zombie : Board.zombiesOnBoard)			
+				zombie.go();
+		}
 		
 		gridCond(false);
 		//Spawn
@@ -126,6 +141,7 @@ public class Controller {
 		
 		Board.prepareNextTurn();
 	}
+	
 	
 	private static void flowerButtonsEnabled(boolean enabled) {
 		view.getPlants().setEnabled(enabled);	

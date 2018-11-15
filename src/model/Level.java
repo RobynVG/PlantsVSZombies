@@ -55,8 +55,7 @@ public class Level {
 			if (plant.isAffordable())
 				return true;
 		}
-		return false;
-			
+		return false;		
 	}
 	
 }
