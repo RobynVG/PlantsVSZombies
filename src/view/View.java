@@ -82,7 +82,7 @@ public class View extends JFrame {
 		for (int i = 0; i < GRID_HEIGHT; i++) {
 			for (int j = 0; j < GRID_WIDTH; j++) {
 				buttons[i][j] = new JButton("");
-				buttons[i][j].setEnabled(true);
+				buttons[i][j].setEnabled(false);
 				buttons[i][j].setActionCommand(i + " " + j);
 				gridLayoutButtons.add(buttons[i][j]);
 			}
