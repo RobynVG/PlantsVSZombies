@@ -38,7 +38,6 @@ public class VenusFlyTrap extends Plant {
 	 * @return A boolean, true if it is available otherwise false.
 	 */
 	public boolean isAvailable() {
-		System.out.println(currentTime);
 		return (currentTime == 0);
 	}
 	
