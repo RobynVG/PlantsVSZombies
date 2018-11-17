@@ -21,7 +21,7 @@ public class GenericZombieTest extends TestCase {
 	}
 	
 	/**
-	 * This method test lose health in Generic Zombie.
+	 * This method test loseHealth() method.
 	 */
 	public void testLoseHealth() {
 		int health = genericZombie.getHealth();
@@ -30,6 +30,9 @@ public class GenericZombieTest extends TestCase {
 		//assertEquals("Error in loseHealth Method",250);
 	}
 	
+	/**
+	 * This method test if the zombie dies.
+	 */
 	public void testLoseHealthDie() {
 		Board.placeZombie(genericZombie, 2, 2);
 		genericZombie.loseHealth(1000);	
@@ -40,18 +43,27 @@ public class GenericZombieTest extends TestCase {
 		//assertEquals("Error in loseHealth Method",250);
 	}
 	
+	/**
+	 * This method test the attack() method.
+	 */
 	public void testAttack() {
 		int plantHealth = v1.getHealth();
 		genericZombie.attack(v1);
 		assertEquals(v1.getHealth(), plantHealth - genericZombie.getStrength());
 	}
 	
+	/**
+	 * This method test the if the zombie moves on the grid.
+	 */
 	public void testGoAdvance() {
 		Board.placeZombie(genericZombie, 2, 2);
 		genericZombie.go();
 		assertEquals(Board.getObject(2,1), genericZombie);
 	}
 	
+	/**
+	 * This method test the if attack work with the go method.
+	 */
 	public void testGoAttack() {
 		Board.placeZombie(genericZombie, 3, 3);
 		Board.placePlant(v2,2,3);

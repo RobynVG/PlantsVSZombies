@@ -216,11 +216,4 @@ public class Board {
 		return grid[i][j];
 	}
 
-	/**
-	 * This method checks if the object on the grid is a plant.
-	 * 
-	 * @param posY (int), the y-coordinate.
-	 * @param posX (int), the x-coordinate.
-	 * @return A boolean, true if the object is a plant otherwise false.
-	 */
 }
