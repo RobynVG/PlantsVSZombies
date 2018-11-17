@@ -16,12 +16,18 @@ public class VenusFlyTrapTest extends TestCase {
 		v2 = new VenusFlyTrap();
 	}
 	
+	/**
+	 * This method test the attack() method.
+	 */
 	public void testAttack() {
 		int zombieHealth = g1.getHealth();
 		v1.attack(g1);
 		assertEquals(g1.getHealth(), zombieHealth - v1.getStrength());
 	}
 	
+	/**
+	 * This method test the if attack work with the go method .
+	 */
 	public void testGoAttack() {
 		Board.placePlant(v1, 2,3);
 		Board.placeZombie(g1,3,3);

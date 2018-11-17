@@ -4,10 +4,6 @@ public class GenericZombie extends Zombie{
 	public static final int STRENGTH = 100;
 	public static final int FULL_HEALTH = 250;
 	
-	/**
-	 * This method prints out a generic zombie string on the grid. 
-	 * @return A String, this method returns a generic zombie string equivalent.
-	 */
 	public GenericZombie() {
 		super(STRENGTH, FULL_HEALTH, "GenericZombie");
 	}

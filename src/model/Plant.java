@@ -99,39 +99,74 @@ public abstract class Plant extends GridObject{
 	public void attack(Zombie zombie) {
 	}
 	
-	
+	/**
+	 * This method gets the full time.
+	 * @return fullTime
+	 */
 	public int getFullTime() {
 		return fullTime;
 	}
 
+	/**
+	 * This method sets full time.
+	 * @param fullTime
+	 */
 	public void setFullTime(int fullTime) {
 		this.fullTime = fullTime;
 	}
 
+	/**
+	 * This method gets health.
+	 * @return health.
+	 */
 	public int getHealth() {
 		return health;
 	}
 
+	/**
+	 * This method sets health.
+	 * @param health
+	 */
 	public void setHealth(int health) {
 		this.health = health;
 	}
 
+	/**
+	 * This method gets strength.
+	 * @return strength.
+	 */
 	public int getStrength() {
 		return strength;
 	}
 
+	/**
+	 * This set strength.
+	 * @param strength
+	 */
 	public void setStrength(int strength) {
 		this.strength = strength;
 	}
 
+	/**
+	 * This method gets the price.
+	 * @return price
+	 */
 	public int getPrice() {
 		return price;
 	}
 
+	/**
+	 * This method sets price.
+	 * @param price
+	 */
 	public void setPrice(int price) {
 		this.price = price;
 	}
 
+	/**
+	 * This method sets current time.
+	 * @param currentTime
+	 */
 	public void setCurrentTime(int currentTime) {
 		this.currentTime = currentTime;
 	}

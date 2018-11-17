@@ -12,9 +12,6 @@ import java.awt.Insets;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-
-
-//TODO: JList Each Plant will have a setActionCommand so you know what was choose, Info Button with 
 public class View extends JFrame {
 
 	public static final int GRID_HEIGHT = 4;// The Height of the board.
@@ -41,6 +38,9 @@ public class View extends JFrame {
 	// Plant choices
 	private JList<JPanel> menuList;
 
+	/**
+	 * Constructor to construct the view.
+	 */
 	public View() {
 		// Sets the main layout as a BorderLayout.
 		setLayout(new BorderLayout());
@@ -65,15 +65,6 @@ public class View extends JFrame {
 
 		// Adding Menu Bar
 		add(menuBar, BorderLayout.NORTH);
-
-		
-//		output = new JTextArea(); 
-//        output.setBackground(Color.LIGHT_GRAY);                  
-//        output.setBounds(0,360,90,150);    //x 90 
-//        //output.setSize(90,30);
-//		output.setLayout(null);
-//		output.setEditable(false);
-//        add(output); 
 		
 		// Buttons For Main Board Game
 		gridLayoutButtons = new JPanel(new GridLayout(GRID_HEIGHT, GRID_WIDTH));
@@ -151,12 +142,15 @@ public class View extends JFrame {
 		 makeInfoFrame();
 	}
 	
-	//creates the information frame that views the plants prices
+	/**
+	 * This method is the information frame that displays the plants prices.
+	 */
 	public void makeInfoFrame()
 	{
 		this.InfoFrame = new JFrame("INFO");
 		this.InfoFrame.setSize(230,90);
-		this.InfoFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.InfoFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.InfoFrame.setResizable(false);
 		
 		JPanel Panel = new JPanel(new BorderLayout());
 		GridLayout gl = new GridLayout(3, 19);
@@ -187,18 +181,35 @@ public class View extends JFrame {
 		this.InfoFrame.setVisible(true);
 		
 	}
+	
+	/**
+	 * This method gets the buttons
+	 * @return JButtons
+	 */
 	public JButton[][] getButtons() {
 		return buttons;
 	}
 
+	/**
+	 * This method gets the list of plants that are stored.
+	 * @return menuList
+	 */
 	public JList<JPanel> getPlants() {
 		return menuList;
 	}
 	
+	/**
+	 * This method gets JLabel that displays the coins.
+	 * @return coins
+	 */
 	public JLabel getCoins() {
 		return coins;
 	}
 	
+	/**
+	 * This method gets the menu item help.
+	 * @return help
+	 */
 	public JMenuItem getHelp() {
 		return help;
 	}

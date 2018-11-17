@@ -6,6 +6,15 @@ import javax.swing.*;
 
 public class ImageListCellRenderer implements ListCellRenderer<Object> {
 
+	/**
+	 * This method is for the Jlist in the view that stores the buttons.
+	 * @param jlist
+	 * @param value
+	 * @param cellIndex
+	 * @param isSelected
+	 * @param cellHasFocus
+	 * @return component or new JLabel
+	 */
 	@Override
 	public Component getListCellRendererComponent(JList<?> jlist, Object value, int cellIndex, boolean isSelected,
 			boolean cellHasFocus) {

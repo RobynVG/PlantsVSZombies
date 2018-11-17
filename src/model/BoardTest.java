@@ -19,6 +19,9 @@ public class BoardTest extends TestCase {
 		Level.level1();
 	}
 
+	/**
+	 * This test the spawnZombies() method.
+	 */
 	public void testSpawnZombies() {
 		Board.spawnZombies();
 		boolean zombieInG = false;
@@ -29,6 +32,9 @@ public class BoardTest extends TestCase {
 		assertEquals("Testing Zombie Spwan",zombieInG, true);
 	}
 	
+	/**
+	 * This test the spawnZombiesEmpty() method.
+	 */
 	public void testSpawnZombiesEmpty() {
 		Level.allZombies = new ArrayList<Zombie>();
 		Board.spawnZombies();
@@ -40,6 +46,9 @@ public class BoardTest extends TestCase {
 		assertEquals("Testing Zombie Spwan",zombieInG, false);
 	}
 	
+	/**
+	 * This test the prepareNextTurn() method.
+	 */
 	public void testPrepareNextTurn() {
 		Board.setupGrid();
 		Board.placePlant(s1, 2, 2);
@@ -54,43 +63,67 @@ public class BoardTest extends TestCase {
 		
 	}
 	
+	/**
+	 * This test the zombiesInFirstColumnTrue() method.
+	 */
 	public void testZombiesInFirstColumnTrue() {
 		Board.placeZombie(g1, 0, 3);
 		assertEquals(Board.zombiesInFirstColumn(), true);
 	}
 	
+	/**
+	 * This test the zombiesInFirstColumnFalse() method.
+	 */
 	public void testZombiesInFirstColumnFalse() {
 		assertEquals(Board.zombiesInFirstColumn(), false);
 	}
 	
+	/**
+	 * This test toTheLeftZombie() method.
+	 */
 	public void testToTheLeftZombie() {
 		Board.placeZombie(g1, 0, 0);
 		Board.placePlant(s1, 1, 0);
 		assertEquals(Board.toTheLeft(s1), g1);	
 	}
 	
+	/**
+	 * This test the toTheLeftNull() method.
+	 */
 	public void testToTheLeftNull() {
 		Board.placeZombie(g1, 0, 0);
 		assertEquals(Board.toTheLeft(g1), null);	
 	}
 	
+	/**
+	 * This test the toTheRightPlant() method.
+	 */
 	public void testToTheRightPlant() {
 		Board.placeZombie(g1, 0, 0);
 		Board.placePlant(s1, 1, 0);
 		assertEquals(Board.toTheRight(g1), s1);
 	}
 	
+	/**
+	 * This test the toTheRightNull() method.
+	 */
 	public void testToTheRightNull() {
 		Board.placeZombie(g1, Board.GRID_WIDTH-1, 0);
 		assertEquals(Board.toTheRight(g1), null);
 	}
 	
+	/**
+	 * This test the move() method.
+	 */
 	public void testMove() {
 		Board.placePlant(s1, 2, 2);
 		Board.move(s1, (NullSpace) Board.getObject(2, 3));
 		assertEquals(Board.getObject(2, 3), s1);
 	}
 	
+	/**
+	 * This test the removePlant() method.
+	 */
 	public void testRemovePlant() {
 		Board.placePlant(s1, 2, 2);
 		Board.remove(s1);
@@ -100,6 +133,9 @@ public class BoardTest extends TestCase {
 		assertEquals(isNullSpace, true);
 	}
 	
+	/**
+	 * This test the removeZombie() method.
+	 */
 	public void testRemoveZombie() {
 		Board.placeZombie(g1, 2, 2);
 		Board.remove(g1);
