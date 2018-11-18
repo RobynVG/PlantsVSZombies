@@ -3,10 +3,15 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 
 import javax.swing.*;
+
+import model.GridObject;
+import model.Plant;
+import model.Zombie;
 
 public class View extends JFrame {
 
@@ -189,8 +194,60 @@ public class View extends JFrame {
 		this.InfoFrame.add(Panel); //adding the buddy panel to the buddy frame
 		this.InfoFrame.setLocation(30, 30);
 		this.InfoFrame.setVisible(true);
-		
 	}
+	
+	public void displayStats(GridObject o) {
+		if (o instanceof Plant)
+			displayPlantStats((Plant) o);
+		else
+			displayZombieStats((Zombie) o);
+		
+//		JDialog dialog = new JDialog();
+//		dialog.setTitle("Stats");
+//		JLabel typeLabel = new JLabel("Type:     " + o.getObjectTitle());
+//		JLabel healthLabel = new JLabel("Health:     " +ABORT )
+//		dialog.add(typeLabel);
+//		
+//		dialog.setSize(200,300);
+//		dialog.setVisible(true);
+	}
+	
+	private void displayPlantStats(Plant plant) {
+		JDialog dialog = new JDialog();
+		dialog.setTitle("Plant Stats");
+		dialog.setLayout(new GridLayout(0,2));
+		
+		dialog.add(new JLabel("Plant Type:"));
+		dialog.add(new JLabel(plant.getObjectTitle()));
+		dialog.add(new JLabel("Health:"));
+		dialog.add(new JLabel(""+plant.getHealth() + "/" + plant.getFullHealth()));
+		dialog.add(new JLabel("Strength:"));
+		dialog.add(new JLabel(""+plant.getStrength()));
+		dialog.add(new JLabel("Wait Period:"));
+		dialog.add(new JLabel(""+plant.getCurrentTime() + "/" + plant.getFullTime() + " Turns"));
+		
+		dialog.pack();
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
+	}
+	
+	private void displayZombieStats(Zombie zombie) {
+		JDialog dialog = new JDialog();
+		dialog.setTitle("Zombie Stats");
+		dialog.setLayout(new GridLayout(0,2));
+
+		dialog.add(new JLabel("Zombie Type:"));
+		dialog.add(new JLabel(zombie.getObjectTitle()));
+		dialog.add(new JLabel("Health:"));
+		dialog.add(new JLabel(""+zombie.getHealth()+ "/" + zombie.getFullHealth()));
+		dialog.add(new JLabel("Strength:"));
+		dialog.add(new JLabel(""+zombie.getStrength()));
+		
+		dialog.pack();
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
+	}
+	
 	
 	/**
 	 * This method gets the buttons
