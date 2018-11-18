@@ -25,11 +25,17 @@ import view.View;
 public class Controller {
 	static Scanner reader = new Scanner(System.in);
 	private View view;
-	static int row;
-	static int col;
 	static final int NUMOFROWS = 4;
 	static final int NUMOFCOLS = 7;
-
+	private State gridState;
+	
+	public enum State {
+		POSITIONS,
+		STATS,
+		DISABLED;
+	}
+	
+	
 	public Controller(View view) {
 		this.view = view;
 		startGame();
@@ -50,9 +56,9 @@ public class Controller {
 	 * Initialize GUI's Action Listeners
 	 */
 	public void initController() {
-		//Action listener for the help tab to generate information panel
+		//Initialize action listener for the help tab to generate information panel
 		view.getHelp().addActionListener(e -> spawnInfoFrame());
-		//Add an action listener for all plant buttons
+		//Initialize action listener for all plant buttons
 		view.getPlants().addListSelectionListener(e -> plantSelected(e));
 		
 		//Initialize action listener for all of the grid buttons
@@ -60,7 +66,7 @@ public class Controller {
 			for (int j = 0; j < NUMOFCOLS; j++)
 				view.getButtons()[i][j].addActionListener(e -> gridPositionSelected(e));
 		}
-		
+		//Initialize action listener for the end turn button
 		view.getEndTurn().addActionListener(e -> endTurn());
 	}
 	
@@ -79,41 +85,56 @@ public class Controller {
 				//If the plant is not affordable notify the user, disable the grid, and clear the selection
 				if (!plant.isAvailable()) {
 					JOptionPane.showMessageDialog(null,"This plant is available in " + plant.getCurrentTime() + " turn(s)");
-					gridCond(false);
+					gridCond(State.STATS);
 					view.getPlants().clearSelection();
 					return;
 				}
 				//If the plant is not affordable notify the user, disable the grid, and clear the selection
 				if (!plant.isAffordable()) {
 					JOptionPane.showMessageDialog(null,"You cannot afford this plant");
-					gridCond(false);
+					gridCond(State.STATS);
 					view.getPlants().clearSelection();
 					return;
 				}
 				//If this statement is reached the user has chosen a valid plant. Enable the grid so it can be placed
-				gridCond(true);
+				gridCond(State.POSITIONS);
 			}	
 		}		
 	}
 	
 	private void gridPositionSelected(ActionEvent e) {
+		String s = e.getActionCommand();
+		String[] rowcol = s.split(" ");
+				
+		int i = Integer.parseInt(rowcol[0]);
+		int j = Integer.parseInt(rowcol[1]);
+		
+		if (gridState == State.STATS) {
+			GridObject selected = Board.getObject(i, j);
+			view.displayStats(selected);
+			return;
+		}
+			
+			
+		String plantSelected = ((JLabel) view.getPlants().getSelectedValue().getComponent(0)).getText();
+	
 		//Immediately disable the grid once player has selected where to place their plant
-		gridCond(false);
+		gridCond(State.DISABLED);
 		//Disable the flower buttons, the player must wait until the board turn has ended
 		flowerButtonsEnabled(false);
 		//Action command corresponds the the row and column of the selected button
-		String s = e.getActionCommand();
-		String[] rowcol = s.split(" ");
+		///String s = e.getActionCommand();
+		///String[] rowcol = s.split(" ");
 		//Extract the name of the last selected plant from the plant list
-		JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
+		///JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
 		//Clear the plant list selection so once enabled the user can select a new plant
 		view.getPlants().clearSelection();
 		//Add the plant to the board
-		addPlant(j.getText(), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
+		addPlant(plantSelected, Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 		//Display coins
 		view.getCoins().setText("       Sun Points: " + Level.coins);
-		//If player cannot buy plants, board turn restarts
-		gridCond(false);
+		//Allow player to check current stats of any object
+		gridCond(State.STATS);
 		//Enable the flower buttons in case player would like to plant enother plant
 		flowerButtonsEnabled(true);
 	}
@@ -133,6 +154,7 @@ public class Controller {
 		}
 		//Board turn has ended, allow the player to pick another plant
 		flowerButtonsEnabled(true);
+		gridCond(State.STATS);
 	}
 
 	private void boardTurn() {
@@ -145,11 +167,11 @@ public class Controller {
 				zombie.go();
 		}
 		//Refresh the grid (ensure buttons are disabled)
-		gridCond(false);
+		gridCond(State.DISABLED);
 		//Spawn
 		Board.spawnZombies();
 		//Refresh the grid again
-		gridCond(false);
+		gridCond(State.DISABLED);
 		//Give player coins reduce count down on plant timers
 		Board.prepareNextTurn();
 	}
@@ -236,28 +258,41 @@ public class Controller {
 			System.out.println(ex);
 		}
 	}
-
+	
+	private void spawnInfoFrame() {
+		view.makeInfoFrame();
+	}
+	
 	//Refresh the board and set the unnocupied buttons to enabled or disabled according to the parameter passed
-	private void gridCond(boolean gridEnabled) {
+	private void gridCond(State state) {
+		gridState = state;
 		for (int i = 0; i < NUMOFROWS; i++) {
 			for (int j = 0; j < NUMOFCOLS; j++) {
+				JButton button = view.getButtons()[i][j];
 				//Update the btton at the specified location
 				updateButton(view.getButtons()[i][j], Board.grid[i][j]);
-				//If the specified location is not empty or is column j (cannot place plant in final column)
-				//Disable the button
-				if (!Board.isEmpty(i,j) || j == NUMOFCOLS - 1)
-					view.getButtons()[i][j].setEnabled(false);
-				//Else this location is available. Player may place a plant here. Enable these buttons based on the parameter
-				else
-					view.getButtons()[i][j].setEnabled(gridEnabled);
+				
+				switch(state) {
+				case STATS:
+					if (!Board.isEmpty(i,j))
+						button.setEnabled(true);
+					else
+						button.setEnabled(false);
+					break;	
+				case POSITIONS:
+					if (!Board.isEmpty(i, j) || j == NUMOFCOLS - 1)
+						button.setEnabled(false);
+					else
+						button.setEnabled(true);
+					break;
+				case DISABLED:
+					button.setEnabled(false);
+					break;
+				}
 			}
 		}
 		//Refresh the GUI
 		view.revalidate();
 		view.repaint();
-	}
-	
-	private void spawnInfoFrame() {
-		view.makeInfoFrame();
 	}
 }
