@@ -2,14 +2,10 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class View extends JFrame {
@@ -27,13 +23,11 @@ public class View extends JFrame {
 	private JFrame InfoFrame;
 	private JLabel coins;
 	
+	private JButton lastTurn, endTurn, nextTurn;
 	// Buttons(Plant VS Zombies Grid)
 	private JPanel gridLayoutButtons;
 	public static JButton[][] buttons; // A Button Array that retains the Buttons
-	private JLabel j1;
-	private JLabel j2;
-	private JLabel j3;
-	private JLabel j4;
+	private JLabel j1,j2,j3,j4;
 	
 	// Plant choices
 	private JList<JPanel> menuList;
@@ -111,7 +105,7 @@ public class View extends JFrame {
 		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		menuList.setLayoutOrientation(JList.VERTICAL);
 
-		coins = new JLabel("Sun Points: 10");
+		coins = new JLabel("       Sun Points: 10");
 		coins.setPreferredSize(new Dimension(30,30));
 		JPanel plantsAndCoins = new JPanel();
 		plantsAndCoins.setLayout(new BorderLayout());
@@ -121,8 +115,25 @@ public class View extends JFrame {
 		
 		add(plantsAndCoins, BorderLayout.WEST);
 		
+		
+		JPanel optionsPanel = new JPanel();
+		
+		lastTurn = new JButton("Undo");
+		endTurn = new JButton("End Turn");
+		nextTurn = new JButton("Redo");
+		lastTurn.setEnabled(false);
+		endTurn.setEnabled(true);
+		nextTurn.setEnabled(false);
+		
+		optionsPanel.add(lastTurn);
+		optionsPanel.add(endTurn);
+		optionsPanel.add(nextTurn);
+		
+		add(optionsPanel, BorderLayout.SOUTH);
 		//add(menuList, BorderLayout.WEST);
 
+		
+		
 		// Setting the minimum size of the main frame
 		setMinimumSize(new Dimension(1000, 500));
 		// To Center the code
@@ -135,7 +146,6 @@ public class View extends JFrame {
 		pack();
 		// Sets the title name to Plants vs Zombies
 		setTitle("Plants VS Zombies");
-		
 		// Allows the GUI to be visible.
 		setVisible(true);
 		//calls the information frame method
@@ -213,4 +223,29 @@ public class View extends JFrame {
 	public JMenuItem getHelp() {
 		return help;
 	}
+	
+	public JButton getLastTurn() {
+		return lastTurn;
+	}
+
+	public void setLastTurn(JButton lastTurn) {
+		this.lastTurn = lastTurn;
+	}
+
+	public JButton getEndTurn() {
+		return endTurn;
+	}
+
+	public void setEndTurn(JButton endTurn) {
+		this.endTurn = endTurn;
+	}
+
+	public JButton getNextTurn() {
+		return nextTurn;
+	}
+
+	public void setNextTurn(JButton nextTurn) {
+		this.nextTurn = nextTurn;
+	}
+
 }
