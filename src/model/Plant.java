@@ -1,6 +1,7 @@
 package model;
 
 public abstract class Plant extends GridObject{
+	public int fullHealth;
 	public int fullTime; 
 	public int currentTime; //available again at 0, when used counts down from full time;
 	protected int health;
@@ -11,6 +12,7 @@ public abstract class Plant extends GridObject{
 	 * This constructs a plant.
 	 */
 	public Plant(int fullTime, int strength, int health, int price, String objectTitle) {
+		this.fullHealth = health;
 		this.fullTime = fullTime;
 		this.strength = strength;
 		this.health = health;
@@ -169,5 +171,9 @@ public abstract class Plant extends GridObject{
 	 */
 	public void setCurrentTime(int currentTime) {
 		this.currentTime = currentTime;
+	}
+	
+	public int getFullHealth() {
+		return fullHealth;
 	}
 }

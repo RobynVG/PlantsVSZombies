@@ -2,15 +2,16 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import model.GridObject;
+import model.Plant;
+import model.Zombie;
 
 public class View extends JFrame {
 
@@ -27,13 +28,11 @@ public class View extends JFrame {
 	private JFrame InfoFrame;
 	private JLabel coins;
 	
+	private JButton lastTurn, endTurn, nextTurn;
 	// Buttons(Plant VS Zombies Grid)
 	private JPanel gridLayoutButtons;
 	public static JButton[][] buttons; // A Button Array that retains the Buttons
-	private JLabel j1;
-	private JLabel j2;
-	private JLabel j3;
-	private JLabel j4;
+	private JLabel j1,j2,j3,j4;
 	
 	// Plant choices
 	private JList<JPanel> menuList;
@@ -111,7 +110,7 @@ public class View extends JFrame {
 		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		menuList.setLayoutOrientation(JList.VERTICAL);
 
-		coins = new JLabel("Sun Points: 10");
+		coins = new JLabel("       Sun Points: 10");
 		coins.setPreferredSize(new Dimension(30,30));
 		JPanel plantsAndCoins = new JPanel();
 		plantsAndCoins.setLayout(new BorderLayout());
@@ -121,8 +120,25 @@ public class View extends JFrame {
 		
 		add(plantsAndCoins, BorderLayout.WEST);
 		
+		
+		JPanel optionsPanel = new JPanel();
+		
+		lastTurn = new JButton("Undo");
+		endTurn = new JButton("End Turn");
+		nextTurn = new JButton("Redo");
+		lastTurn.setEnabled(false);
+		endTurn.setEnabled(true);
+		nextTurn.setEnabled(false);
+		
+		optionsPanel.add(lastTurn);
+		optionsPanel.add(endTurn);
+		optionsPanel.add(nextTurn);
+		
+		add(optionsPanel, BorderLayout.SOUTH);
 		//add(menuList, BorderLayout.WEST);
 
+		
+		
 		// Setting the minimum size of the main frame
 		setMinimumSize(new Dimension(1000, 500));
 		// To Center the code
@@ -135,7 +151,6 @@ public class View extends JFrame {
 		pack();
 		// Sets the title name to Plants vs Zombies
 		setTitle("Plants VS Zombies");
-		
 		// Allows the GUI to be visible.
 		setVisible(true);
 		//calls the information frame method
@@ -179,8 +194,60 @@ public class View extends JFrame {
 		this.InfoFrame.add(Panel); //adding the buddy panel to the buddy frame
 		this.InfoFrame.setLocation(30, 30);
 		this.InfoFrame.setVisible(true);
-		
 	}
+	
+	public void displayStats(GridObject o) {
+		if (o instanceof Plant)
+			displayPlantStats((Plant) o);
+		else
+			displayZombieStats((Zombie) o);
+		
+//		JDialog dialog = new JDialog();
+//		dialog.setTitle("Stats");
+//		JLabel typeLabel = new JLabel("Type:     " + o.getObjectTitle());
+//		JLabel healthLabel = new JLabel("Health:     " +ABORT )
+//		dialog.add(typeLabel);
+//		
+//		dialog.setSize(200,300);
+//		dialog.setVisible(true);
+	}
+	
+	private void displayPlantStats(Plant plant) {
+		JDialog dialog = new JDialog();
+		dialog.setTitle("Plant Stats");
+		dialog.setLayout(new GridLayout(0,2));
+		
+		dialog.add(new JLabel("Plant Type:"));
+		dialog.add(new JLabel(plant.getObjectTitle()));
+		dialog.add(new JLabel("Health:"));
+		dialog.add(new JLabel(""+plant.getHealth() + "/" + plant.getFullHealth()));
+		dialog.add(new JLabel("Strength:"));
+		dialog.add(new JLabel(""+plant.getStrength()));
+		dialog.add(new JLabel("Wait Period:"));
+		dialog.add(new JLabel(""+plant.getCurrentTime() + "/" + plant.getFullTime() + " Turns"));
+		
+		dialog.pack();
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
+	}
+	
+	private void displayZombieStats(Zombie zombie) {
+		JDialog dialog = new JDialog();
+		dialog.setTitle("Zombie Stats");
+		dialog.setLayout(new GridLayout(0,2));
+
+		dialog.add(new JLabel("Zombie Type:"));
+		dialog.add(new JLabel(zombie.getObjectTitle()));
+		dialog.add(new JLabel("Health:"));
+		dialog.add(new JLabel(""+zombie.getHealth()+ "/" + zombie.getFullHealth()));
+		dialog.add(new JLabel("Strength:"));
+		dialog.add(new JLabel(""+zombie.getStrength()));
+		
+		dialog.pack();
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
+	}
+	
 	
 	/**
 	 * This method gets the buttons
@@ -213,4 +280,29 @@ public class View extends JFrame {
 	public JMenuItem getHelp() {
 		return help;
 	}
+	
+	public JButton getLastTurn() {
+		return lastTurn;
+	}
+
+	public void setLastTurn(JButton lastTurn) {
+		this.lastTurn = lastTurn;
+	}
+
+	public JButton getEndTurn() {
+		return endTurn;
+	}
+
+	public void setEndTurn(JButton endTurn) {
+		this.endTurn = endTurn;
+	}
+
+	public JButton getNextTurn() {
+		return nextTurn;
+	}
+
+	public void setNextTurn(JButton nextTurn) {
+		this.nextTurn = nextTurn;
+	}
+
 }

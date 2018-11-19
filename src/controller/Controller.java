@@ -7,23 +7,16 @@ import model.SunFlower;
 import model.VenusFlyTrap;
 import model.Zombie;
 
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import java.awt.Dimension;
-import java.awt.Image;
 import java.util.Scanner;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import model.Board;
 import model.GridObject;
@@ -31,119 +24,140 @@ import view.View;
 
 public class Controller {
 	static Scanner reader = new Scanner(System.in);
-	static View view;
-	static int row;
-	static int col;
+	private View view;
 	static final int NUMOFROWS = 4;
 	static final int NUMOFCOLS = 7;
-
+	private State gridState;
+	
+	public enum State {
+		POSITIONS,
+		STATS,
+		DISABLED;
+	}
+	
+	
 	public Controller(View view) {
 		this.view = view;
 		startGame();
 
 		Board.setupGrid();
 	}
-
+	
+	/**
+	 * This method starts the game for Plant Versus Zombies.
+	 */
+	public static void startGame() {
+		//Initialize the level and grid
+		Level.level1();
+		Board.setupGrid();
+	}
+	
 	/**
 	 * Initialize GUI's Action Listeners
 	 */
 	public void initController() {
-		//Action listener for the help tab to generate information panel
-		view.getHelp().addActionListener(new ActionListener() {
-			//If user presses help information pane is displayed
-			@Override
-			public void actionPerformed(ActionEvent e){
-				view.makeInfoFrame();
-			}
-		});
-		
-		//Add an action listener for all plant buttons
-		view.getPlants().addListSelectionListener(new ListSelectionListener() {
-			
-			//When plant button is pressed
-			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
-				//If statements deals with multiple events fired by one click
-				if (arg0.getValueIsAdjusting())
-					return;
-				if (!arg0.getValueIsAdjusting()) {
-					//!getValueIsAdjusting gets fired twice getSelectedValue is cleared after the first
-					if (view.getPlants().getSelectedValue()== null)
-						return;
-					//The plant label for the list item that was selected
-					JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
-					//For all of the plants available in current level
-					for (Plant plant: Level.allPlants) {
-						//Continue for loop until we find an instance of plant selected
-						if (j.getText() != plant.getObjectTitle())
-							continue;
-						else {
-							//If the plant is not affordable notify the user, disable the grid, and clear the selection
-							if (!plant.isAffordable()) {
-								JOptionPane.showMessageDialog(null,"You cannot afford this plant");
-								gridCond(false);
-								view.getPlants().clearSelection();
-								return;
-							}
-							//If the plant is not affordable notify the user, disable the grid, and clear the selection
-							if (!plant.isAvailable()) {
-								JOptionPane.showMessageDialog(null,"This plant is available in " + plant.getCurrentTime() + " turn(s)");
-								gridCond(false);
-								view.getPlants().clearSelection();
-								return;
-							}
-							//If this statement is reached the user has chosen a valid plant. Enable the grid so it can be placed
-							gridCond(true);
-							return;
-						}	
-					}	
-				}
-			}
-		});
+		//Initialize action listener for the help tab to generate information panel
+		view.getHelp().addActionListener(e -> spawnInfoFrame());
+		//Initialize action listener for all plant buttons
+		view.getPlants().addListSelectionListener(e -> plantSelected(e));
 		
 		//Initialize action listener for all of the grid buttons
 		for (int i = 0; i < NUMOFROWS; i++) {
-			for (int j = 0; j < NUMOFCOLS; j++) {
-				view.getButtons()[i][j].addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						//Immediately disable the grid once player has selected where to place their plant
-						gridCond(false);
-						//Disable the flower buttons, the player must wait until the board turn has ended
-						flowerButtonsEnabled(false);
-						//Action command corresponds the the row and column of the selected button
-						String s = e.getActionCommand();
-						String[] rowcol = s.split(" ");
-						//Extract the name of the last selected plant from the plant list
-						JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
-						//Clear the plant list selection so once enabled the user can select a new plant
-						view.getPlants().clearSelection();
-						//Add the plant to the board
-						addPlant(j.getText(), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
-						//If player cannot buy plants, board turn restarts
-						gridCond(false);
-						for(;;) {
-							//Plants and zombies attack then zombies spawn
-							boardTurn();
-							//Update the coins on the GUI
-							view.getCoins().setText("Sun Points: " + Level.coins);
-							//Check if a win or loss has occured
-							playerWinLose();
-							//If no plant is affordable player must wait for the board to perform another turn
-							//until they accumulate enough sun points to go
-							if(Level.plantAffordable())
-								break;
-						}
-						//Board turn has ended, allow the player to pick another plant
-						flowerButtonsEnabled(true);
-					}
-				});
-			}
+			for (int j = 0; j < NUMOFCOLS; j++)
+				view.getButtons()[i][j].addActionListener(e -> gridPositionSelected(e));
 		}
+		//Initialize action listener for the end turn button
+		view.getEndTurn().addActionListener(e -> endTurn());
 	}
 	
-	private static void boardTurn() {
+	private void plantSelected(ListSelectionEvent arg0) {
+		//If statements deals with multiple events fired by one click
+		if (arg0.getValueIsAdjusting() || view.getPlants().getSelectedValue() == null)
+			return;
+		//Extract the name of the plant from the list item selected
+		String plantName = ((JLabel) view.getPlants().getSelectedValue().getComponent(0)).getText();
+		//For all of the plants available in current level
+		for (Plant plant: Level.allPlants) {
+			//Continue for loop until we find an instance of plant selected
+			if (plantName != plant.getObjectTitle())
+				continue;
+			else {
+				//If the plant is not affordable notify the user, disable the grid, and clear the selection
+				if (!plant.isAvailable()) {
+					JOptionPane.showMessageDialog(null,"This plant is available in " + plant.getCurrentTime() + " turn(s)");
+					gridCond(State.STATS);
+					view.getPlants().clearSelection();
+					return;
+				}
+				//If the plant is not affordable notify the user, disable the grid, and clear the selection
+				if (!plant.isAffordable()) {
+					JOptionPane.showMessageDialog(null,"You cannot afford this plant");
+					gridCond(State.STATS);
+					view.getPlants().clearSelection();
+					return;
+				}
+				//If this statement is reached the user has chosen a valid plant. Enable the grid so it can be placed
+				gridCond(State.POSITIONS);
+			}	
+		}		
+	}
+	
+	private void gridPositionSelected(ActionEvent e) {
+		String s = e.getActionCommand();
+		String[] rowcol = s.split(" ");
+				
+		int i = Integer.parseInt(rowcol[0]);
+		int j = Integer.parseInt(rowcol[1]);
+		
+		if (gridState == State.STATS) {
+			GridObject selected = Board.getObject(i, j);
+			view.displayStats(selected);
+			return;
+		}
+			
+			
+		String plantSelected = ((JLabel) view.getPlants().getSelectedValue().getComponent(0)).getText();
+	
+		//Immediately disable the grid once player has selected where to place their plant
+		gridCond(State.DISABLED);
+		//Disable the flower buttons, the player must wait until the board turn has ended
+		flowerButtonsEnabled(false);
+		//Action command corresponds the the row and column of the selected button
+		///String s = e.getActionCommand();
+		///String[] rowcol = s.split(" ");
+		//Extract the name of the last selected plant from the plant list
+		///JLabel j = (JLabel) view.getPlants().getSelectedValue().getComponent(0);
+		//Clear the plant list selection so once enabled the user can select a new plant
+		view.getPlants().clearSelection();
+		//Add the plant to the board
+		addPlant(plantSelected, Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
+		//Display coins
+		view.getCoins().setText("       Sun Points: " + Level.coins);
+		//Allow player to check current stats of any object
+		gridCond(State.STATS);
+		//Enable the flower buttons in case player would like to plant enother plant
+		flowerButtonsEnabled(true);
+	}
+
+	private void endTurn() {
+		for(;;) {
+			//Plants and zombies attack then zombies spawn
+			boardTurn();
+			//Update the coins on the GUI
+			view.getCoins().setText("       Sun Points: " + Level.coins);
+			//Check if a win or loss has occured
+			playerWinLose();
+			//If no plant is affordable player must wait for the board to perform another turn
+			//until they accumulate enough sun points to go
+			if(Level.plantAffordable())
+				break;
+		}
+		//Board turn has ended, allow the player to pick another plant
+		flowerButtonsEnabled(true);
+		gridCond(State.STATS);
+	}
+
+	private void boardTurn() {
 		//All plants then all zombies on the board - Advance or attack
 		if (!Board.zombiesOnBoard.isEmpty()) {
 			for (Plant plant : Board.plantsOnBoard)
@@ -153,29 +167,21 @@ public class Controller {
 				zombie.go();
 		}
 		//Refresh the grid (ensure buttons are disabled)
-		gridCond(false);
+		gridCond(State.DISABLED);
 		//Spawn
 		Board.spawnZombies();
 		//Refresh the grid again
-		gridCond(false);
+		gridCond(State.DISABLED);
 		//Give player coins reduce count down on plant timers
 		Board.prepareNextTurn();
 	}
 	
 	//Enable or disable all of the plant buttons
-	private static void flowerButtonsEnabled(boolean enabled) {
+	private void flowerButtonsEnabled(boolean enabled) {
 		view.getPlants().setEnabled(enabled);	
 	}
 
-	/**
-	 * This method starts the game for Plant Versus Zombies.
-	 */
-	public static void startGame() {
-		//Initialize the level and grid
-		Level.level1();
-		Board.setupGrid();
 
-	}
 
 	/*
 	 * 
@@ -194,7 +200,7 @@ public class Controller {
 	 * 
 	 * @True if the player wins the level
 	 */
-	public static void playerWinLose() {
+	private void playerWinLose() {
 		// If Player Wins the Level because there are no zombies to be spawned an no zombies on the board
 		if (Level.isEmpty() && Board.zombiesOnBoard.isEmpty()) {
 			//Spawn a dialog to inform user
@@ -252,20 +258,37 @@ public class Controller {
 			System.out.println(ex);
 		}
 	}
-
+	
+	private void spawnInfoFrame() {
+		view.makeInfoFrame();
+	}
+	
 	//Refresh the board and set the unnocupied buttons to enabled or disabled according to the parameter passed
-	private static void gridCond(boolean gridEnabled) {
+	private void gridCond(State state) {
+		gridState = state;
 		for (int i = 0; i < NUMOFROWS; i++) {
 			for (int j = 0; j < NUMOFCOLS; j++) {
+				JButton button = view.getButtons()[i][j];
 				//Update the btton at the specified location
 				updateButton(view.getButtons()[i][j], Board.grid[i][j]);
-				//If the specified location is not empty or is column j (cannot place plant in final column)
-				//Disable the button
-				if (!Board.isEmpty(i,j) || j == NUMOFCOLS - 1)
-					view.getButtons()[i][j].setEnabled(false);
-				//Else this location is available. Player may place a plant here. Enable these buttons based on the parameter
-				else
-					view.getButtons()[i][j].setEnabled(gridEnabled);
+				
+				switch(state) {
+				case STATS:
+					if (!Board.isEmpty(i,j))
+						button.setEnabled(true);
+					else
+						button.setEnabled(false);
+					break;	
+				case POSITIONS:
+					if (!Board.isEmpty(i, j) || j == NUMOFCOLS - 1)
+						button.setEnabled(false);
+					else
+						button.setEnabled(true);
+					break;
+				case DISABLED:
+					button.setEnabled(false);
+					break;
+				}
 			}
 		}
 		//Refresh the GUI
