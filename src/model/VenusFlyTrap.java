@@ -12,7 +12,6 @@ public class VenusFlyTrap extends Plant {
 	 */
 	public VenusFlyTrap() {
 		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"VenusFlyTrap");
-		currentTime = fullTime; //new object created - reset static timer
 	}
 
 	//VenusFlyTraps only zombies in front of them
@@ -54,6 +53,10 @@ public class VenusFlyTrap extends Plant {
 	 */
 	public int getCurrentTime() {
 		return currentTime;
+	}
+	
+	public void setCurrentTime(int currentTime) {
+		VenusFlyTrap.currentTime = currentTime;
 	}
 	
 	

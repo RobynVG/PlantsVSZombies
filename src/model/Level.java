@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Level {
 	public static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
-	static ArrayList<Zombie> allZombies; //Actually all zombies
+	private static ArrayList<Zombie> allZombies; //Actually all zombies
 	public static int coins = 10; 
 	
 	
@@ -42,7 +42,7 @@ public class Level {
 	public static void startLevel() {
 		//something to clean the board here;
 		allZombies = new ArrayList<Zombie>();
-		allPlants = new ArrayList<Plant>();   //
+		allPlants = new ArrayList<Plant>();
 	}
 	
 	//Checks to make sure player can play at least 1 plant
@@ -56,6 +56,14 @@ public class Level {
 				return true;
 		}
 		return false;		
+	}
+	
+	public static ArrayList<Zombie> getAllZombies(){
+		return allZombies;
+	}
+	
+	public static void setAllZombies(ArrayList<Zombie> zombies) {
+		allZombies = zombies;
 	}
 	
 }
