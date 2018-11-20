@@ -14,7 +14,6 @@ public class SunFlower extends Plant {
 	 */
 	public SunFlower() {
 		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"SunFlower");
-		currentTime = fullTime; //new object created - reset static timer
 	}
 		
 	//Can't inherit the function since this one deals with static vars. Can override though
@@ -47,5 +46,13 @@ public class SunFlower extends Plant {
 	 */
 	public int getCurrentTime() {
 		return currentTime;
+	}
+	
+	/**
+	 * This method sets current time.
+	 * @param currentTime
+	 */
+	public void setCurrentTime(int currentTime) {
+		SunFlower.currentTime = currentTime;
 	}
 }

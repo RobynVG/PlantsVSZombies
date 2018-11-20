@@ -4,8 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.*;
 
@@ -14,25 +18,21 @@ import model.Plant;
 import model.Zombie;
 
 public class View extends JFrame {
-
 	public static final int GRID_HEIGHT = 4;// The Height of the board.
 	public static final int GRID_WIDTH = 7;// The Width of the board.
-
+	
 	// Menu
 	private JMenuBar menuBar;// The menu bar
 	private JMenu menu; // The menu
-	private JMenuItem start; // Menu item to start the game
-	private JMenuItem restart; // Menu item to restart the game.
-	private JMenuItem help; // Menu item for game help
-	private JTextArea output;
-	private JFrame InfoFrame;
-	private JLabel coins;
+	private JMenuItem start, restart, help; // Menu items
 	
-	private JButton lastTurn, endTurn, nextTurn;
+	private JLabel coins; //label to hold coin values
+	
+	private JButton undoTurn, endTurn, redoTurn;
+	
 	// Buttons(Plant VS Zombies Grid)
 	private JPanel gridLayoutButtons;
 	public static JButton[][] buttons; // A Button Array that retains the Buttons
-	private JLabel j1,j2,j3,j4;
 	
 	// Plant choices
 	private JList<JPanel> menuList;
@@ -45,23 +45,20 @@ public class View extends JFrame {
 		setLayout(new BorderLayout());
 		// MenuBar for storing the Menu
 		menuBar = new JMenuBar();
-
 		// Menu
 		menu = new JMenu("Menu");
-
 		// Menu Item
 		start = new JMenuItem("Start"); // Start Menu Item, to first start the game.
 		restart = new JMenuItem("Restart"); // Restart Menu Item, reset the game.
 		help = new JMenuItem("Help"); // Help Menu item, instructions for the user if they need help.
-
-		// Adding Menu item to the Menu
+		// Initialize help menu item enabled only when plant information panel is not already displayed.
+		help.setEnabled(false);
+		// Adding Menu items to the Menu
 		menu.add(start);
 		menu.add(restart);
 		menu.add(help);
-
 		// Adding Menu to Menu Bar
 		menuBar.add(menu);
-
 		// Adding Menu Bar
 		add(menuBar, BorderLayout.NORTH);
 		
@@ -111,7 +108,6 @@ public class View extends JFrame {
 		menuList.setLayoutOrientation(JList.VERTICAL);
 
 		coins = new JLabel("       Sun Points: 10");
-		coins.setPreferredSize(new Dimension(30,30));
 		JPanel plantsAndCoins = new JPanel();
 		plantsAndCoins.setLayout(new BorderLayout());
 		
@@ -123,26 +119,23 @@ public class View extends JFrame {
 		
 		JPanel optionsPanel = new JPanel();
 		
-		lastTurn = new JButton("Undo");
+		undoTurn = new JButton("Undo");
 		endTurn = new JButton("End Turn");
-		nextTurn = new JButton("Redo");
-		lastTurn.setEnabled(false);
+		redoTurn = new JButton("Redo");
+		undoTurn.setEnabled(false);
 		endTurn.setEnabled(true);
-		nextTurn.setEnabled(false);
+		redoTurn.setEnabled(false);
 		
-		optionsPanel.add(lastTurn);
+		optionsPanel.add(undoTurn);
 		optionsPanel.add(endTurn);
-		optionsPanel.add(nextTurn);
+		optionsPanel.add(redoTurn);
 		
 		add(optionsPanel, BorderLayout.SOUTH);
-		//add(menuList, BorderLayout.WEST);
-
-		
-		
+				
 		// Setting the minimum size of the main frame
 		setMinimumSize(new Dimension(1000, 500));
-		// To Center the code
-		setLocationRelativeTo(null);
+		// Close to center but allow room for plant information panel.
+		setLocation(210,100);
 		// Allows the user to resize the Frame by minimizing and maximizing.
 		setResizable(false);
 		// Allows the user to exit out of the frame.
@@ -157,33 +150,38 @@ public class View extends JFrame {
 		 makeInfoFrame();
 	}
 	
+	
 	/**
 	 * This method is the information frame that displays the plants prices.
 	 */
 	public void makeInfoFrame()
 	{
-		this.InfoFrame = new JFrame("INFO");
-		this.InfoFrame.setSize(230,90);
-		this.InfoFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.InfoFrame.setResizable(false);
+		help.setEnabled(false);
+		JDialog infoFrame = new JDialog(this);
+		infoFrame.setTitle("Pricing Information");
+		infoFrame.setResizable(false);
 		
 		JPanel Panel = new JPanel(new BorderLayout());
-		GridLayout gl = new GridLayout(3, 19);
+		GridLayout gl = new GridLayout(0, 2);
 		JPanel InfoPanel = new JPanel(gl);
 		
 		JLabel j1 = new JLabel("VenusFlyTrap : ");
+		j1.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
 		j1.setForeground(Color.GREEN); 
 		InfoPanel.add(j1); 
 		
 		JLabel j2 = new JLabel("5 coins");
+		j2.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
 		j2.setForeground(Color.CYAN);
 		InfoPanel.add(j2);
 		
 		JLabel j3 = new JLabel("SunFlower : ");
+		j3.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
 		j3.setForeground(Color.green); 
 		InfoPanel.add(j3); 
 		
 		JLabel j4 = new JLabel("2 coins");
+		j4.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
 		j4.setForeground(Color.CYAN);
 		InfoPanel.add(j4);
 		
@@ -191,9 +189,17 @@ public class View extends JFrame {
 		InfoPanel.setOpaque(true);
 		InfoPanel.setBackground(Color.DARK_GRAY);
 		
-		this.InfoFrame.add(Panel); //adding the buddy panel to the buddy frame
-		this.InfoFrame.setLocation(30, 30);
-		this.InfoFrame.setVisible(true);
+		infoFrame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				help.setEnabled(true);
+			}
+		});
+		
+		infoFrame.add(Panel); //adding the buddy panel to the buddy frame
+		infoFrame.pack();
+		infoFrame.setLocation(0, 100);
+		infoFrame.setVisible(true);
 	}
 	
 	public void displayStats(GridObject o) {
@@ -201,15 +207,6 @@ public class View extends JFrame {
 			displayPlantStats((Plant) o);
 		else
 			displayZombieStats((Zombie) o);
-		
-//		JDialog dialog = new JDialog();
-//		dialog.setTitle("Stats");
-//		JLabel typeLabel = new JLabel("Type:     " + o.getObjectTitle());
-//		JLabel healthLabel = new JLabel("Health:     " +ABORT )
-//		dialog.add(typeLabel);
-//		
-//		dialog.setSize(200,300);
-//		dialog.setVisible(true);
 	}
 	
 	private void displayPlantStats(Plant plant) {
@@ -281,12 +278,12 @@ public class View extends JFrame {
 		return help;
 	}
 	
-	public JButton getLastTurn() {
-		return lastTurn;
+	public JButton getUndoTurn() {
+		return undoTurn;
 	}
 
-	public void setLastTurn(JButton lastTurn) {
-		this.lastTurn = lastTurn;
+	public void setUndoTurn(JButton lastTurn) {
+		this.undoTurn = lastTurn;
 	}
 
 	public JButton getEndTurn() {
@@ -297,12 +294,12 @@ public class View extends JFrame {
 		this.endTurn = endTurn;
 	}
 
-	public JButton getNextTurn() {
-		return nextTurn;
+	public JButton getRedoTurn() {
+		return redoTurn;
 	}
 
-	public void setNextTurn(JButton nextTurn) {
-		this.nextTurn = nextTurn;
+	public void setRedoTurn(JButton nextTurn) {
+		this.redoTurn = nextTurn;
 	}
 
 }

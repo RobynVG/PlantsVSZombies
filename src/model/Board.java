@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import controller.Controller.State;
+
 public class Board {
 	public static final int GRID_HEIGHT = 4;
 	public static final int GRID_WIDTH = 7;
@@ -13,6 +15,8 @@ public class Board {
 	public static ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
 	public static ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
 
+	
+	
 	/**
 	 * This method sets up and prints the grid.
 	 */
@@ -29,15 +33,35 @@ public class Board {
 	 * This method spawns the zombies on the board.
 	 */
 	public static void spawnZombies() {
-		if (Level.allZombies.isEmpty())
+		if (Level.getAllZombies().isEmpty())
 			return;
 		
 		int yPos = ThreadLocalRandom.current().nextInt(0, 3);
-		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.allZombies.size());
-		Zombie zombie = Level.allZombies.remove(randZombie); 
+		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.getAllZombies().size());
+		Zombie zombie = Level.getAllZombies().remove(randZombie); 
 
 		if (Board.isEmpty(yPos, Board.GRID_WIDTH - 1))
 			Board.placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
+	}
+	
+	public static void startBoardTurn(CommandManager commandManager) {
+		commandManager.executeCommand(new BoardTurnCommand());
+	}
+	
+	public static void boardTurn() {
+		//All plants then all zombies on the board - Advance or attack
+		if (!Board.zombiesOnBoard.isEmpty()) {
+			for (Plant plant : Board.plantsOnBoard)
+				plant.go();
+
+			for (Zombie zombie : Board.zombiesOnBoard)			
+				zombie.go();
+		}
+		//Spawn
+		Board.spawnZombies();
+
+		//Give player coins reduce count down on plant timers
+		Board.prepareNextTurn();
 	}
 	
 	/**
@@ -48,8 +72,9 @@ public class Board {
 			if (plant instanceof SunFlower)
 				Level.coins = Level.coins + SunFlower.COIN_BONUS;
 		}
-		for (Plant plant: Level.allPlants)
+		for (Plant plant: Level.allPlants) {
 			plant.newTurn();
+		}
 	}
 
 	/**
@@ -78,6 +103,8 @@ public class Board {
 		grid[posX][posY] = plant;
 		plantsOnBoard.add(plant);
 		gridObjects.add(plant);
+		Level.coins -= plant.getPrice();
+		plant.setCurrentTime(plant.getFullTime());
 	}
 
 	/**
@@ -214,6 +241,25 @@ public class Board {
 	 */
 	public static GridObject getObject(int i, int j) {
 		return grid[i][j];
+	}
+	
+
+	
+	//Used for debugging
+	private void printGrid(GridObject[][] objects) {
+		for (int i = 0; i < GRID_HEIGHT; i++) {
+			for (int j = 0; j < GRID_WIDTH; j++) {
+				if (objects[i][j] instanceof GenericZombie)
+					System.out.print("[ g ]");
+				else if (objects[i][j] instanceof SunFlower)
+					System.out.print("[ S ]");
+				else if (objects[i][j] instanceof VenusFlyTrap)
+					System.out.print("[ V ]");
+				else
+					System.out.print("[   ]");
+			}
+			System.out.print("\n");
+		}	
 	}
 
 }
