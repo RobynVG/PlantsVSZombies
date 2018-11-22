@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 class BoardTurnCommand implements Command{
+	private Board board;
     //objects on board plants on board zombies on board.
     //levelPlants levelZombies
 	private int					previousCoins;
@@ -23,7 +24,8 @@ class BoardTurnCommand implements Command{
     private ArrayList<Zombie>	nextLevelZombies;
     
     //
-    public BoardTurnCommand() {
+    public BoardTurnCommand(Board board) {
+    	this.board = board;
     	previousGridObjects = new ArrayList<GridObject>();
     	previousPlantsOnBoard = new ArrayList<Plant>();
     	previousZombiesOnBoard = new ArrayList<Zombie>();
@@ -44,7 +46,7 @@ class BoardTurnCommand implements Command{
         
         for (int i = 0; i < Board.GRID_HEIGHT; i++) {
         	for (int j = 0; j < Board.GRID_WIDTH; j++) {
-        		GridObject o = Board.grid[i][j];
+        		GridObject o = board.grid[i][j];
         		if (o instanceof Plant) {
         			Plant clonePlant = (Plant)GridObjectFactory.createNewGridObject(o.getObjectTitle());
         			clonePlant.setHealth(((Plant)o).getHealth());
@@ -66,11 +68,11 @@ class BoardTurnCommand implements Command{
         	}
         }
      
-        Board.boardTurn();
+        board.boardTurn();
            
         nextCoins = Level.coins;
         
-        for (GridObject o: Board.gridObjects) {
+        for (GridObject o: board.gridObjects) {
     		if (o instanceof Plant) {
     			nextPlantsOnBoard.add((Plant) o);
     			nextGridObjects.add(o);
@@ -86,7 +88,7 @@ class BoardTurnCommand implements Command{
     	
         for (int i = 0; i < Board.GRID_HEIGHT; i++) {
         	for (int j = 0; j < Board.GRID_WIDTH; j++) {
-        		GridObject o = Board.grid[i][j];
+        		GridObject o = board.grid[i][j];
         		nextGridState[i][j] = o;
         	}
         }
@@ -98,7 +100,7 @@ class BoardTurnCommand implements Command{
     public void undo() {
     	for (int i = 0; i < Board.GRID_HEIGHT; i++) {
     		for (int j = 0; j < Board.GRID_WIDTH; j++) {
-    			Board.grid[i][j] = previousGridState[i][j];
+    			board.grid[i][j] = previousGridState[i][j];
     		}
     	}
     	
@@ -113,16 +115,16 @@ class BoardTurnCommand implements Command{
     	
     	Level.coins = previousCoins;
     	Level.setAllZombies(previousLevelZombies);
-    	Board.gridObjects = previousGridObjects;
-    	Board.plantsOnBoard = previousPlantsOnBoard;
-    	Board.zombiesOnBoard = previousZombiesOnBoard;	
+    	board.gridObjects = previousGridObjects;
+    	board.plantsOnBoard = previousPlantsOnBoard;
+    	board.zombiesOnBoard = previousZombiesOnBoard;	
     }
     	
 
 	public void redo() {
     	for (int i = 0; i < Board.GRID_HEIGHT; i++) {
     		for (int j = 0; j < Board.GRID_WIDTH; j++) {
-    			Board.grid[i][j] = nextGridState[i][j];
+    			board.grid[i][j] = nextGridState[i][j];
     		}
     	}
     	for (Plant plant: Level.allPlants) {
@@ -130,8 +132,8 @@ class BoardTurnCommand implements Command{
     	}
     	Level.coins = nextCoins;
     	Level.setAllZombies(nextLevelZombies);
-    	Board.gridObjects = nextGridObjects;
-    	Board.plantsOnBoard = nextPlantsOnBoard;
-    	Board.zombiesOnBoard = nextZombiesOnBoard;
+    	board.gridObjects = nextGridObjects;
+    	board.plantsOnBoard = nextPlantsOnBoard;
+    	board.zombiesOnBoard = nextZombiesOnBoard;
     }
 }

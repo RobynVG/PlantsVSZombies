@@ -25,10 +25,10 @@ public abstract class Plant extends GridObject{
 	/**
 	 * This method allows the plants to move on the board.
 	 */
-	public void go() {
-		GridObject right = Board.toTheRight(this);
+	public void go(Board board) {
+		GridObject right = board.toTheRight(this);
 		if (right instanceof Zombie)
-			attack((Zombie)right);
+			((Zombie)right).loseHealth(strength);;
 	}
 	
 	/**
@@ -44,8 +44,6 @@ public abstract class Plant extends GridObject{
 	 */
 	public void loseHealth(int zombieStrength) {
 		health = health - zombieStrength;
-		if (health <= 0)
-			Board.remove(this);
 	}
 	
 	/**
@@ -59,7 +57,7 @@ public abstract class Plant extends GridObject{
 	 * @return A int, returns the current time.
 	 */
 	public int getCurrentTime() {
-		return currentTime;
+		return 0;
 	}
 	
 	/**
@@ -73,12 +71,11 @@ public abstract class Plant extends GridObject{
 	 * @return A boolean, true if it is available otherwise false.
 	 */
 	public boolean isAvailable() {
-		System.out.println("This method should have been overridden by my children");
 		return false;
 	}
 	
 	/**
-	 * This method checks if the player can afford the plant (Will be overridden by the child class).
+	 * This method checks if the player can afford the plant.
 	 * @return A boolean, true if it is affordable otherwise false.
 	 */
 	public boolean isAffordable() {

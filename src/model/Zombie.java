@@ -15,16 +15,12 @@ public abstract class Zombie extends GridObject {
 	/**
 	 * This method allows the zombies to move on the board.
 	 */
-	public void go() {
-		GridObject left = Board.toTheLeft(this);
+	public void go(Board board) {
+		GridObject left = board.toTheLeft(this);
 		if (left instanceof Plant )
-			attack((Plant)left);
+			((Plant)left).loseHealth(strength);
 		else if (left instanceof NullSpace)
-			advance((NullSpace)left);
-		//else if (left == null) //off the board plants lose!
-			
-		//else
-			//another zombie;  //Should theoretically only happen if the zombie before this one is attacking a plant
+			board.move(this, (NullSpace)left);		
 	}
 	
 	/**
@@ -34,10 +30,8 @@ public abstract class Zombie extends GridObject {
 	 */
 	public void loseHealth(int plantStrength) {
 		health = health - plantStrength;
-		if (health <= 0)
-			Board.remove(this);
 	}
-	
+
 	//All attacks should be different -Override
 	/**
 	 * This method is for when a zombie attacks a plant (Will be overridden by the child class).
@@ -50,9 +44,7 @@ public abstract class Zombie extends GridObject {
 	 * This method allows the zombie to move on the board.
 	 * @param nullSpace (NullSpace), empty space
 	 */
-	public void advance(NullSpace nullSpace) {
-		Board.move(this, nullSpace);
-	}
+	public void advance(NullSpace nullSpace) {}
 
 	/**
 	 * This method gets strength.

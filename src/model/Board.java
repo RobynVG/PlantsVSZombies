@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
 import controller.Controller.State;
@@ -10,17 +11,18 @@ public class Board {
 	public static final int GRID_WIDTH = 7;
 	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G" }; // Must be same length as GRID_WIDTH
 	public static final String GRID_Y[] = { "1", "2", "3", "4" };
-	public static GridObject[][] grid;
-	public static ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
-	public static ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
-	public static ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
-
+	
+	public GridObject[][] grid;
+	public ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
+	public ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
+	public ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
+	public CommandManager commandManager = new CommandManager();
 	
 	
 	/**
 	 * This method sets up and prints the grid.
 	 */
-	public static void setupGrid() {
+	public void setupGrid() {
 		grid = new GridObject[GRID_HEIGHT][GRID_WIDTH];
 		for (int i = 0; i < GRID_HEIGHT; i++) {
 			for (int j = 0; j < GRID_WIDTH; j++) {
@@ -32,7 +34,7 @@ public class Board {
 	/**
 	 * This method spawns the zombies on the board.
 	 */
-	public static void spawnZombies() {
+	public void spawnZombies() {
 		if (Level.getAllZombies().isEmpty())
 			return;
 		
@@ -40,34 +42,35 @@ public class Board {
 		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.getAllZombies().size());
 		Zombie zombie = Level.getAllZombies().remove(randZombie); 
 
-		if (Board.isEmpty(yPos, Board.GRID_WIDTH - 1))
-			Board.placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
+		if (isEmpty(yPos, Board.GRID_WIDTH - 1))
+			placeZombie(zombie, yPos, Board.GRID_WIDTH - 1);
 	}
 	
-	public static void startBoardTurn(CommandManager commandManager) {
-		commandManager.executeCommand(new BoardTurnCommand());
+	public void startBoardTurn() {
+		commandManager.executeCommand(new BoardTurnCommand(this));
 	}
 	
-	public static void boardTurn() {
+	public void boardTurn() {
 		//All plants then all zombies on the board - Advance or attack
-		if (!Board.zombiesOnBoard.isEmpty()) {
-			for (Plant plant : Board.plantsOnBoard)
-				plant.go();
-
-			for (Zombie zombie : Board.zombiesOnBoard)			
-				zombie.go();
+		if (!zombiesOnBoard.isEmpty()) {
+			for (Plant plant : plantsOnBoard)
+				plant.go(this);
+			
+			for (Zombie zombie : zombiesOnBoard)			
+				zombie.go(this);
 		}
+		removeTheDead();
 		//Spawn
-		Board.spawnZombies();
+		spawnZombies();
 
 		//Give player coins reduce count down on plant timers
-		Board.prepareNextTurn();
+		prepareNextTurn();
 	}
 	
 	/**
 	 * This method prepares for the upcomming turn
 	 */
-	public static void prepareNextTurn() {
+	public void prepareNextTurn() {
 		for (Plant plant: plantsOnBoard) {
 			if (plant instanceof SunFlower)
 				Level.coins = Level.coins + SunFlower.COIN_BONUS;
@@ -83,7 +86,7 @@ public class Board {
 	 * @return A boolean, true is there is any zombies in the first column otherwise
 	 *         false.
 	 */
-	public static boolean zombiesInFirstColumn() {
+	public boolean zombiesInFirstColumn() {
 		for (int i = 0; i < GRID_Y.length; i++) {
 			if (getObject(i, 0) instanceof Zombie) {
 				return true;
@@ -99,7 +102,7 @@ public class Board {
 	 * @param posY  (int), the y-coordinate of the grid.
 	 * @param posX  (int), the x-coordinate of the grid.
 	 */
-	public static void placePlant(Plant plant, int posY, int posX) {
+	public void placePlant(Plant plant, int posX, int posY) {
 		grid[posX][posY] = plant;
 		plantsOnBoard.add(plant);
 		gridObjects.add(plant);
@@ -114,7 +117,7 @@ public class Board {
 	 * @param posY   (int), the y-coordinate of the grid.
 	 * @param posX   (int), the x-coordinate of the grid.
 	 */
-	public static void placeZombie(Zombie zombie, int posY, int posX) {
+	public void placeZombie(Zombie zombie, int posX, int posY) {
 		grid[posX][posY] = zombie;
 		zombiesOnBoard.add(zombie);
 		gridObjects.add(zombie);
@@ -126,7 +129,7 @@ public class Board {
 	 * @param zombie (Zombie), a zombie.
 	 * @return gridOject (GridObject), an object on the grid.
 	 */
-	public static GridObject toTheLeft(GridObject zombie) { // mostly just called by zombies but no need to specify
+	public GridObject toTheLeft(GridObject zombie) { // mostly just called by zombies but no need to specify
 		int j = getX(zombie);
 		int i = getY(zombie);
 		if ((i != -1 || j != -1) && j!=0)
@@ -140,7 +143,7 @@ public class Board {
 	 * @param plant (Plant), a plant.
 	 * @return gridObject (GridObject), an object on the grid.
 	 */
-	public static GridObject toTheRight(GridObject plant) {
+	public GridObject toTheRight(GridObject plant) {
 		int j = getX(plant);
 		int i = getY(plant);
 		if ((i != -1 || j != -1) && j!= Board.GRID_WIDTH-1) {
@@ -155,7 +158,7 @@ public class Board {
 	 * @param gridObject (GridObject), the object on the grid.
 	 * @param nullSpace  (NullSpace), empty space.
 	 */
-	public static void move(GridObject gridObject, NullSpace nullSpace) {
+	public void move(GridObject gridObject, NullSpace nullSpace) {
 		int j = getX(gridObject);
 		int i = getY(gridObject);
 		int jnext = getX(nullSpace);
@@ -170,19 +173,21 @@ public class Board {
 	 * @param gridObject (GridObject), the object on the grid.
 	 * @param nullSpace  (NullSpace), empty space.
 	 */
-	public static boolean remove(GridObject gridObject) {
+	public boolean remove(GridObject gridObject) {
 		int j = getX(gridObject);
 		int i = getY(gridObject);
-		grid[i][j] = new NullSpace();
-		
-		gridObjects.remove(gridObject);
-		if (gridObject instanceof Zombie)
-			zombiesOnBoard.remove(gridObject);
-		if (gridObject instanceof Plant)
-			plantsOnBoard.remove(gridObject);
-		
-		if(grid[i][j] instanceof NullSpace) {
-			return true;
+		if (i!=-1 && j!=-1) {
+			grid[i][j] = new NullSpace();
+			
+			gridObjects.remove(gridObject);
+			if (gridObject instanceof Zombie )
+				zombiesOnBoard.remove(gridObject);
+			if (gridObject instanceof Plant)
+				plantsOnBoard.remove(gridObject);
+			
+			if(grid[i][j] instanceof NullSpace) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -193,7 +198,7 @@ public class Board {
 	 * @param gridObject (Grid Object), the object on the grid.
 	 * @return A int, the x-coordinate of the gridObject.
 	 */
-	private static int getX(GridObject gridObject) {
+	private int getX(GridObject gridObject) {
 		int i, j = 0;
 		for (i = 0; i < GRID_HEIGHT; i++) {
 			for (j = 0; j < GRID_WIDTH; j++) {
@@ -210,7 +215,7 @@ public class Board {
 	 * @param gridObject (GridObject), the object on the grid.
 	 * @return A int, the y-coordinate of the gridObject.
 	 */
-	private static int getY(GridObject gridObject) {
+	private int getY(GridObject gridObject) {
 		int i, j = 0;
 		for (i = 0; i < GRID_HEIGHT; i++) {
 			for (j = 0; j < GRID_WIDTH; j++) {
@@ -220,6 +225,29 @@ public class Board {
 		}
 		return -1;
 	}
+	
+	private void removeTheDead() {
+		Iterator<Plant> iteratorP = plantsOnBoard.iterator();
+		Iterator<Zombie> iteratorZ = zombiesOnBoard.iterator();
+		while(iteratorP.hasNext())
+		{ 
+			Plant p = iteratorP.next();
+			if (p.getHealth() <= 0) {
+				iteratorP.remove();
+				remove(p);
+			}
+		}
+		while(iteratorZ.hasNext())
+		{
+			Zombie z = iteratorZ.next();
+			
+			if (z.getHealth() <= 0) {
+				iteratorZ.remove();
+				remove(z);
+			}
+		}
+	} 	
+
 
 	/**
 	 * This method checks if a location from the grid is empty.
@@ -228,7 +256,7 @@ public class Board {
 	 * @param posX (int), the x-coordinate on the grid.
 	 * @return A boolean, true if the position is empty otherwise false.
 	 */
-	public static boolean isEmpty(int posY, int posX) {
+	public boolean isEmpty(int posY, int posX) {
 		return (getObject(posY, posX) instanceof NullSpace);
 	}
 
@@ -239,14 +267,37 @@ public class Board {
 	 * @param j (int), this is the y coordinate of the grid.
 	 * @return A GridObject, the item on the grid.
 	 */
-	public static GridObject getObject(int i, int j) {
+	public GridObject getObject(int i, int j) {
 		return grid[i][j];
 	}
 	
+	public ArrayList<GridObject> getGridObjects() {
+		return gridObjects;
+	}
+
+	public void setGridObjects(ArrayList<GridObject> gridObjects) {
+		this.gridObjects = gridObjects;
+	}
+
+	public ArrayList<Zombie> getZombiesOnBoard() {
+		return zombiesOnBoard;
+	}
+
+	public void setZombiesOnBoard(ArrayList<Zombie> zombiesOnBoard) {
+		this.zombiesOnBoard = zombiesOnBoard;
+	}
+
+	public ArrayList<Plant> getPlantsOnBoard() {
+		return plantsOnBoard;
+	}
+
+	public void setPlantsOnBoard(ArrayList<Plant> plantsOnBoard) {
+		this.plantsOnBoard = plantsOnBoard;
+	}
 
 	
 	//Used for debugging
-	private void printGrid(GridObject[][] objects) {
+	void printGrid(GridObject[][] objects) {
 		for (int i = 0; i < GRID_HEIGHT; i++) {
 			for (int j = 0; j < GRID_WIDTH; j++) {
 				if (objects[i][j] instanceof GenericZombie)
