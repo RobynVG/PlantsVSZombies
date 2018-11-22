@@ -12,22 +12,6 @@ public class Unicorn extends Plant {
 	}
 	
 	/**
-	 * This method reduces the amount of money the player has when purchasing a unicorn.
-	 */
-	public void purchase() {
-		Level.coins -= price;
-	}
-	
-	/**
-	 * This method checks if the player has the appropriate amount of coins to purchase
-	 * the unicorn plant.
-	 * @return True, if the player has enough coins otherwise false.
-	 */
-	public boolean isAffordable() {
-		return (price <= Level.coins);
-	}
-	
-	/**
 	 * This method keeps track of how many game turns have occurred in order
 	 * to make the unicorn available for the player. 
 	 */
@@ -67,17 +51,4 @@ public class Unicorn extends Plant {
 	public void setCurrentTime(int currentTime) {
 		Unicorn.currentTime = currentTime;
 	}
-	
-	/**
-	 * This method reduces the unicorn's health. 
-	 * If the unicorn's is equal or less then zero, the unicorn is removed from the board.
-	 * @param A int which is the zombie's strength.
-	 */
-	public void loseHealth(int zombieStrength) {
-		health = health - zombieStrength;
-		if (health <= 0)
-			Board.remove(this);
-	}
-	
-	
 }
