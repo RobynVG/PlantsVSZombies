@@ -251,7 +251,7 @@ public class Controller {
 		try {
 			//Get the image icon corresponding to the name of the object parameter
 			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle()+".png").getImage()
-					.getScaledInstance(50, 50, Image.SCALE_AREA_AVERAGING));
+					.getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING));
 			//Set the icon on the board
 			button.setIcon(image);
 			//Set the disable icon. This ensure the icon is not greyed out when it is disabled
