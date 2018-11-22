@@ -5,12 +5,10 @@ import model.NullSpace;
 import model.Plant;
 import model.SunFlower;
 import model.VenusFlyTrap;
-import model.Zombie;
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.ImageIcon;
@@ -20,8 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 
 import model.Board;
-import model.Command;
-import model.CommandManager;
 import model.GridObject;
 import model.GridObjectFactory;
 import view.View;
@@ -29,9 +25,11 @@ import view.View;
 public class Controller {
 	static Scanner reader = new Scanner(System.in);
 	private View view;
-	private CommandManager commandManager;
-	static final int NUMOFROWS = 4;
-	static final int NUMOFCOLS = 7;
+	//public static final int GRID_HEIGHT = 4;
+	//public static final int GRID_WIDTH = 7;
+	
+	//static final int Board.GRID_HEIGHT = 4;
+	//static final int Board.GRID_WIDTH = 7;
 	private State gridState;
 	
 	public enum State {
@@ -43,7 +41,6 @@ public class Controller {
 	
 	public Controller(View view) {
 		this.view = view;
-		commandManager = new CommandManager();
 		startGame();
 		Board.setupGrid();
 	}
@@ -67,8 +64,8 @@ public class Controller {
 		view.getPlants().addListSelectionListener(e -> plantSelected(e));
 		
 		//Initialize action listener for all of the grid buttons
-		for (int i = 0; i < NUMOFROWS; i++) {
-			for (int j = 0; j < NUMOFCOLS; j++)
+		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
+			for (int j = 0; j < Board.GRID_WIDTH; j++)
 				view.getButtons()[i][j].addActionListener(e -> gridPositionSelected(e));
 		}
 		//Initialize action listener for the end turn button
@@ -76,14 +73,14 @@ public class Controller {
 		
 		view.getUndoTurn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				commandManager.undo();
+				Board.commandManager.undo();
 				gridCond(State.STATS);
 			}
 		});
 		
 		view.getRedoTurn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				commandManager.redo();
+				Board.commandManager.redo();
 				gridCond(State.STATS);
 			}
 		});
@@ -145,7 +142,7 @@ public class Controller {
 		//Clear the plant list selection so once enabled the user can select a new plant
 		view.getPlants().clearSelection();
 		//Add the plant to the board
-		commandManager.executeCommand(new PlacePlantCommand((Plant)GridObjectFactory.createNewGridObject(plantSelected), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1])));
+		Board.placePlant((Plant)GridObjectFactory.createNewGridObject(plantSelected), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 		//addPlant(plantSelected, Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 		//Display coins
 		view.getCoins().setText("       Sun Points: " + Level.coins);
@@ -158,7 +155,7 @@ public class Controller {
 	private void endTurn() {
 		for(;;) {
 			//Plants and zombies attack then zombies spawn
-			Board.startBoardTurn(commandManager);
+			Board.startBoardTurn();
 			//Update the coins on the GUI
 			view.getCoins().setText("       Sun Points: " + Level.coins);
 			//Update the grid
@@ -268,8 +265,8 @@ public class Controller {
 	//Refresh the board and set the unnocupied buttons to enabled or disabled according to the parameter passed
 	private void gridCond(State state) {
 		gridState = state;
-		for (int i = 0; i < NUMOFROWS; i++) {
-			for (int j = 0; j < NUMOFCOLS; j++) {
+		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
+			for (int j = 0; j < Board.GRID_WIDTH; j++) {
 				JButton button = view.getButtons()[i][j];
 				//Update the btton at the specified location
 				updateButton(view.getButtons()[i][j], Board.grid[i][j]);
@@ -282,7 +279,7 @@ public class Controller {
 						button.setEnabled(false);
 					break;	
 				case POSITIONS:
-					if (!Board.isEmpty(i, j) || j == NUMOFCOLS - 1)
+					if (!Board.isEmpty(i, j) || j == Board.GRID_WIDTH - 1)
 						button.setEnabled(false);
 					else
 						button.setEnabled(true);
@@ -295,85 +292,11 @@ public class Controller {
 		}
 		view.getCoins().setText("       Sun Points: " + Level.coins);
 		
-		view.getUndoTurn().setEnabled(commandManager.isUndoAvailable());
-		view.getRedoTurn().setEnabled(commandManager.isRedoAvailable());
+		view.getUndoTurn().setEnabled(Board.commandManager.isUndoAvailable());
+		view.getRedoTurn().setEnabled(Board.commandManager.isRedoAvailable());
 		
 		//Refresh the GUI
 		view.revalidate();
 		view.repaint();
-	}
-	
-	private class PlacePlantCommand implements Command{
-		private int row;
-		private int col;
-		private Plant p;
-	    //objects on board plants on board zombies on board.
-	    //levelPlants levelZombies
-	    private GridObject[][]		previousGridState;
-	    private ArrayList<GridObject> previousGridObjects;
-	    private ArrayList<Plant> 	previousPlantsOnBoard;
-	    private int 				previousCoins;
-	    
-	    private GridObject[][] 		nextGridState;
-	    private ArrayList<GridObject> nextGridObjects;
-	    private ArrayList<Plant> 	nextPlantsOnBoard;
-	    private int					nextCoins;
-	    
-	    public PlacePlantCommand(Plant p, int row, int col) {
-	    	this.row = row;
-	    	this.col = col;
-	    	this.p = p;
-	    	previousGridObjects = new ArrayList<GridObject>();
-	    	previousPlantsOnBoard = new ArrayList<Plant>();
-	    	nextGridObjects = new ArrayList<GridObject>();
-	    	nextPlantsOnBoard = new ArrayList<Plant>();
-	    	
-	        previousGridState = new GridObject[Board.GRID_HEIGHT][Board.GRID_WIDTH];
-	        nextGridState = new GridObject[Board.GRID_HEIGHT][Board.GRID_WIDTH];
-	        for (int i = 0; i < Board.GRID_HEIGHT; i++) {
-	        	for (int j = 0; j < Board.GRID_WIDTH; j++) {
-	        		GridObject o = Board.grid[i][j];
-	        		previousGridState[i][j] = o;
-	        		nextGridState[i][j] = o;
-	        	}
-	        }
-	        nextGridState[row][col] = p;
-	        
-	        for (GridObject object: Board.gridObjects) {
-	        	previousGridObjects.add(object);
-	        	nextGridObjects.add(object);
-	        	if (object instanceof Plant) {
-		        	previousPlantsOnBoard.add((Plant)object);
-		        	nextPlantsOnBoard.add((Plant)object);
-	        	}
-	        }
-	        nextPlantsOnBoard.add(p);
-	        nextGridObjects.add(p);
-	        
-	        previousCoins = Level.coins;
-	        nextCoins = Level.coins - p.getPrice();
-	    }
-	    	
-	    public void execute() {
-	    	Board.placePlant(p,col,row);
-	    }
-	    	
-	    public void undo() {
-	    	p.setCurrentTime(0);
-	    	Board.grid = previousGridState;
-	    	Board.gridObjects = previousGridObjects;
-	    	Board.plantsOnBoard = previousPlantsOnBoard;
-	    	Level.coins = previousCoins;
-	    	gridCond(State.STATS);
-	    }
-	    	
-	    public void redo() {
-	    	p.setCurrentTime(p.fullTime);
-	    	Board.grid = nextGridState;
-	    	Board.gridObjects = nextGridObjects;
-	    	Board.plantsOnBoard = nextPlantsOnBoard;
-	    	Level.coins = nextCoins;
-	    	gridCond(State.STATS);
-	    }
 	}
 }

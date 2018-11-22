@@ -14,7 +14,7 @@ public class Board {
 	public static ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
 	public static ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
 	public static ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
-
+	public static CommandManager commandManager = new CommandManager();
 	
 	
 	/**
@@ -44,7 +44,7 @@ public class Board {
 			Board.placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
 	}
 	
-	public static void startBoardTurn(CommandManager commandManager) {
+	public static void startBoardTurn() {
 		commandManager.executeCommand(new BoardTurnCommand());
 	}
 	
@@ -99,7 +99,8 @@ public class Board {
 	 * @param posY  (int), the y-coordinate of the grid.
 	 * @param posX  (int), the x-coordinate of the grid.
 	 */
-	public static void placePlant(Plant plant, int posY, int posX) {
+	public static void placePlant(Plant plant, int posX, int posY) {
+		commandManager.executeCommand(new BoardTurnCommand());
 		grid[posX][posY] = plant;
 		plantsOnBoard.add(plant);
 		gridObjects.add(plant);
