@@ -13,22 +13,6 @@ public class SassySquash extends Plant {
 	}
 	
 	/**
-	 * This method reduces the amount of money the player has when purchasing a sassysquash.
-	 */
-	public void purchase() {
-		Level.coins -= price;
-	}
-	
-	/**
-	 * This method checks if the player has the appropriate amount of coins to purchase
-	 * the sassysquash plant.
-	 * @return True, if the player has enough coins otherwise false.
-	 */
-	public boolean isAffordable() {
-		return (price <= Level.coins);
-	}
-	
-	/**
 	 * This method keeps track of how many game turns have occurred in order
 	 * to make the sassysquash available for the player. 
 	 */
@@ -66,19 +50,6 @@ public class SassySquash extends Plant {
 	 * @param currentTime
 	 */
 	public void setCurrentTime(int currentTime) {
-		Unicorn.currentTime = currentTime;
+		SassySquash.currentTime = currentTime;
 	}
-	
-	/**
-	 * This method reduces the sassysquash's health. 
-	 * If the sassysquash's is equal or less then zero, the sassysquash is removed from the board.
-	 * @param A int which is the zombie's strength.
-	 */
-	public void loseHealth(int zombieStrength) {
-		health = health - zombieStrength;
-		if (health <= 0)
-			Board.remove(this);
-	}
-	
-	
 }

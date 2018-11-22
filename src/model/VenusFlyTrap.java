@@ -41,13 +41,6 @@ public class VenusFlyTrap extends Plant {
 	}
 	
 	/**
-	 * This method makes the venus flytrap available to the player.
-	 */
-	public void makeAvailable() {
-		currentTime = 0;
-	}
-	
-	/**
 	 * This method gets the current time (Will be overridden by the child class).
 	 * @return A int, returns the current time.
 	 */
