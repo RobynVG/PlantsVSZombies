@@ -8,14 +8,17 @@ public class BoardTest extends TestCase {
 	public SunFlower s1;
 	public SunFlower s2;
 	public VenusFlyTrap v1;
-	public GenericZombie g1;
+	public GenericZombie g1,g2;
+	public Board board;
 	
 	protected void setUp() {
 		s1 = new SunFlower();
 		s2 = new SunFlower();
 		v1 = new VenusFlyTrap();
 		g1 = new GenericZombie();
-		Board.setupGrid();
+		g2 = new GenericZombie();
+		board = new Board();
+		board.setupGrid();
 		Level.level1();
 	}
 
@@ -23,10 +26,10 @@ public class BoardTest extends TestCase {
 	 * This test the spawnZombies() method.
 	 */
 	public void testSpawnZombies() {
-		Board.spawnZombies();
+		board.spawnZombies();
 		boolean zombieInG = false;
 		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
-			if (Board.getObject(i,Board.GRID_WIDTH-1) instanceof GenericZombie)
+			if (board.getObject(i,Board.GRID_WIDTH-1) instanceof GenericZombie)
 				zombieInG = true;
 		}
 		assertEquals("Testing Zombie Spwan",zombieInG, true);
@@ -36,11 +39,11 @@ public class BoardTest extends TestCase {
 	 * This test the spawnZombiesEmpty() method.
 	 */
 	public void testSpawnZombiesEmpty() {
-		Level.allZombies = new ArrayList<Zombie>();
-		Board.spawnZombies();
+		Level.setAllZombies(new ArrayList<Zombie>());
+		board.spawnZombies();
 		boolean zombieInG = false;
 		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
-			if (Board.getObject(i,Board.GRID_WIDTH-1) instanceof GenericZombie)
+			if (board.getObject(i,Board.GRID_WIDTH-1) instanceof GenericZombie)
 				zombieInG = true;
 		}
 		assertEquals("Testing Zombie Spwan",zombieInG, false);
@@ -50,85 +53,83 @@ public class BoardTest extends TestCase {
 	 * This test the prepareNextTurn() method.
 	 */
 	public void testPrepareNextTurn() {
-		Board.setupGrid();
-		Board.placePlant(s1, 2, 2);
-		Board.placePlant(s2, 1, 1);
-		Board.placePlant(v1, 3, 3);
+		board.setupGrid();
+		board.placePlant(s1, 2, 2);
+		board.placePlant(s2, 1, 1);
+		board.placePlant(v1, 3, 3);
 		Level.coins = 0;
 		
-		Board.prepareNextTurn();
+		board.prepareNextTurn();
 		
-		//To be fixed
-		assertEquals(Level.coins, Level.coins);
-		
+		assertEquals(Level.coins, SunFlower.COIN_BONUS * 2);		
 	}
 	
 	/**
 	 * This test the zombiesInFirstColumnTrue() method.
 	 */
 	public void testZombiesInFirstColumnTrue() {
-		Board.placeZombie(g1, 0, 3);
-		assertEquals(Board.zombiesInFirstColumn(), true);
+		board.placeZombie(g1, 3, 0);
+		assertEquals(board.zombiesInFirstColumn(), true);
 	}
 	
 	/**
 	 * This test the zombiesInFirstColumnFalse() method.
 	 */
 	public void testZombiesInFirstColumnFalse() {
-		assertEquals(Board.zombiesInFirstColumn(), false);
+		assertEquals(board.zombiesInFirstColumn(), false);
 	}
 	
 	/**
 	 * This test toTheLeftZombie() method.
 	 */
 	public void testToTheLeftZombie() {
-		Board.placeZombie(g1, 0, 0);
-		Board.placePlant(s1, 1, 0);
-		assertEquals(Board.toTheLeft(s1), g1);	
+		board.placeZombie(g1, 0, 0);
+		board.placePlant(s1, 0, 1);
+		assertEquals(board.toTheLeft(s1), g1);	
 	}
 	
 	/**
 	 * This test the toTheLeftNull() method.
 	 */
 	public void testToTheLeftNull() {
-		Board.placeZombie(g1, 0, 0);
-		assertEquals(Board.toTheLeft(g1), null);	
+		board.placeZombie(g1, 0, 0);
+		assertEquals(board.toTheLeft(g1), null);	
 	}
 	
 	/**
 	 * This test the toTheRightPlant() method.
 	 */
 	public void testToTheRightPlant() {
-		Board.placeZombie(g1, 0, 0);
-		Board.placePlant(s1, 1, 0);
-		assertEquals(Board.toTheRight(g1), s1);
+		board.placeZombie(g1, 0, 0);
+		board.placePlant(s1, 0, 1);
+		assertEquals(board.toTheRight(g1), s1);
 	}
 	
 	/**
 	 * This test the toTheRightNull() method.
 	 */
 	public void testToTheRightNull() {
-		Board.placeZombie(g1, Board.GRID_WIDTH-1, 0);
-		assertEquals(Board.toTheRight(g1), null);
+		board.placeZombie(g1, 0, Board.GRID_WIDTH-1);
+		assertEquals(board.toTheRight(g1), null);
 	}
 	
 	/**
 	 * This test the move() method.
 	 */
 	public void testMove() {
-		Board.placePlant(s1, 2, 2);
-		Board.move(s1, (NullSpace) Board.getObject(2, 3));
-		assertEquals(Board.getObject(2, 3), s1);
+		board.placePlant(s1, 2, 2);
+		board.move(s1, (NullSpace) board.getObject(2, 3));
+		assertEquals(board.getObject(2, 3), s1);
 	}
 	
 	/**
 	 * This test the removePlant() method.
 	 */
 	public void testRemovePlant() {
-		Board.placePlant(s1, 2, 2);
-		Board.remove(s1);
+		board.placePlant(s1, 2, 2);
+		board.remove(s1);
 		boolean isNullSpace = false;
-		if (Board.getObject(2,2) instanceof NullSpace)
+		if (board.getObject(2,2) instanceof NullSpace)
 			isNullSpace = true;
 		assertEquals(isNullSpace, true);
 	}
@@ -137,29 +138,59 @@ public class BoardTest extends TestCase {
 	 * This test the removeZombie() method.
 	 */
 	public void testRemoveZombie() {
-		Board.placeZombie(g1, 2, 2);
-		Board.remove(g1);
+		board.placeZombie(g1, 2, 2);
+		board.remove(g1);
 		boolean isNullSpace = false;
-		if (Board.getObject(2,2) instanceof NullSpace)
+		if (board.getObject(2,2) instanceof NullSpace)
 			isNullSpace = true;
 		assertEquals(isNullSpace, true);
 	}
-
-//	public static boolean remove(GridObject gridObject) {
-//		int j = getX(gridObject);
-//		int i = getY(gridObject);
-//		grid[i][j] = new NullSpace();
-//		
-//		gridObjects.remove(gridObject);
-//		if (gridObject instanceof Zombie)
-//			zombiesOnBoard.remove(gridObject);
-//		if (gridObject instanceof Plant)
-//			plantsOnBoard.remove(gridObject);
-//		
-//		if(grid[i][j] instanceof NullSpace) {
-//			return true;
-//		}
-//		return false;
-//	}
 	
+	public void testRemoveObjectNotOnBoard() {
+		board.placeZombie(g1, 2, 2);
+		assertEquals(false,board.remove(g2));
+	}
+	
+	/**
+	 * This tests the startBoardTurn() method.
+	 */
+	public void testStartBoardTurn() {
+		board.startBoardTurn();
+		assertEquals(board.commandManager.isUndoAvailable(), true);
+	}
+	
+	public void testBoardTurnDeadPlant() {
+		board.placePlant(s1, 0, 0);
+		board.placeZombie(g1, 0, 1);
+		board.boardTurn();
+		assertEquals(true, board.getPlantsOnBoard().isEmpty());
+	}
+	
+	public void testBoardTurnDeadZombie() {
+		board.placePlant(v1, 0, 0);
+		board.placeZombie(g1, 0, 1);
+		g1.setHealth(1);
+		board.boardTurn();		
+		board.printGrid(board.grid);
+		assertEquals(true, !board.getZombiesOnBoard().contains(g1));
+	}
+	
+	
+
+//	public void boardTurn() {
+//		//All plants then all zombies on the board - Advance or attack
+//		if (!zombiesOnBoard.isEmpty()) {
+//			for (Plant plant : plantsOnBoard)
+//				plant.go(this);
+//			
+//			for (Zombie zombie : zombiesOnBoard)			
+//				zombie.go(this);
+//		}
+//		removeTheDead();
+//		//Spawn
+//		spawnZombies();
+//
+//		//Give player coins reduce count down on plant timers
+//		prepareNextTurn();
+//	}
 }
