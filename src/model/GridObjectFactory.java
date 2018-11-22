@@ -10,6 +10,15 @@ public class GridObjectFactory {
 			return new VenusFlyTrap();
 		case ("GenericZombie"):	
 			return new GenericZombie();
+		case ("Unicorn"):
+			return new Unicorn();
+		case("MushyMushroom"):
+			return new MushyMushroom();
+		case("SassySquash"):
+			return new SassySquash();
+		case("BaNana"):
+			return new BaNana();
+			
 		default:				
 			return null;
 		}
