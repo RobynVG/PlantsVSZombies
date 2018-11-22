@@ -43,7 +43,7 @@ public class Board {
 		Zombie zombie = Level.getAllZombies().remove(randZombie); 
 
 		if (isEmpty(yPos, Board.GRID_WIDTH - 1))
-			placeZombie(zombie, Board.GRID_WIDTH - 1, yPos);
+			placeZombie(zombie, yPos, Board.GRID_WIDTH - 1);
 	}
 	
 	public void startBoardTurn() {
@@ -117,7 +117,7 @@ public class Board {
 	 * @param posY   (int), the y-coordinate of the grid.
 	 * @param posX   (int), the x-coordinate of the grid.
 	 */
-	public void placeZombie(Zombie zombie, int posY, int posX) {
+	public void placeZombie(Zombie zombie, int posX, int posY) {
 		grid[posX][posY] = zombie;
 		zombiesOnBoard.add(zombie);
 		gridObjects.add(zombie);
@@ -176,16 +176,18 @@ public class Board {
 	public boolean remove(GridObject gridObject) {
 		int j = getX(gridObject);
 		int i = getY(gridObject);
-		grid[i][j] = new NullSpace();
-		
-		gridObjects.remove(gridObject);
-		if (gridObject instanceof Zombie )
-			zombiesOnBoard.remove(gridObject);
-		if (gridObject instanceof Plant)
-			plantsOnBoard.remove(gridObject);
-		
-		if(grid[i][j] instanceof NullSpace) {
-			return true;
+		if (i!=-1 && j!=-1) {
+			grid[i][j] = new NullSpace();
+			
+			gridObjects.remove(gridObject);
+			if (gridObject instanceof Zombie )
+				zombiesOnBoard.remove(gridObject);
+			if (gridObject instanceof Plant)
+				plantsOnBoard.remove(gridObject);
+			
+			if(grid[i][j] instanceof NullSpace) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -295,7 +297,7 @@ public class Board {
 
 	
 	//Used for debugging
-	private void printGrid(GridObject[][] objects) {
+	void printGrid(GridObject[][] objects) {
 		for (int i = 0; i < GRID_HEIGHT; i++) {
 			for (int j = 0; j < GRID_WIDTH; j++) {
 				if (objects[i][j] instanceof GenericZombie)
