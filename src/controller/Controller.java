@@ -24,12 +24,8 @@ import view.View;
 
 public class Controller {
 	static Scanner reader = new Scanner(System.in);
+	private Board board;
 	private View view;
-	//public static final int GRID_HEIGHT = 4;
-	//public static final int GRID_WIDTH = 7;
-	
-	//static final int Board.GRID_HEIGHT = 4;
-	//static final int Board.GRID_WIDTH = 7;
 	private State gridState;
 	
 	public enum State {
@@ -39,19 +35,19 @@ public class Controller {
 	}
 	
 	
-	public Controller(View view) {
+	public Controller(Board board, View view) {
 		this.view = view;
+		this.board = board;
 		startGame();
-		Board.setupGrid();
 	}
 	
 	/**
 	 * This method starts the game for Plant Versus Zombies.
 	 */
-	public static void startGame() {
+	public void startGame() {
 		//Initialize the level and grid
 		Level.level1();
-		Board.setupGrid();
+		board.setupGrid();
 	}
 	
 	/**
@@ -73,14 +69,14 @@ public class Controller {
 		
 		view.getUndoTurn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Board.commandManager.undo();
+				board.commandManager.undo();
 				gridCond(State.STATS);
 			}
 		});
 		
 		view.getRedoTurn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Board.commandManager.redo();
+				board.commandManager.redo();
 				gridCond(State.STATS);
 			}
 		});
@@ -127,7 +123,7 @@ public class Controller {
 		int j = Integer.parseInt(rowcol[1]);
 		
 		if (gridState == State.STATS) {
-			GridObject selected = Board.getObject(i, j);
+			GridObject selected = board.getObject(i, j);
 			view.displayStats(selected);
 			return;
 		}
@@ -138,24 +134,24 @@ public class Controller {
 		//Immediately disable the grid once player has selected where to place their plant
 		gridCond(State.DISABLED);
 		//Disable the flower buttons, the player must wait until the board turn has ended
-		flowerButtonsEnabled(false);
+		plantButtonsEnabled(false);
 		//Clear the plant list selection so once enabled the user can select a new plant
 		view.getPlants().clearSelection();
 		//Add the plant to the board
-		Board.placePlant((Plant)GridObjectFactory.createNewGridObject(plantSelected), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
+		board.placePlant((Plant)GridObjectFactory.createNewGridObject(plantSelected), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 		//addPlant(plantSelected, Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
 		//Display coins
 		view.getCoins().setText("       Sun Points: " + Level.coins);
 		//Allow player to check current stats of any object
 		gridCond(State.STATS);
 		//Enable the flower buttons in case player would like to plant enother plant
-		flowerButtonsEnabled(true);
+		plantButtonsEnabled(true);
 	}
 
 	private void endTurn() {
 		for(;;) {
 			//Plants and zombies attack then zombies spawn
-			Board.startBoardTurn();
+			board.startBoardTurn();
 			//Update the coins on the GUI
 			view.getCoins().setText("       Sun Points: " + Level.coins);
 			//Update the grid
@@ -168,28 +164,8 @@ public class Controller {
 				break;
 		}
 		//Board turn has ended, allow the player to pick another plant
-		flowerButtonsEnabled(true);
+		plantButtonsEnabled(true);
 		gridCond(State.STATS);
-	}
-
-	
-	//Enable or disable all of the plant buttons
-	private void flowerButtonsEnabled(boolean enabled) {
-		view.getPlants().setEnabled(enabled);	
-	}
-
-
-
-	/*
-	 * 
-	 * Adds a Delay
-	 */
-	private static void addDelay(int delay) {
-		try {
-			Thread.sleep(delay);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -199,7 +175,7 @@ public class Controller {
 	 */
 	private void playerWinLose() {
 		// If Player Wins the Level because there are no zombies to be spawned an no zombies on the board
-		if (Level.isEmpty() && Board.zombiesOnBoard.isEmpty()) {
+		if (Level.isEmpty() && board.zombiesOnBoard.isEmpty()) {
 			//Spawn a dialog to inform user
 			JOptionPane.showMessageDialog(null, "!!!!!!!YOU WON!!!!!!!!");
 			//Dispose of the GUI. Game has ended
@@ -208,7 +184,7 @@ public class Controller {
 			return;
 		}
 		// If Player Loses the Level because zombies have reached the first column
-		if (Board.zombiesInFirstColumn()) {
+		if (board.zombiesInFirstColumn()) {
 			//Spawn a dialog to inform user
 			JOptionPane.showMessageDialog(null, "You Lost....");
 			//Dispose of the GUI. Game has ended
@@ -222,24 +198,24 @@ public class Controller {
 	/**
 	 * This method adds a plant to the board
 	 */
-	public static void addPlant(String plantName, int i, int j) {
+	public void addPlant(String plantName, int i, int j) {
 		Plant p = null;
 		//Create a plant based on the string parameter
 		if (plantName.equals("SunFlower")) {
 			p = new SunFlower();
 			//place the plant
-			Board.placePlant(p, j, i);
+			board.placePlant(p, j, i);
 			return;
 		} else if (plantName.equals("VenusFlyTrap")) {
 			p = new VenusFlyTrap();
 			//place the plant
-			Board.placePlant(p, j, i);
+			board.placePlant(p, j, i);
 			return;
 		}
 	}
 
 
-	private static void updateButton(JButton button, GridObject o) {
+	private void updateButton(JButton button, GridObject o) {
 		//If button is to display a nullspce the button is cleared (null space has no image)
 		if (o instanceof NullSpace) {
 			button.setIcon(null);
@@ -269,17 +245,17 @@ public class Controller {
 			for (int j = 0; j < Board.GRID_WIDTH; j++) {
 				JButton button = view.getButtons()[i][j];
 				//Update the btton at the specified location
-				updateButton(view.getButtons()[i][j], Board.grid[i][j]);
+				updateButton(view.getButtons()[i][j], board.grid[i][j]);
 				
 				switch(state) {
 				case STATS:
-					if (!Board.isEmpty(i,j))
+					if (!board.isEmpty(i,j))
 						button.setEnabled(true);
 					else
 						button.setEnabled(false);
 					break;	
 				case POSITIONS:
-					if (!Board.isEmpty(i, j) || j == Board.GRID_WIDTH - 1)
+					if (!board.isEmpty(i, j) || j == Board.GRID_WIDTH - 1)
 						button.setEnabled(false);
 					else
 						button.setEnabled(true);
@@ -292,11 +268,16 @@ public class Controller {
 		}
 		view.getCoins().setText("       Sun Points: " + Level.coins);
 		
-		view.getUndoTurn().setEnabled(Board.commandManager.isUndoAvailable());
-		view.getRedoTurn().setEnabled(Board.commandManager.isRedoAvailable());
+		view.getUndoTurn().setEnabled(board.commandManager.isUndoAvailable());
+		view.getRedoTurn().setEnabled(board.commandManager.isRedoAvailable());
 		
 		//Refresh the GUI
 		view.revalidate();
 		view.repaint();
+	}
+	
+	//Enable or disable all of the plant buttons
+	private void plantButtonsEnabled(boolean enabled) {
+		view.getPlants().setEnabled(enabled);	
 	}
 }

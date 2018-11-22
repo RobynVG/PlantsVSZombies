@@ -25,10 +25,10 @@ public abstract class Plant extends GridObject{
 	/**
 	 * This method allows the plants to move on the board.
 	 */
-	public void go() {
-		GridObject right = Board.toTheRight(this);
+	public void go(Board board) {
+		GridObject right = board.toTheRight(this);
 		if (right instanceof Zombie)
-			attack((Zombie)right);
+			((Zombie)right).loseHealth(strength);;
 	}
 	
 	/**
@@ -44,8 +44,8 @@ public abstract class Plant extends GridObject{
 	 */
 	public void loseHealth(int zombieStrength) {
 		health = health - zombieStrength;
-		if (health <= 0)
-			Board.remove(this);
+//		if (health <= 0)
+//			Board.remove(this);
 	}
 	
 	/**

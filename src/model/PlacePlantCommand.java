@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class PlacePlantCommand implements Command{
+	private Board board;
 	private int row;
 	private int col;
 	private Plant p;
@@ -18,7 +19,8 @@ public class PlacePlantCommand implements Command{
     private ArrayList<Plant> 	nextPlantsOnBoard;
     private int					nextCoins;
     
-    public PlacePlantCommand(Plant p, int row, int col) {
+    public PlacePlantCommand(Board board, Plant p, int row, int col) {
+    	this.board = board;
     	this.row = row;
     	this.col = col;
     	this.p = p;
@@ -31,14 +33,14 @@ public class PlacePlantCommand implements Command{
         nextGridState = new GridObject[Board.GRID_HEIGHT][Board.GRID_WIDTH];
         for (int i = 0; i < Board.GRID_HEIGHT; i++) {
         	for (int j = 0; j < Board.GRID_WIDTH; j++) {
-        		GridObject o = Board.grid[i][j];
+        		GridObject o = board.grid[i][j];
         		previousGridState[i][j] = o;
         		nextGridState[i][j] = o;
         	}
         }
         nextGridState[row][col] = p;
         
-        for (GridObject object: Board.gridObjects) {
+        for (GridObject object: board.gridObjects) {
         	previousGridObjects.add(object);
         	nextGridObjects.add(object);
         	if (object instanceof Plant) {
@@ -54,22 +56,22 @@ public class PlacePlantCommand implements Command{
     }
     	
     public void execute() {
-    	Board.placePlant(p,col,row);
+    	board.placePlant(p,col,row);
     }
     	
     public void undo() {
     	p.setCurrentTime(0);
-    	Board.grid = previousGridState;
-    	Board.gridObjects = previousGridObjects;
-    	Board.plantsOnBoard = previousPlantsOnBoard;
+    	board.grid = previousGridState;
+    	board.gridObjects = previousGridObjects;
+    	board.plantsOnBoard = previousPlantsOnBoard;
     	Level.coins = previousCoins;
     }
     	
     public void redo() {
     	p.setCurrentTime(p.fullTime);
-    	Board.grid = nextGridState;
-    	Board.gridObjects = nextGridObjects;
-    	Board.plantsOnBoard = nextPlantsOnBoard;
+    	board.grid = nextGridState;
+    	board.gridObjects = nextGridObjects;
+    	board.plantsOnBoard = nextPlantsOnBoard;
     	Level.coins = nextCoins;
     }
 }
