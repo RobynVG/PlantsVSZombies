@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 public class UnicornTest extends TestCase {
 	private Unicorn u1;
 	private Board board;
-	
+
 	protected void setUp() {
 		u1 = new Unicorn();
 		Level.level1();

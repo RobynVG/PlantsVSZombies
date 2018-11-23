@@ -81,4 +81,12 @@ public abstract class Zombie extends GridObject {
 	public int getFullHealth() {
 		return fullHealth;
 	}
+	
+	public boolean equals(Zombie zombie) {
+		if (!(zombie.getObjectTitle().equals(getObjectTitle())))
+			return false;
+		if (!(zombie.health == health))
+			return false;
+		return true;
+	}
 }

@@ -7,8 +7,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import controller.Controller.State;
 
 public class Board {
-	public static final int GRID_HEIGHT = 4;
-	public static final int GRID_WIDTH = 7;
+	public static final int GRID_HEIGHT = 6;
+	public static final int GRID_WIDTH = 9;
 	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G" }; // Must be same length as GRID_WIDTH
 	public static final String GRID_Y[] = { "1", "2", "3", "4" };
 	

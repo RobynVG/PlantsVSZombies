@@ -13,6 +13,7 @@ import java.awt.event.WindowListener;
 
 import javax.swing.*;
 
+import model.Board;
 import model.GridObject;
 import model.Plant;
 import model.Zombie;
@@ -63,11 +64,11 @@ public class View extends JFrame {
 		add(menuBar, BorderLayout.NORTH);
 		
 		// Buttons For Main Board Game
-		gridLayoutButtons = new JPanel(new GridLayout(GRID_HEIGHT, GRID_WIDTH));
-		buttons = new JButton[GRID_HEIGHT][GRID_WIDTH];
+		gridLayoutButtons = new JPanel(new GridLayout(Board.GRID_HEIGHT, Board.GRID_WIDTH));
+		buttons = new JButton[Board.GRID_HEIGHT][Board.GRID_WIDTH];
 		// Putting the buttons in the 2-D Array
-		for (int i = 0; i < GRID_HEIGHT; i++) {
-			for (int j = 0; j < GRID_WIDTH; j++) {
+		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
+			for (int j = 0; j < Board.GRID_WIDTH; j++) {
 				buttons[i][j] = new JButton("");
 				buttons[i][j].setEnabled(false);
 				buttons[i][j].setActionCommand(i + " " + j);
