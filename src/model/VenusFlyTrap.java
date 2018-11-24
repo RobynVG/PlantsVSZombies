@@ -48,9 +48,10 @@ public class VenusFlyTrap extends Plant {
 		return currentTime;
 	}
 	
+	/**
+	 * This method sets the current time for the VenusFlyTrap class.
+	 */
 	public void setCurrentTime(int currentTime) {
 		VenusFlyTrap.currentTime = currentTime;
 	}
-	
-	
 }

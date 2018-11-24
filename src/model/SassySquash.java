@@ -12,11 +12,6 @@ public class SassySquash extends Plant {
 		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"SassySquash");
 	}
 	
-	public void go(Board board) {
-		GridObject right = board.toTheRight(this);
-		if (right instanceof Zombie)
-			((Zombie)right).loseHealth(strength);;
-	}
 	/**
 	 * This method keeps track of how many game turns have occurred in order
 	 * to make the sassysquash available for the player. 

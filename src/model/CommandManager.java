@@ -4,34 +4,57 @@ import java.util.Stack;
 
 public class CommandManager {
 	 
-    private Stack<Command> undos = new Stack<Command>();
-    private Stack<Command> redos = new Stack<Command>();
+    private Stack<Command> undoStack = new Stack<Command>();
+    private Stack<Command> redoStack = new Stack<Command>();
  
-    public void executeCommand(Command c) {
-        c.execute();
-        undos.push(c);
-        redos.clear();
+    /**
+     * This method executes a command.
+     * @param command
+     */
+    public void executeCommand(Command command) {
+        command.execute();
+        undoStack.push(command);
+        redoStack.clear();
     }
  
+    /**
+     * This method checks if a undo is available.
+     * @return boolean
+     */
     public boolean isUndoAvailable() {
-        return !undos.empty();
+        return !undoStack.empty();
     }
  
+    /**
+     * This method undoes a command.
+     */
     public void undo() {
-        assert(!undos.empty());
-        Command command = undos.pop();
+    	//Cannot execute an undo if the stack is empty
+        if (undoStack.empty())
+        	return;
+        Command command = undoStack.pop();
         command.undo();
-        redos.push(command);
+        redoStack.push(command);
     }
  
+    /**
+     * This method checks if a redo is available
+     * @return boolean
+     */
     public boolean isRedoAvailable() {
-        return !redos.empty();
+        return !redoStack.empty();
     }
  
+    /**
+     * This method redoes a command
+     * @return boolean
+     */
     public void redo() {
-        assert(!redos.empty());
-        Command command = redos.pop();
+    	//Cannot execute a redo if the stack is empty
+        if (redoStack.empty())
+        	return;
+        Command command = redoStack.pop();
         command.redo();
-        undos.push(command);
+        undoStack.push(command);
     }
 }

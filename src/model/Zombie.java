@@ -32,9 +32,8 @@ public abstract class Zombie extends GridObject {
 		health = health - plantStrength;
 	}
 
-	//All attacks should be different -Override
 	/**
-	 * This method is for when a zombie attacks a plant (Will be overridden by the child class).
+	 * This method is for when a zombie attacks a plant.
 	 * @param plant (plant), a plant that is being attacked.
 	 */
 	public void attack(Plant plant) {
@@ -73,10 +72,20 @@ public abstract class Zombie extends GridObject {
 		this.health = health;
 	}
 	
+	/**
+	 * This method gets the fullHealth
+	 * @return fullHealth
+	 */
 	public int getFullHealth() {
 		return fullHealth;
 	}
 	
+	/**
+	 * This method compares zombie objects. returns true both zombies are 
+	 * of the same type and have equal attributes.
+	 * @param zombie
+	 * @return boolean
+	 */
 	public boolean equals(Zombie zombie) {
 		if (!(zombie.getObjectTitle().equals(getObjectTitle())))
 			return false;

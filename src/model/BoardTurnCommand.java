@@ -23,7 +23,11 @@ class BoardTurnCommand implements Command{
     private ArrayList<Zombie> 	nextZombiesOnBoard;
     private ArrayList<Zombie>	nextLevelZombies;
     
-    //
+    /**
+     * This constructor saves the values on the board before and after 
+     * the board's turn.
+     * @param board
+     */
     public BoardTurnCommand(Board board) {
     	this.board = board;
     	previousGridObjects = new ArrayList<GridObject>();
@@ -94,9 +98,17 @@ class BoardTurnCommand implements Command{
         }
     }
    
+    /**
+     * Execute occurs in contstructor however must still implement method
+     * from Command interface.
+     */
     public void execute() {
     }
     	
+    /**
+     * This method undoes an entire board's turn. Brings player back to having pressed 
+     * "End Turn".
+     */
     public void undo() {
     	for (int i = 0; i < Board.GRID_HEIGHT; i++) {
     		for (int j = 0; j < Board.GRID_WIDTH; j++) {
@@ -121,6 +133,9 @@ class BoardTurnCommand implements Command{
     }
     	
 
+    /**
+     * This method performs a redo on the last undo.
+     */
 	public void redo() {
     	for (int i = 0; i < Board.GRID_HEIGHT; i++) {
     		for (int j = 0; j < Board.GRID_WIDTH; j++) {

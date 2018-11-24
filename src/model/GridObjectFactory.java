@@ -2,6 +2,12 @@ package model;
 
 public class GridObjectFactory {
 
+	/**
+	 * This method returns a new grid object whose type corresponds to 
+	 * the paramater passed
+	 * @param s
+	 * @return GridObject
+	 */
 	public static GridObject createNewGridObject(String s) {
 		switch(s) {
 		case ("SunFlower"): 	

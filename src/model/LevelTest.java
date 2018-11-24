@@ -11,18 +11,18 @@ public class LevelTest extends TestCase {
 	}
 
 	/**
-	 * This method test if level empty is false.
+	 * This method test if zombies empty is false.
 	 */
 	public void testLevelIsEmptyFalse() {
-		assertEquals(Level.isEmpty(),false);
+		assertEquals(Level.zombiesEmpty(),false);
 	}
 	
 	/**
-	 * This method test if level empty is true.
+	 * This method test if zombies empty is true.
 	 */
 	public void testLevelIsEmptyTrue() {
-		Level.allZombies = new ArrayList<Zombie>();
-		assertEquals(Level.isEmpty(),true);
+		Level.setAllZombies(new ArrayList<Zombie>());
+		assertEquals(Level.zombiesEmpty(),true);
 	}
 	
 	/**

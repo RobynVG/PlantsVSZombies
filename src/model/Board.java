@@ -46,10 +46,16 @@ public class Board {
 			placeZombie(zombie, yPos, Board.GRID_WIDTH - 1);
 	}
 	
+	/**
+	 * This method starts the board's turn in the command manager
+	 */
 	public void startBoardTurn() {
 		commandManager.executeCommand(new BoardTurnCommand(this));
 	}
 	
+	/**
+	 * This method executes the board's turn
+	 */
 	public void boardTurn() {
 		//All plants then all zombies on the board - Advance or attack
 		if (!zombiesOnBoard.isEmpty()) {
@@ -226,6 +232,10 @@ public class Board {
 		return -1;
 	}
 	
+	/**
+	 * This method sweeps the board for dead grid objects after any turn.
+	 * Removes dead plants or zombies from the board.
+	 */
 	private void removeTheDead() {
 		Iterator<Plant> iteratorP = plantsOnBoard.iterator();
 		Iterator<Zombie> iteratorZ = zombiesOnBoard.iterator();
@@ -270,34 +280,61 @@ public class Board {
 	public GridObject getObject(int i, int j) {
 		return grid[i][j];
 	}
-	
+	 /**
+	  * This method gets the gridObject array
+	  * @return gridObjects
+	  */
 	public ArrayList<GridObject> getGridObjects() {
 		return gridObjects;
 	}
 
+	/**
+	 * This method sets the gridObject array
+	 * @param gridObjects
+	 */
 	public void setGridObjects(ArrayList<GridObject> gridObjects) {
 		this.gridObjects = gridObjects;
 	}
 
+	/**
+	 * This method gets the zombiesOnBoard
+	 * @return zombiesOnBoard
+	 */
 	public ArrayList<Zombie> getZombiesOnBoard() {
 		return zombiesOnBoard;
 	}
 
+	/**
+	 * This method sets the zombiesOnBoard
+	 * @param zombiesOnBoard
+	 */
 	public void setZombiesOnBoard(ArrayList<Zombie> zombiesOnBoard) {
 		this.zombiesOnBoard = zombiesOnBoard;
 	}
 
+	/**
+	 * This method gets the plantsOnBoard
+	 * @return plantsOnBoard
+	 */
 	public ArrayList<Plant> getPlantsOnBoard() {
 		return plantsOnBoard;
 	}
 
+	/**
+	 * This method sets the plantsOnBoard
+	 * @param plantsOnBoard
+	 */
 	public void setPlantsOnBoard(ArrayList<Plant> plantsOnBoard) {
 		this.plantsOnBoard = plantsOnBoard;
 	}
 
 	
 	//Used for debugging
-	void printGrid(GridObject[][] objects) {
+	/**
+	 * This method prints the grid. Used for debugging
+	 * @param objects
+	 */
+	public void printGrid(GridObject[][] objects) {
 		for (int i = 0; i < GRID_HEIGHT; i++) {
 			for (int j = 0; j < GRID_WIDTH; j++) {
 				if (objects[i][j] instanceof GenericZombie)
