@@ -169,6 +169,7 @@ public class BoardTest extends TestCase {
 	public void testBoardTurnDeadZombie() {
 		board.placePlant(v1, 0, 0);
 		board.placeZombie(g1, 0, 1);
+		board.placePlant(s1,3,3);
 		g1.setHealth(1);
 		board.boardTurn();		
 		board.printGrid(board.grid);

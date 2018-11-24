@@ -18,6 +18,9 @@ public class BoardTurnCommandTest extends TestCase{
 		Level.level1();
 	}
 	
+	/**
+	 * This method tests execute when a loss of health occurs
+	 */
 	public void testHealthLossExecute() {
 		board.placeZombie(g1, 0, 5);
 		board.placePlant(v1, 0, 4);
@@ -30,6 +33,9 @@ public class BoardTurnCommandTest extends TestCase{
 		assertEquals(90, v1.getHealth());
 	}
 	
+	/**
+	 * This method tests undo when a loss of health occured
+	 */
 	public void testHealthLossUndo() {
 		board.placeZombie(g1, 0, 5);
 		board.placePlant(v1, 0, 4);
@@ -44,6 +50,9 @@ public class BoardTurnCommandTest extends TestCase{
 		assertEquals(100, ((Plant)board.getObject(0, 4)).getHealth());
 	}
 	
+	/**
+	 * This method tests redo when a loss of health occured
+	 */
 	public void testHealthLossRedo() {
 		board.placeZombie(g1, 0, 5);
 		board.placePlant(v1, 0, 4);
@@ -59,6 +68,9 @@ public class BoardTurnCommandTest extends TestCase{
 		assertEquals(90, ((Plant)board.getObject(0, 4)).getHealth());
 	}
 	
+	/**
+	 * This method tests execute when a plants timer is to be decremented.
+	 */
 	public void testPlantTimerExecute() {
 		board.placePlant(v1, 0, 4);
 		v1.setCurrentTime(5);
@@ -67,6 +79,9 @@ public class BoardTurnCommandTest extends TestCase{
 		assertEquals(4, ((Plant)board.getObject(0, 4)).getCurrentTime());
 	}
 	
+	/**
+	 * This method tests undo when a plants timer has been decremented.
+	 */
 	public void testPlantTimerUndo() {
 		board.placePlant(v1, 0, 4);
 		v1.setCurrentTime(5);
@@ -76,6 +91,9 @@ public class BoardTurnCommandTest extends TestCase{
 		assertEquals(5, ((Plant)board.getObject(0, 4)).getCurrentTime());
 	}
 	
+	/**
+	 * This method tests redo when a plants timer has been decremented
+	 */
 	public void testPlantTimerRedo() {
 		board.placePlant(v1, 0, 4);
 		v1.setCurrentTime(5);
@@ -86,33 +104,45 @@ public class BoardTurnCommandTest extends TestCase{
 		assertEquals(4, ((Plant)board.getObject(0, 4)).getCurrentTime());
 	}
 	
-//	public void testObjectDeathExecute() {
-//		v1.setHealth(20);
-//		board.placePlant(v1, 0, 4);
-//		board.placeZombie(g1, 0, 5);
-//		v1.setCurrentTime(5);
-//		BoardTurnCommand btc = new BoardTurnCommand(board);
-//		btc.execute();
-//		assertEquals(, ((Plant)board.getObject(0, 4)).getCurrentTime());
-//	}
-//	
-//	public void testObjectDeathUndo() {
-//		board.placePlant(v1, 0, 4);
-//		v1.setCurrentTime(5);
-//		BoardTurnCommand btc = new BoardTurnCommand(board);
-//		btc.execute();
-//		btc.undo();
-//		btc.redo();
-//		assertEquals(4, ((Plant)board.getObject(0, 4)).getCurrentTime());
-//	}
-//	
-//	public void testObjectDeathUndo() {
-//		board.placePlant(v1, 0, 4);
-//		v1.setCurrentTime(5);
-//		BoardTurnCommand btc = new BoardTurnCommand(board);
-//		btc.execute();
-//		btc.undo();
-//		btc.redo();
-//		assertEquals(4, ((Plant)board.getObject(0, 4)).getCurrentTime());
-//	}
+	/**
+	 * This method tests execute when an object on the board will die.
+	 */
+	public void testObjectDeathExecute() {
+		v1.setHealth(20);
+		board.placePlant(v1, 0, 4);
+		board.placeZombie(g1, 0, 5);
+		v1.setCurrentTime(5);
+		BoardTurnCommand btc = new BoardTurnCommand(board);
+		btc.execute();
+		assertEquals(true,(board.getObject(0, 4) instanceof NullSpace));
+	}
+	
+	/**
+	 * This method tests undo when an object has died.
+	 */
+	public void testObjectDeathUndo() {
+		v1.setHealth(20);
+		board.placePlant(v1, 0, 4);
+		board.placeZombie(g1, 0, 5);
+		v1.setCurrentTime(5);
+		BoardTurnCommand btc = new BoardTurnCommand(board);
+		btc.execute();
+		btc.undo();
+		assertEquals(true,(board.getObject(0, 4) instanceof VenusFlyTrap));
+	}
+	
+	/**
+	 * This method tests redo when an object has died.
+	 */
+	public void testObjectDeathRed() {
+		v1.setHealth(20);
+		board.placePlant(v1, 0, 4);
+		board.placeZombie(g1, 0, 5);
+		v1.setCurrentTime(5);
+		BoardTurnCommand btc = new BoardTurnCommand(board);
+		btc.execute();
+		btc.undo();
+		btc.redo();
+		assertEquals(true,(board.getObject(0, 4) instanceof NullSpace));
+	}
 }

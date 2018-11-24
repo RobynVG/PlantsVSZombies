@@ -27,7 +27,7 @@ public class VenusFlyTrapTest extends TestCase {
 	}
 	
 	/**
-	 * This method test the if attack work with the go method .
+	 * This method test the if attack works with the go method .
 	 */
 	public void testGoAttack() {
 		board.placePlant(v1, 3,2);
@@ -36,44 +36,68 @@ public class VenusFlyTrapTest extends TestCase {
 		assertEquals(g1.getHealth(), GenericZombie.FULL_HEALTH - VenusFlyTrap.STRENGTH);
 	}
 	
+	/**
+	 * This method tests the newTurn method if current time is not 0.
+	 */
 	public void testNewTurnNotZero() {
 		v1.setCurrentTime(3);
 		v1.newTurn();
 		assertEquals(v1.getCurrentTime(),2);
 	}
 	
+	/**
+	 * This method tests the newTurn() method if current time is 0.
+	 */
 	public void testNewTurnZero() {
 		v1.setCurrentTime(0);
 		v1.newTurn();
 		assertEquals(v1.getCurrentTime(),0);
 	}
 	
+	/**
+	 * This method tests the isAvailable() method if current time is 0.
+	 */
 	public void testIsAvailableTrue() {
 		v1.setCurrentTime(0);
 		assertEquals(v1.isAvailable(),true);
 	}
 	
+	/**
+	 * This method tests the isAvailable() method if current time is not 0.
+	 */
 	public void testIsAvailableFalse() {
 		v1.setCurrentTime(3);
 		assertEquals(v1.isAvailable(),false);
 	}
 	
+	/**
+	 * This method tests the isAffordable method if the price < coins.
+	 */
 	public void testIsAffordableTrue() {
 		Level.coins = 1000;
 		assertEquals(v1.isAffordable(),true);
 	}
 	
+	/**
+	 * This method tests the isAffordable method if the price = coins.
+	 */
 	public void testIsAffordableFalse() {
-		Level.coins = 1;
+		Level.coins = 5;
 		assertEquals(v1.isAffordable(),false);
 	}
 	
+	/**
+	 * This method tests the purchase method.
+	 */
 	public void testPurchase() {
 		Level.coins = 6;
 		v1.purchase();
 		assertEquals(1, Level.coins);
 	}
 	
+	/**
+	 * This method tests the loseHealth method.
+	 */
 	public void testLoseHealth() {
 		v1.setHealth(50);
 		v1.loseHealth(5);

@@ -175,7 +175,7 @@ public class Controller {
 	 */
 	private void playerWinLose() {
 		// If Player Wins the Level because there are no zombies to be spawned an no zombies on the board
-		if (Level.isEmpty() && board.zombiesOnBoard.isEmpty()) {
+		if (Level.zombiesEmpty() && board.zombiesOnBoard.isEmpty()) {
 			//Spawn a dialog to inform user
 			JOptionPane.showMessageDialog(null, "!!!!!!!YOU WON!!!!!!!!");
 			//Dispose of the GUI. Game has ended
