@@ -19,6 +19,14 @@ public class PlacePlantCommand implements Command{
     private ArrayList<Plant> 	nextPlantsOnBoard;
     private int					nextCoins;
     
+    /**
+     * This method saves the previous and next values of the board before
+     * a place plant command is executed
+     * @param board
+     * @param p
+     * @param row
+     * @param col
+     */
     public PlacePlantCommand(Board board, Plant p, int row, int col) {
     	this.board = board;
     	this.row = row;
@@ -54,11 +62,17 @@ public class PlacePlantCommand implements Command{
         previousCoins = Level.coins;
         nextCoins = Level.coins - p.getPrice();
     }
-    	
+    
+    /**
+     * This method executes a place plant command.
+     */
     public void execute() {
     	board.placePlant(p,col,row);
     }
-    	
+    
+    /**
+     * This method undoes a place plant command.
+     */
     public void undo() {
     	p.setCurrentTime(0);
     	board.grid = previousGridState;
@@ -66,7 +80,10 @@ public class PlacePlantCommand implements Command{
     	board.plantsOnBoard = previousPlantsOnBoard;
     	Level.coins = previousCoins;
     }
-    	
+    
+    /**
+     * This method redoes a place plant command.
+     */
     public void redo() {
     	p.setCurrentTime(p.fullTime);
     	board.grid = nextGridState;

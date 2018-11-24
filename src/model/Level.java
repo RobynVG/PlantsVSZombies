@@ -6,12 +6,6 @@ public class Level {
 	private static ArrayList<Zombie> allZombies; //Actually all zombies
 	public static int coins = 10; 
 	
-	
-	public static boolean isEmpty() {
-		return (allZombies.isEmpty());
-	}
-	
-	//Not ideal to code every level but good for now
 	/**
 	 * This method is the first level of the game.
 	 */
@@ -36,8 +30,6 @@ public class Level {
 			plant.makeAvailable();
 	}
 	
-	
-	//function should be called on every level
 	/**
 	 * This method initialize the plant and zombie array.
 	 */
@@ -47,7 +39,6 @@ public class Level {
 		allPlants = new ArrayList<Plant>();
 	}
 	
-	//Checks to make sure player can play at least 1 plant
 	/**
 	 * This method checks that a player has a plant they can play.
 	 * @return A boolean, true if the player can affod a plant or false if there if they are all too expensive.
@@ -60,12 +51,27 @@ public class Level {
 		return false;		
 	}
 	
+	/**
+	 * This method returns all the zombies that are to be played for the current level.
+	 * @return allZombies
+	 */
 	public static ArrayList<Zombie> getAllZombies(){
 		return allZombies;
 	}
 	
+	/*
+	 * This method sets all the zombies that are to be played for the current level.
+	 * @param zombies.
+	 */
 	public static void setAllZombies(ArrayList<Zombie> zombies) {
 		allZombies = zombies;
 	}
 	
+	/*
+	 * This method checks if there are no more zombies left to play for the current level.
+	 * @return boolean
+	 */
+	public static boolean zombiesEmpty() {
+		return (allZombies.isEmpty());
+	}
 }

@@ -30,13 +30,6 @@ public class BaNana extends Plant {
 	}
 	
 	/**
-	 * This method sets the current time of the baNana to zero.
-	 */
-	public void makeAvailable() { //Not used but might need at some point? 
-		currentTime = 0;
-	}
-	
-	/**
 	 * This method gets the current time.
 	 * @return A int which is the current time.
 	 */

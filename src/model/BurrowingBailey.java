@@ -15,10 +15,14 @@ public class BurrowingBailey extends Zombie{
 		GridObject l = board.toTheLeft(this);
 		GridObject ll = board.toTheLeft(l);
 		
+		//BurrowingBailey burrows under the next plant if there is a NullSPace
+		//To its left
 		if (l instanceof Plant && ll instanceof NullSpace)
 			board.move(this, (NullSpace) ll);
+		//Regular move to the left.
 		else if (l instanceof NullSpace)
 			board.move(this, (NullSpace) l);
+		//Regular attack
 		else if (l instanceof Plant)
 			attack((Plant)l);
 	}

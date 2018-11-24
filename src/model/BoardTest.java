@@ -169,28 +169,10 @@ public class BoardTest extends TestCase {
 	public void testBoardTurnDeadZombie() {
 		board.placePlant(v1, 0, 0);
 		board.placeZombie(g1, 0, 1);
+		board.placePlant(s1,3,3);
 		g1.setHealth(1);
 		board.boardTurn();		
 		board.printGrid(board.grid);
 		assertEquals(true, !board.getZombiesOnBoard().contains(g1));
 	}
-	
-	
-
-//	public void boardTurn() {
-//		//All plants then all zombies on the board - Advance or attack
-//		if (!zombiesOnBoard.isEmpty()) {
-//			for (Plant plant : plantsOnBoard)
-//				plant.go(this);
-//			
-//			for (Zombie zombie : zombiesOnBoard)			
-//				zombie.go(this);
-//		}
-//		removeTheDead();
-//		//Spawn
-//		spawnZombies();
-//
-//		//Give player coins reduce count down on plant timers
-//		prepareNextTurn();
-//	}
 }

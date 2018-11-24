@@ -169,10 +169,21 @@ public abstract class Plant extends GridObject{
 		this.currentTime = currentTime;
 	}
 	
+	/**
+	 * This method gets the fullHealth
+	 * @return fullHealth
+	 */
 	public int getFullHealth() {
 		return fullHealth;
 	}
 	
+	/**
+	 * This method compares this Plant to another plant
+	 * returns true if they are both the same class and have
+	 * all the same attributes.
+	 * @param plant
+	 * @return boolean
+	 */
 	public boolean equals(Plant plant) {
 		if (!(plant.getObjectTitle().equals(getObjectTitle())))
 			return false;
