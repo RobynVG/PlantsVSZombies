@@ -7,12 +7,4 @@ public class GenericZombie extends Zombie{
 	public GenericZombie() {
 		super(STRENGTH, FULL_HEALTH, "GenericZombie");
 	}
-	
-	/**
-	 * This method is when a generic zombie attacks a plant.
-	 */
-	@Override
-	public void attack(Plant plant) {
-		plant.loseHealth(strength);
-	}
 }

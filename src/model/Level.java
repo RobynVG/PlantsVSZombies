@@ -29,6 +29,8 @@ public class Level {
 		//zombies type/amount needs to be generated/level
 		for (int i = 0; i < numOfZombies; i++)
 			allZombies.add(new GenericZombie());
+		allZombies.add(new FrankTheTank());
+		allZombies.add(new BurrowingBailey());
 		
 		for(Plant plant: allPlants)
 			plant.makeAvailable();

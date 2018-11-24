@@ -6,10 +6,14 @@ public class GridObjectFactory {
 		switch(s) {
 		case ("SunFlower"): 	
 			return new SunFlower();
-		case ("VenusFlyTrap") :	
+		case ("VenusFlyTrap"):	
 			return new VenusFlyTrap();
 		case ("GenericZombie"):	
 			return new GenericZombie();
+		case ("FrankTheTank"):
+			return new FrankTheTank();
+		case("BurrowingBailey"):
+			return new BurrowingBailey();
 		case ("Unicorn"):
 			return new Unicorn();
 		case("MushyMushroom"):
