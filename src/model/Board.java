@@ -7,8 +7,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import controller.Controller.State;
 
 public class Board {
-	public static final int GRID_HEIGHT = 4;
-	public static final int GRID_WIDTH = 7;
+	public static final int GRID_HEIGHT = 6;
+	public static final int GRID_WIDTH = 9;
 	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G" }; // Must be same length as GRID_WIDTH
 	public static final String GRID_Y[] = { "1", "2", "3", "4" };
 	
@@ -198,7 +198,7 @@ public class Board {
 	 * @param gridObject (Grid Object), the object on the grid.
 	 * @return A int, the x-coordinate of the gridObject.
 	 */
-	private int getX(GridObject gridObject) {
+	public int getX(GridObject gridObject) {
 		int i, j = 0;
 		for (i = 0; i < GRID_HEIGHT; i++) {
 			for (j = 0; j < GRID_WIDTH; j++) {
@@ -215,7 +215,7 @@ public class Board {
 	 * @param gridObject (GridObject), the object on the grid.
 	 * @return A int, the y-coordinate of the gridObject.
 	 */
-	private int getY(GridObject gridObject) {
+	public int getY(GridObject gridObject) {
 		int i, j = 0;
 		for (i = 0; i < GRID_HEIGHT; i++) {
 			for (j = 0; j < GRID_WIDTH; j++) {

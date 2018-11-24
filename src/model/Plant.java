@@ -172,4 +172,14 @@ public abstract class Plant extends GridObject{
 	public int getFullHealth() {
 		return fullHealth;
 	}
+	
+	public boolean equals(Plant plant) {
+		if (!(plant.getObjectTitle().equals(getObjectTitle())))
+			return false;
+		if (!(plant.health == health))
+			return false;
+		if (!(plant.getCurrentTime() == currentTime))
+			return false;
+		return true;
+	}
 }

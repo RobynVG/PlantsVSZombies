@@ -13,22 +13,6 @@ public class MushyMushroom extends Plant {
 	}
 	
 	/**
-	 * This method reduces the amount of money the player has when purchasing a mushymushroom.
-	 */
-	public void purchase() {
-		Level.coins -= price;
-	}
-	
-	/**
-	 * This method checks if the player has the appropriate amount of coins to purchase
-	 * the mushymushroom plant.
-	 * @return True, if the player has enough coins otherwise false.
-	 */
-	public boolean isAffordable() {
-		return (price <= Level.coins);
-	}
-	
-	/**
 	 * This method keeps track of how many game turns have occurred in order
 	 * to make the mushymushroom available for the player. 
 	 */
@@ -66,18 +50,6 @@ public class MushyMushroom extends Plant {
 	 * @param currentTime
 	 */
 	public void setCurrentTime(int currentTime) {
-		Unicorn.currentTime = currentTime;
+		MushyMushroom.currentTime = currentTime;
 	}
-	
-	/**
-	 * This method reduces the mushymushroom's health. 
-	 * If the mushymushroom's is equal or less then zero, the mushymushroom is removed from the board.
-	 * @param A int which is the zombie's strength.
-	 */
-	public void loseHealth(int zombieStrength) {
-		health = health - zombieStrength;
-		if (health <= 0)
-			Board.remove(this);
-	}
-	
 }

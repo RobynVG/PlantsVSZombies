@@ -37,15 +37,10 @@ public abstract class Zombie extends GridObject {
 	 * This method is for when a zombie attacks a plant (Will be overridden by the child class).
 	 * @param plant (plant), a plant that is being attacked.
 	 */
-	public void attack(Plant plant) {}
+	public void attack(Plant plant) {
+		plant.loseHealth(strength);
+	}
 	
-	//For now zombies only move one space -eventually this must be overridden
-	/**
-	 * This method allows the zombie to move on the board.
-	 * @param nullSpace (NullSpace), empty space
-	 */
-	public void advance(NullSpace nullSpace) {}
-
 	/**
 	 * This method gets strength.
 	 * @return strength
@@ -80,5 +75,13 @@ public abstract class Zombie extends GridObject {
 	
 	public int getFullHealth() {
 		return fullHealth;
+	}
+	
+	public boolean equals(Zombie zombie) {
+		if (!(zombie.getObjectTitle().equals(getObjectTitle())))
+			return false;
+		if (!(zombie.health == health))
+			return false;
+		return true;
 	}
 }
