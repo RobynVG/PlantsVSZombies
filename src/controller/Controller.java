@@ -12,7 +12,6 @@ import model.SunFlower;
 import model.VenusFlyTrap;
 import model.Walnut;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -77,13 +76,14 @@ public class Controller {
 		//Initialize action listener for the end turn button
 		view.getEndTurn().addActionListener(e -> endTurn());
 		
+		//Initialize and define action listener for the undo button
 		view.getUndoTurn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				board.commandManager.undo();
 				gridCond(State.STATS);
 			}
 		});
-		
+		//Initialize and define action listener for the redo button
 		view.getRedoTurn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				board.commandManager.redo();
@@ -91,7 +91,7 @@ public class Controller {
 			}
 		});
 	}
-	
+	//Action listener for plant buttons
 	private void plantSelected(ListSelectionEvent arg0) {
 		//If statements deals with multiple events fired by one click
 		if (arg0.getValueIsAdjusting() || view.getPlants().getSelectedValue() == null)
@@ -126,14 +126,19 @@ public class Controller {
 		}		
 	}
 	
+	//Player selects a position on the grid
 	private void gridPositionSelected(ActionEvent e) {
+		//Action command corresponds to i j
 		String s = e.getActionCommand();
 		String[] rowcol = s.split(" ");
 				
 		int i = Integer.parseInt(rowcol[0]);
 		int j = Integer.parseInt(rowcol[1]);
 		
+		//If the grid is in the STATS state the player has selected an
+		//area on the board to view an objects stats
 		if (gridState == State.STATS) {
+			//Get the grid object and display its stats
 			GridObject selected = board.getObject(i, j);
 			view.displayStats(selected);
 			return;
@@ -180,9 +185,7 @@ public class Controller {
 	}
 
 	/**
-	 * Player wins level
-	 * 
-	 * @True if the player wins the level
+	 * This method checks to see if the player has won or lost
 	 */
 	private void playerWinLose() {
 		// If Player Wins the Level because there are no zombies to be spawned an no zombies on the board
@@ -207,40 +210,10 @@ public class Controller {
 	}
 
 	/**
-	 * This method adds a plant to the board
+	 * This method updates the button in the grid with its corresponding grid object
+	 * @param button
+	 * @param o
 	 */
-	public void addPlant(String plantName, int i, int j) {
-		Plant p = null;
-		//Create a plant based on the string parameter
-		if (plantName.equals("SunFlower")) {
-			p = new SunFlower();
-			//place the plant
-			board.placePlant(p, j, i);
-			return;
-		} else if (plantName.equals("VenusFlyTrap")) {
-			p = new VenusFlyTrap();
-			//place the plant
-			board.placePlant(p, j, i);
-			return;
-		}else if(plantName.equals("Potatoe")) {
-			p = new Potatoe();
-			//place the plant
-			board.placePlant(p, j, i);
-			return;
-		}else if(plantName.equals("PeaShooter")) {
-			p = new PeaShooter();
-			//place the plant
-			board.placePlant(p, j, i);
-			return;
-		}else if(plantName.equals("Walnut")) {
-			p = new Walnut();
-			//place the plant
-			board.placePlant(p, j, i);
-			return;
-		}
-	}
-
-
 	private void updateButton(JButton button, GridObject o) {
 		//If button is to display a nullspce the button is cleared (null space has no image)
 		if (o instanceof NullSpace) {
@@ -260,6 +233,10 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * This is the action listener for clicking on an object on the grid
+	 * to view its stats. Spawns a dialog displaying stats
+	 */
 	private void spawnInfoFrame() {
 		view.makeInfoFrame();
 	}
