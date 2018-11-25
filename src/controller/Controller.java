@@ -162,7 +162,7 @@ public class Controller {
 		//Enable the flower buttons in case player would like to plant enother plant
 		plantButtonsEnabled(true);
 	}
-
+	
 	private void endTurn() {
 		//Plants and zombies attack then zombies spawn
 		board.startBoardTurn();
@@ -178,7 +178,6 @@ public class Controller {
 			JOptionPane.showMessageDialog(view, "Wow you just found " + (50-Level.coins) + " Sun Points...");
 			Level.coins = 50;
 		}
-			
 		//Board turn has ended, allow the player to pick another plant
 		plantButtonsEnabled(true);
 		gridCond(State.STATS);
@@ -210,30 +209,6 @@ public class Controller {
 	}
 
 	/**
-	 * This method updates the button in the grid with its corresponding grid object
-	 * @param button
-	 * @param o
-	 */
-	private void updateButton(JButton button, GridObject o) {
-		//If button is to display a nullspce the button is cleared (null space has no image)
-		if (o instanceof NullSpace) {
-			button.setIcon(null);
-			return;
-		}
-		try {
-			//Get the image icon corresponding to the name of the object parameter
-			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle()+".png").getImage()
-					.getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
-			//Set the icon on the board
-			button.setIcon(image);
-			//Set the disable icon. This ensure the icon is not greyed out when it is disabled
-			button.setDisabledIcon(image);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-	}
-	
-	/**
 	 * This is the action listener for clicking on an object on the grid
 	 * to view its stats. Spawns a dialog displaying stats
 	 */
@@ -248,7 +223,7 @@ public class Controller {
 			for (int j = 0; j < Board.GRID_WIDTH; j++) {
 				JButton button = view.getButtons()[i][j];
 				//Update the btton at the specified location
-				updateButton(view.getButtons()[i][j], board.grid[i][j]);
+				view.updateButton(view.getButtons()[i][j], board.grid[i][j]);
 				
 				switch(state) {
 				case STATS:
