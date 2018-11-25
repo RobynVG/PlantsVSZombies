@@ -30,7 +30,7 @@ public class Level {
 		allZombies.add(new BurrowingBailey());
 		
 		for(Plant plant: allPlants)
-			plant.makeAvailable();
+			plant.setCurrentTime(0);
 	}
 	
 	/**

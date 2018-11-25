@@ -14,45 +14,49 @@ public class Walnut extends Plant {
 		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"Walnut");
 	}
 	
-	/**
-	 * This method keeps track of how many game turns have occurred in order
-	 * to make the walnut available for the player. 
-	 */
+	@Override
 	public void newTurn() {
-		if(currentTime != 0)
-				currentTime = currentTime - 1;
+		if (currentTime != 0)
+			currentTime = currentTime - 1;
 	}
-	
+
 	/**
-	 * This method check for when the walnut is available for the player to purchase
-	 * and use in the game.
+	 * This method check for when the pea shooter is available for the player to
+	 * purchase and use in the game.
+	 * 
 	 * @return True if the current time is equal to zero otherwise false.
 	 */
+	@Override
 	public boolean isAvailable() {
 		return (currentTime == 0);
 	}
-	
-	/**
-	 * This method sets the current time of the walnut plant to zero.
-	 */
-	public void makeAvailable() { 
-		currentTime = 0;
-	}
-	
+
 	/**
 	 * This method gets the current time.
+	 * 
 	 * @return A int which is the current time.
 	 */
+	@Override
 	public int getCurrentTime() {
 		return currentTime;
 	}
-	
+
 	/**
-	 * This method sets the walnut's current time.
+	 * This method sets the pea shooter's current time.
+	 * 
 	 * @param currentTime
 	 */
+	@Override
 	public void setCurrentTime(int currentTime) {
-		Walnut.currentTime = currentTime;
+		PeaShooter.currentTime = currentTime;
+	}
+
+	/**
+	 * This method resets the plants static timer.
+	 */
+	@Override
+	public void resetTime() {
+		currentTime = fullTime;
 	}
 	
 }
