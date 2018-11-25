@@ -16,9 +16,16 @@ public class Board {
 	public ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
 	public ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
 	public ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
-	public CommandManager commandManager = new CommandManager();
+	public CommandManager commandManager;
 	
+	//Use this constructor for tests only
+	public Board() {
+	}
 	
+	public Board(CommandManager cm) {
+		commandManager = cm;
+	}
+
 	/**
 	 * This method sets up and prints the grid.
 	 */
