@@ -14,21 +14,18 @@ public class GridObjectFactory {
 			return new SunFlower();
 		case ("VenusFlyTrap"):	
 			return new VenusFlyTrap();
+		case ("Walnut"):
+			return new Walnut();
+		case("Potatoe"):
+			return new Potatoe();
+		case("PeaShooter"):
+			return new PeaShooter();
 		case ("GenericZombie"):	
 			return new GenericZombie();
 		case ("FrankTheTank"):
 			return new FrankTheTank();
 		case("BurrowingBailey"):
 			return new BurrowingBailey();
-		case ("Unicorn"):
-			return new Unicorn();
-		case("MushyMushroom"):
-			return new MushyMushroom();
-		case("SassySquash"):
-			return new SassySquash();
-		case("BaNana"):
-			return new BaNana();
-			
 		default:				
 			return null;
 		}

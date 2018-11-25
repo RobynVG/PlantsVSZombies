@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class Level {
 	public static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
 	private static ArrayList<Zombie> allZombies; //Actually all zombies
-	public static int coins = 10; 
+	public static int coins = 50; 
 	
 	/**
 	 * This method is the first level of the game.
@@ -18,6 +18,9 @@ public class Level {
 		//available plants keeps ONLY 1  instance of each type available in level
 		allPlants.add(new SunFlower());
 		allPlants.add(new VenusFlyTrap());
+		allPlants.add(new Potatoe());
+		allPlants.add(new Walnut());
+		allPlants.add(new PeaShooter());
 		coins = previousCoins;
 		
 		//zombies type/amount needs to be generated/level
