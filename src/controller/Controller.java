@@ -2,9 +2,12 @@ package controller;
 
 import model.Level;
 import model.NullSpace;
+import model.PeaShooter;
 import model.Plant;
+import model.Potatoe;
 import model.SunFlower;
 import model.VenusFlyTrap;
+import model.Walnut;
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -208,6 +211,21 @@ public class Controller {
 			return;
 		} else if (plantName.equals("VenusFlyTrap")) {
 			p = new VenusFlyTrap();
+			//place the plant
+			board.placePlant(p, j, i);
+			return;
+		}else if(plantName.equals("Potatoe")) {
+			p = new Potatoe();
+			//place the plant
+			board.placePlant(p, j, i);
+			return;
+		}else if(plantName.equals("PeaShooter")) {
+			p = new PeaShooter();
+			//place the plant
+			board.placePlant(p, j, i);
+			return;
+		}else if(plantName.equals("Walnut")) {
+			p = new Walnut();
 			//place the plant
 			board.placePlant(p, j, i);
 			return;
