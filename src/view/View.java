@@ -92,9 +92,10 @@ public class View extends JFrame {
 		ImageIcon walnutImage = new ImageIcon(
 				new ImageIcon("resources/Walnut.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
 		ImageIcon potatoeImage  = new ImageIcon(
-				new ImageIcon("resource/Potatoe.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+				new ImageIcon("resources/Potatoe.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
 		ImageIcon peaShooterImage = new ImageIcon(
-				new ImageIcon("resource/PeaShooter.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+				new ImageIcon("resources/PeaShooter.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+		
 		// add images to the labels
 		JLabel sunflowerLabel = new JLabel("SunFlower", sunflowerImage, JLabel.LEFT);
 		JLabel venusflytrapLabel = new JLabel("VenusFlyTrap", venusflytrapImage, JLabel.LEFT);
