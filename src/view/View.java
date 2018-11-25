@@ -309,58 +309,70 @@ public class View extends JFrame {
 	 * @param o
 	 */
 	public void updateButton(JButton button, GridObject o) {
+		// If button is to display a nullspce the button is cleared (null space has no
+		// image)
+		if (o instanceof NullSpace) {
+			button.setIcon(null);
+			return;
+		}
+		try {
+			// Get the image icon corresponding to the name of the object parameter
+			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle() + ".png").getImage()
+					.getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
+			// Set the icon on the board
+			button.setIcon(image);
+			// Set the disable icon. This ensure the icon is not greyed out when it is
+			// disabled
+			button.setDisabledIcon(image);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+	}
 
+	public void playAnimation(JButton button, GridObject o) {
 		// Get the image icon corresponding to the name of the object parameter (Frame
 		// 0)
 		ImageIcon frame1 = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle() + ".png").getImage()
 				.getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
 
 		// Animated Image (Frame 2)
-		ImageIcon frame2 = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle() + "Animated1.png")
-				.getImage().getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
+		ImageIcon frame2 = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle() + "Animated1.png").getImage()
+				.getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
 
 		// Animated Image (Frame 3)
-		ImageIcon frame3 = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle() + "Animated2.png")
-				.getImage().getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
+		ImageIcon frame3 = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle() + "Animated2.png").getImage()
+				.getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
 
 		// Animated Image (Frame 4)
-		ImageIcon frame4 = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle() + "Animated3.png")
-				.getImage().getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
-		
-		// Frames in Animation
+		ImageIcon frame4 = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle() + "Animated3.png").getImage()
+				.getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
+
 		ArrayList<ImageIcon> frames = new ArrayList<ImageIcon>();
 		frames.add(frame1);
 		frames.add(frame2);
 		frames.add(frame3);
 		frames.add(frame4);
 
-		button.setIcon(frame1);
-		
 		animationThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-
 				// If button is to display a nullspce the button is cleared (null space has no
 				// image)
 				if (o instanceof NullSpace) {
 					button.setIcon(null);
 					return;
 				}
-				
+
 				for (ImageIcon frame : frames) {
 					button.setIcon(frame);
-					addDelay(200);
+					addDelay(400);
 				}
-				
+
 				button.setIcon(frame1);
 				button.setDisabledIcon(frame1);
 			}
 		});
-		playAnimation();
-	}
-	
-	public void playAnimation() {
 		animationThread.start();
 	}
 
