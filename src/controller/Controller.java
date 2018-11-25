@@ -2,11 +2,17 @@ package controller;
 
 import model.Level;
 import model.NullSpace;
+
 import model.PlacePlantCommand;
+
+import model.PeaShooter;
 import model.Plant;
+import model.Potatoe;
 import model.SunFlower;
 import model.VenusFlyTrap;
+import model.Walnut;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -153,20 +159,21 @@ public class Controller {
 	}
 
 	private void endTurn() {
-		for(;;) {
-			//Plants and zombies attack then zombies spawn
-			board.startBoardTurn();
-			//Update the coins on the GUI
-			view.getCoins().setText("       Sun Points: " + Level.coins);
-			//Update the grid
-			gridCond(State.DISABLED);
-			//Check if a win or loss has occured
-			playerWinLose();
-			//If no plant is affordable player must wait for the board to perform another turn
-			//until they accumulate enough sun points to go
-			if(Level.plantAffordable())
-				break;
+		//Plants and zombies attack then zombies spawn
+		board.startBoardTurn();
+		//Update the coins on the GUI
+		view.getCoins().setText("       Sun Points: " + Level.coins);
+		//Update the grid
+		gridCond(State.DISABLED);
+		//Check if a win or loss has occured
+		playerWinLose();
+		//If no plant is affordable player must wait for the board to perform another turn
+		//until they accumulate enough sun points to go
+		if(!Level.plantAffordable()) {
+			JOptionPane.showMessageDialog(view, "Wow you just found " + (50-Level.coins) + " Sun Points...");
+			Level.coins = 50;
 		}
+			
 		//Board turn has ended, allow the player to pick another plant
 		plantButtonsEnabled(true);
 		gridCond(State.STATS);
@@ -215,6 +222,21 @@ public class Controller {
 			//place the plant
 			board.placePlant(p, j, i);
 			return;
+		}else if(plantName.equals("Potatoe")) {
+			p = new Potatoe();
+			//place the plant
+			board.placePlant(p, j, i);
+			return;
+		}else if(plantName.equals("PeaShooter")) {
+			p = new PeaShooter();
+			//place the plant
+			board.placePlant(p, j, i);
+			return;
+		}else if(plantName.equals("Walnut")) {
+			p = new Walnut();
+			//place the plant
+			board.placePlant(p, j, i);
+			return;
 		}
 	}
 
@@ -253,19 +275,24 @@ public class Controller {
 				
 				switch(state) {
 				case STATS:
-					if (!board.isEmpty(i,j))
+					if (!board.isEmpty(i,j)) {
 						button.setEnabled(true);
+						button.setContentAreaFilled(true);
+					}
 					else
 						button.setEnabled(false);
 					break;	
 				case POSITIONS:
 					if (!board.isEmpty(i, j) || j == Board.GRID_WIDTH - 1)
 						button.setEnabled(false);
-					else
+					else {
 						button.setEnabled(true);
+						button.setContentAreaFilled(true);
+					}
 					break;
 				case DISABLED:
 					button.setEnabled(false);
+					button.setContentAreaFilled(false);;
 					break;
 				}
 			}

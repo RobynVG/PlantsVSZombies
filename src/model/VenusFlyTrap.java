@@ -1,20 +1,20 @@
 package model;
 
 public class VenusFlyTrap extends Plant {
-	protected static final int FULL_TIME = 3;	//Actually this # - 1. So if 3, its 2 turns.
-	protected static final int STRENGTH = 150; //BEAST
+	protected static final int FULL_TIME = 3;	
+	protected static final int STRENGTH = 175; 
 	protected static final int FULL_HEALTH = 320;
-	protected static final int PRICE = 5;
+	protected static final int PRICE = 150;
 	static int currentTime = 0;
 	
 	/**
-	 * This construct a venus flytrap.
+	 * This constructor, constructs a VenusFlyTrap by calling the plant class with a super method.
 	 */
 	public VenusFlyTrap() {
 		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"VenusFlyTrap");
 	}
 
-	//VenusFlyTraps only zombies in front of them
+	
 	/**
 	 *  This method only attacks zombies in front of them.  
 	 */
@@ -41,7 +41,7 @@ public class VenusFlyTrap extends Plant {
 	}
 	
 	/**
-	 * This method gets the current time (Will be overridden by the child class).
+	 * This method gets the current time.
 	 * @return A int, returns the current time.
 	 */
 	public int getCurrentTime() {
@@ -50,6 +50,7 @@ public class VenusFlyTrap extends Plant {
 	
 	/**
 	 * This method sets the current time for the VenusFlyTrap class.
+	 * This methods sets the current time.
 	 */
 	public void setCurrentTime(int currentTime) {
 		VenusFlyTrap.currentTime = currentTime;
