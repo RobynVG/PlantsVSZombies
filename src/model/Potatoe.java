@@ -71,24 +71,5 @@ public class Potatoe extends Plant {
 	public void setCurrentTime(int currentTime) {
 		Potatoe.currentTime = currentTime;
 	}
-	
-	/**
-	 * This method attacks the Zombie.
-	 */
-	public void attack(Zombie zombie) {
-		zombie.loseHealth(strength);
-	}
-	
-	/**
-	 * This method is when the potatoe explodes a zombie.
-	 */
-	public void go(Board board) {
-		//Check if there is a zombie to the right of the potatoe
-		GridObject obj = board.toTheRight(this);
-		//If there is a zombie to the right 
-		if(obj instanceof Zombie) {
-			attack((Zombie)obj);
-		}
-	}
 
 }

@@ -2,8 +2,8 @@ package model;
 
 public class PeaShooter extends Plant {
 
-	protected static final int FULL_TIME = 5;
-	protected static final int STRENGTH = 250;
+	protected static final int FULL_TIME = 2;
+	protected static final int STRENGTH = 150;
 	protected static final int FULL_HEALTH = 500;
 	protected static final int PRICE = 100;
 	static int currentTime = 0;

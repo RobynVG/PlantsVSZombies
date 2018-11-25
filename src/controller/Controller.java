@@ -9,6 +9,7 @@ import model.SunFlower;
 import model.VenusFlyTrap;
 import model.Walnut;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -268,20 +269,24 @@ public class Controller {
 				
 				switch(state) {
 				case STATS:
-					if (!board.isEmpty(i,j))
+					if (!board.isEmpty(i,j)) {
 						button.setEnabled(true);
+						button.setContentAreaFilled(true);
+					}
 					else
 						button.setEnabled(false);
 					break;	
 				case POSITIONS:
 					if (!board.isEmpty(i, j) || j == Board.GRID_WIDTH - 1)
 						button.setEnabled(false);
-					else
+					else {
 						button.setEnabled(true);
+						button.setContentAreaFilled(true);
+					}
 					break;
 				case DISABLED:
 					button.setEnabled(false);
-					//TODO: ADD BUTTONS HERE.
+					button.setContentAreaFilled(false);;
 					break;
 				}
 			}

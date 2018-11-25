@@ -2,7 +2,7 @@ package model;
 
 public class VenusFlyTrap extends Plant {
 	protected static final int FULL_TIME = 3;	
-	protected static final int STRENGTH = 150; 
+	protected static final int STRENGTH = 175; 
 	protected static final int FULL_HEALTH = 320;
 	protected static final int PRICE = 150;
 	static int currentTime = 0;
