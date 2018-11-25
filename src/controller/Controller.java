@@ -213,26 +213,6 @@ public class Controller {
 			return;
 		}
 	}
-
-
-	private void updateButton(JButton button, GridObject o) {
-		//If button is to display a nullspce the button is cleared (null space has no image)
-		if (o instanceof NullSpace) {
-			button.setIcon(null);
-			return;
-		}
-		try {
-			//Get the image icon corresponding to the name of the object parameter
-			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle()+".png").getImage()
-					.getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
-			//Set the icon on the board
-			button.setIcon(image);
-			//Set the disable icon. This ensure the icon is not greyed out when it is disabled
-			button.setDisabledIcon(image);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-	}
 	
 	private void spawnInfoFrame() {
 		view.makeInfoFrame();
@@ -245,7 +225,7 @@ public class Controller {
 			for (int j = 0; j < Board.GRID_WIDTH; j++) {
 				JButton button = view.getButtons()[i][j];
 				//Update the btton at the specified location
-				updateButton(view.getButtons()[i][j], board.grid[i][j]);
+				view.updateButton(view.getButtons()[i][j], board.grid[i][j]);
 				
 				switch(state) {
 				case STATS:
