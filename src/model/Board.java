@@ -9,16 +9,23 @@ import controller.Controller.State;
 public class Board {
 	public static final int GRID_HEIGHT = 6;
 	public static final int GRID_WIDTH = 9;
-	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G" }; // Must be same length as GRID_WIDTH
-	public static final String GRID_Y[] = { "1", "2", "3", "4" };
+	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I" }; // Must be same length as GRID_WIDTH
+	public static final String GRID_Y[] = { "1", "2", "3", "4", "5", "6" };
 	
 	public GridObject[][] grid;
 	public ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
 	public ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
 	public ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
-	public CommandManager commandManager = new CommandManager();
+	public CommandManager commandManager;
 	
+	//Use this constructor for tests only
+	public Board() {
+	}
 	
+	public Board(CommandManager cm) {
+		commandManager = cm;
+	}
+
 	/**
 	 * This method sets up and prints the grid.
 	 */
@@ -343,6 +350,12 @@ public class Board {
 					System.out.print("[ S ]");
 				else if (objects[i][j] instanceof VenusFlyTrap)
 					System.out.print("[ V ]");
+				else if(objects[i][j] instanceof PeaShooter)
+					System.out.print("[ PS ]");
+				else if(objects[i][j] instanceof Potatoe)
+					System.out.print("[ P ]");
+				else if(objects[i][j] instanceof Walnut)
+					System.out.print("[ W ]");
 				else
 					System.out.print("[   ]");
 			}

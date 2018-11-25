@@ -76,6 +76,11 @@ public class View extends JFrame {
 				buttons[i][j] = new JButton("");
 				buttons[i][j].setEnabled(false);
 				buttons[i][j].setActionCommand(i + " " + j);
+				if((i + j) % 2 == 0 ) {
+					buttons[i][j].setBackground(new Color(154,205,50));
+				}else{
+					buttons[i][j].setBackground(new Color(173,255,47));
+				}
 				gridLayoutButtons.add(buttons[i][j]);
 			}
 		}
@@ -90,21 +95,37 @@ public class View extends JFrame {
 				new ImageIcon("resources/SunFlower.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
 		ImageIcon venusflytrapImage = new ImageIcon(
 				new ImageIcon("resources/VenusFlyTrap.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-
+		ImageIcon walnutImage = new ImageIcon(
+				new ImageIcon("resources/Walnut.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+		ImageIcon potatoeImage  = new ImageIcon(
+				new ImageIcon("resources/Potatoe.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+		ImageIcon peaShooterImage = new ImageIcon(
+				new ImageIcon("resources/PeaShooter.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+		
 		// add images to the labels
 		JLabel sunflowerLabel = new JLabel("SunFlower", sunflowerImage, JLabel.LEFT);
 		JLabel venusflytrapLabel = new JLabel("VenusFlyTrap", venusflytrapImage, JLabel.LEFT);
-
+		JLabel walnutLabel = new JLabel("Walnut", walnutImage, JLabel.LEFT);
+		JLabel potatoeLabel = new JLabel("Potatoe",potatoeImage, JLabel.LEFT);
+		JLabel peaShooterLabel = new JLabel("PeaShooter",peaShooterImage, JLabel.LEFT);
+		
 		// create panels for each plant
 		JPanel sunflowerPanel = new JPanel();
 		JPanel venusflytrapPanel = new JPanel();
+		JPanel walnutPanel = new JPanel();
+		JPanel potatoePanel = new JPanel();
+		JPanel peaShooterPanel = new JPanel();
 
 		// add JLabel to JPanel
 		sunflowerPanel.add(sunflowerLabel);
 		venusflytrapPanel.add(venusflytrapLabel);
+		walnutPanel.add(walnutLabel);
+		potatoePanel.add(potatoeLabel);
+		peaShooterPanel.add(peaShooterLabel);
+		
 
 		// array of panels
-		JPanel[] panels = { sunflowerPanel, venusflytrapPanel };
+		JPanel[] panels = { sunflowerPanel, venusflytrapPanel, walnutPanel, potatoePanel, peaShooterPanel};
 
 		// JList of panels
 		menuList.setListData(panels);
@@ -112,7 +133,7 @@ public class View extends JFrame {
 		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		menuList.setLayoutOrientation(JList.VERTICAL);
 
-		coins = new JLabel("       Sun Points: 10");
+		coins = new JLabel("       Sun Points: 50");
 		JPanel plantsAndCoins = new JPanel();
 		plantsAndCoins.setLayout(new BorderLayout());
 
@@ -167,25 +188,67 @@ public class View extends JFrame {
 		GridLayout gl = new GridLayout(0, 2);
 		JPanel InfoPanel = new JPanel(gl);
 
+
+		// VenusFlyTrap Info
+
 		JLabel j1 = new JLabel("VenusFlyTrap : ");
 		j1.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
 		j1.setForeground(Color.GREEN);
 		InfoPanel.add(j1);
 
-		JLabel j2 = new JLabel("5 coins");
+		JLabel j2 = new JLabel("150 coins");
+
 		j2.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
 		j2.setForeground(Color.CYAN);
 		InfoPanel.add(j2);
+
+
+
+		// SunFlower Info
 
 		JLabel j3 = new JLabel("SunFlower : ");
 		j3.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
 		j3.setForeground(Color.green);
 		InfoPanel.add(j3);
 
-		JLabel j4 = new JLabel("2 coins");
+		JLabel j4= new JLabel("50 coins");
 		j4.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
 		j4.setForeground(Color.CYAN);
 		InfoPanel.add(j4);
+
+
+		// Walnut Info
+		JLabel j5 = new JLabel("Walnut : ");
+		j5.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
+		j5.setForeground(Color.green);
+		InfoPanel.add(j5);
+
+		JLabel j6 = new JLabel("50 coins");
+		j6.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
+		j6.setForeground(Color.CYAN);
+		InfoPanel.add(j6);
+
+		// Potatoe Info
+		JLabel j7 = new JLabel("Potatoe : ");
+		j7.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
+		j7.setForeground(Color.green);
+		InfoPanel.add(j7);
+
+		JLabel j8 = new JLabel("25 coins");
+		j8.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
+		j8.setForeground(Color.CYAN);
+		InfoPanel.add(j8);
+
+		// Potatoe Info
+		JLabel j9 = new JLabel("Pea Shooter : ");
+		j9.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
+		j9.setForeground(Color.green);
+		InfoPanel.add(j9);
+
+		JLabel j10 = new JLabel("100 coins");
+		j10.setFont(new Font("TimesNewRoman", Font.BOLD, 13));
+		j10.setForeground(Color.CYAN);
+		InfoPanel.add(j10);
 
 		Panel.add(InfoPanel, BorderLayout.CENTER);
 		InfoPanel.setOpaque(true);

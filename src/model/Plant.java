@@ -32,46 +32,12 @@ public abstract class Plant extends GridObject{
 	}
 	
 	/**
-	 * This method keeps track of the game turn.
-	 */
-	public void newTurn() { //on every turn should only be called ONCE per plant type.		
-	}
-	
-	/**
 	 * This method reduces the plant's health when a zombie has attack the plant.
 	 * If the plant's health is zero it is removed from the board.
 	 * @param zombieStrength (int), the zombie's strength for attacking a plant.
 	 */
 	public void loseHealth(int zombieStrength) {
 		health = health - zombieStrength;
-	}
-	
-	/**
-	 * This method resets the time (Will be overridden by the child class).
-	 */
-	public void resetTime() { //when a plant is placed
-	}
-	
-	/**
-	 * This method gets the current time (Will be overridden by the child class).
-	 * @return A int, returns the current time.
-	 */
-	public int getCurrentTime() {
-		return 0;
-	}
-	
-	/**
-	 * This method makes the plant available (Will be overridden by the child class).
-	 */
-	public void makeAvailable() {
-	}
-	
-	/**
-	 * This method checks if the plant is available for the round (Will be overridden by the child class).
-	 * @return A boolean, true if it is available otherwise false.
-	 */
-	public boolean isAvailable() {
-		return false;
 	}
 	
 	/**
@@ -95,7 +61,31 @@ public abstract class Plant extends GridObject{
 	 * @param zombie (Zombie), a zombie that is being attacked.
 	 */
 	public void attack(Zombie zombie) {
+		zombie.loseHealth(strength);
 	}
+	
+	/**
+	 * This method decrements the plants static timer.
+	 */
+	public abstract void newTurn();
+	
+	/**
+	 * This method resets the time (Will be overridden by the child class).
+	 */
+	public abstract void resetTime();
+	
+	
+	/**
+	 * This method gets the current time (Will be overridden by the child class).
+	 * @return A int, returns the current time.
+	 */
+	public abstract int getCurrentTime();
+	
+	/**
+	 * This method checks if the plant is available for the round (Will be overridden by the child class).
+	 * @return A boolean, true if it is available otherwise false.
+	 */
+	public abstract boolean isAvailable();
 	
 	/**
 	 * This method gets the full time.

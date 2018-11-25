@@ -2,9 +2,15 @@ package controller;
 
 import model.Level;
 import model.NullSpace;
+
+import model.PlacePlantCommand;
+
+import model.PeaShooter;
 import model.Plant;
+import model.Potatoe;
 import model.SunFlower;
 import model.VenusFlyTrap;
+import model.Walnut;
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -18,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 
 import model.Board;
+import model.CommandManager;
 import model.GridObject;
 import model.GridObjectFactory;
 import view.View;
@@ -26,6 +33,7 @@ public class Controller {
 	static Scanner reader = new Scanner(System.in);
 	private Board board;
 	private View view;
+	private CommandManager commandManager;
 	private State gridState;
 	
 	public enum State {
@@ -35,9 +43,10 @@ public class Controller {
 	}
 	
 	
-	public Controller(Board board, View view) {
+	public Controller(Board board, View view, CommandManager cm) {
 		this.view = view;
 		this.board = board;
+		commandManager = cm;
 		startGame();
 	}
 	
@@ -67,13 +76,14 @@ public class Controller {
 		//Initialize action listener for the end turn button
 		view.getEndTurn().addActionListener(e -> endTurn());
 		
+		//Initialize and define action listener for the undo button
 		view.getUndoTurn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				board.commandManager.undo();
 				gridCond(State.STATS);
 			}
 		});
-		
+		//Initialize and define action listener for the redo button
 		view.getRedoTurn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				board.commandManager.redo();
@@ -81,7 +91,7 @@ public class Controller {
 			}
 		});
 	}
-	
+	//Action listener for plant buttons
 	private void plantSelected(ListSelectionEvent arg0) {
 		//If statements deals with multiple events fired by one click
 		if (arg0.getValueIsAdjusting() || view.getPlants().getSelectedValue() == null)
@@ -109,20 +119,26 @@ public class Controller {
 					view.getPlants().clearSelection();
 					return;
 				}
+
 				//If this statement is reached the user has chosen a valid plant. Enable the grid so it can be placed
 				gridCond(State.POSITIONS);
 			}	
 		}		
 	}
 	
+	//Player selects a position on the grid
 	private void gridPositionSelected(ActionEvent e) {
+		//Action command corresponds to i j
 		String s = e.getActionCommand();
 		String[] rowcol = s.split(" ");
 				
 		int i = Integer.parseInt(rowcol[0]);
 		int j = Integer.parseInt(rowcol[1]);
 		
+		//If the grid is in the STATS state the player has selected an
+		//area on the board to view an objects stats
 		if (gridState == State.STATS) {
+			//Get the grid object and display its stats
 			GridObject selected = board.getObject(i, j);
 			view.displayStats(selected);
 			return;
@@ -138,8 +154,7 @@ public class Controller {
 		//Clear the plant list selection so once enabled the user can select a new plant
 		view.getPlants().clearSelection();
 		//Add the plant to the board
-		board.placePlant((Plant)GridObjectFactory.createNewGridObject(plantSelected), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
-		//addPlant(plantSelected, Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
+		commandManager.executeCommand(new PlacePlantCommand(board,(Plant)GridObjectFactory.createNewGridObject(plantSelected), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1])));
 		//Display coins
 		view.getCoins().setText("       Sun Points: " + Level.coins);
 		//Allow player to check current stats of any object
@@ -149,29 +164,28 @@ public class Controller {
 	}
 
 	private void endTurn() {
-		for(;;) {
-			//Plants and zombies attack then zombies spawn
-			board.startBoardTurn();
-			//Update the coins on the GUI
-			view.getCoins().setText("       Sun Points: " + Level.coins);
-			//Update the grid
-			gridCond(State.DISABLED);
-			//Check if a win or loss has occured
-			playerWinLose();
-			//If no plant is affordable player must wait for the board to perform another turn
-			//until they accumulate enough sun points to go
-			if(Level.plantAffordable())
-				break;
+		//Plants and zombies attack then zombies spawn
+		board.startBoardTurn();
+		//Update the coins on the GUI
+		view.getCoins().setText("       Sun Points: " + Level.coins);
+		//Update the grid
+		gridCond(State.DISABLED);
+		//Check if a win or loss has occured
+		playerWinLose();
+		//If no plant is affordable player must wait for the board to perform another turn
+		//until they accumulate enough sun points to go
+		if(!Level.plantAffordable()) {
+			JOptionPane.showMessageDialog(view, "Wow you just found " + (50-Level.coins) + " Sun Points...");
+			Level.coins = 50;
 		}
+			
 		//Board turn has ended, allow the player to pick another plant
 		plantButtonsEnabled(true);
 		gridCond(State.STATS);
 	}
 
 	/**
-	 * Player wins level
-	 * 
-	 * @True if the player wins the level
+	 * This method checks to see if the player has won or lost
 	 */
 	private void playerWinLose() {
 		// If Player Wins the Level because there are no zombies to be spawned an no zombies on the board
@@ -196,8 +210,11 @@ public class Controller {
 	}
 
 	/**
-	 * This method adds a plant to the board
+	 * This method updates the button in the grid with its corresponding grid object
+	 * @param button
+	 * @param o
 	 */
+<<<<<<< HEAD
 	public void addPlant(String plantName, int i, int j) {
 		Plant p = null;
 		//Create a plant based on the string parameter
@@ -212,8 +229,31 @@ public class Controller {
 			board.placePlant(p, j, i);
 			return;
 		}
+=======
+	private void updateButton(JButton button, GridObject o) {
+		//If button is to display a nullspce the button is cleared (null space has no image)
+		if (o instanceof NullSpace) {
+			button.setIcon(null);
+			return;
+		}
+		try {
+			//Get the image icon corresponding to the name of the object parameter
+			ImageIcon image = new ImageIcon(new ImageIcon("resources/" + o.getObjectTitle()+".png").getImage()
+					.getScaledInstance(80, 60, Image.SCALE_AREA_AVERAGING));
+			//Set the icon on the board
+			button.setIcon(image);
+			//Set the disable icon. This ensure the icon is not greyed out when it is disabled
+			button.setDisabledIcon(image);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+>>>>>>> b04882fb79f95256948907b6318476c65551e0ea
 	}
 	
+	/**
+	 * This is the action listener for clicking on an object on the grid
+	 * to view its stats. Spawns a dialog displaying stats
+	 */
 	private void spawnInfoFrame() {
 		view.makeInfoFrame();
 	}
@@ -229,19 +269,24 @@ public class Controller {
 				
 				switch(state) {
 				case STATS:
-					if (!board.isEmpty(i,j))
+					if (!board.isEmpty(i,j)) {
 						button.setEnabled(true);
+						button.setContentAreaFilled(true);
+					}
 					else
 						button.setEnabled(false);
 					break;	
 				case POSITIONS:
 					if (!board.isEmpty(i, j) || j == Board.GRID_WIDTH - 1)
 						button.setEnabled(false);
-					else
+					else {
 						button.setEnabled(true);
+						button.setContentAreaFilled(true);
+					}
 					break;
 				case DISABLED:
 					button.setEnabled(false);
+					button.setContentAreaFilled(false);;
 					break;
 				}
 			}

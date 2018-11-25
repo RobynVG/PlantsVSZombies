@@ -9,14 +9,15 @@ public class BurrowingBailey extends Zombie{
 	}
 	
 	/**
-	 * This method allows the zombies to move on the board.
+	 * This method allows BurrowingBailey to move on the board.
 	 */
+	@Override
 	public void go(Board board) {
 		GridObject l = board.toTheLeft(this);
 		GridObject ll = board.toTheLeft(l);
 		
 		//BurrowingBailey burrows under the next plant if there is a NullSPace
-		//To its left
+		//To the next plant's left
 		if (l instanceof Plant && ll instanceof NullSpace)
 			board.move(this, (NullSpace) ll);
 		//Regular move to the left.

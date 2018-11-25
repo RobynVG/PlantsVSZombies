@@ -1,19 +1,19 @@
 package model;
 
-public class VenusFlyTrap extends Plant {
-	protected static final int FULL_TIME = 3;	
-	protected static final int STRENGTH = 175; 
-	protected static final int FULL_HEALTH = 320;
-	protected static final int PRICE = 150;
+public class Walnut extends Plant {
+	protected static final int FULL_TIME = 4;	
+	protected static final int STRENGTH = 0; 
+	protected static final int FULL_HEALTH = 1000;
+	protected static final int PRICE = 50;
 	static int currentTime = 0;
 	
 	/**
-	 * This constructor, constructs a VenusFlyTrap by calling the plant class with a super method.
+	 * The constructor, constructs a Walnut by calling the plant class with a super method.
 	 */
-	public VenusFlyTrap() {
-		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"VenusFlyTrap");
+	public Walnut() {
+		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"Walnut");
 	}
-
+	
 	@Override
 	public void newTurn() {
 		if (currentTime != 0)
@@ -58,4 +58,5 @@ public class VenusFlyTrap extends Plant {
 	public void resetTime() {
 		currentTime = fullTime;
 	}
+	
 }

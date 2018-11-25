@@ -1,19 +1,36 @@
 package model;
 
-public class VenusFlyTrap extends Plant {
-	protected static final int FULL_TIME = 3;	
-	protected static final int STRENGTH = 175; 
-	protected static final int FULL_HEALTH = 320;
-	protected static final int PRICE = 150;
+public class PeaShooter extends Plant {
+
+	protected static final int FULL_TIME = 2;
+	protected static final int STRENGTH = 150;
+	protected static final int FULL_HEALTH = 500;
+	protected static final int PRICE = 100;
 	static int currentTime = 0;
 	
 	/**
-	 * This constructor, constructs a VenusFlyTrap by calling the plant class with a super method.
+	 * This constructor, constructs a pea shooter by calling the plant class with a
+	 * super method.
 	 */
-	public VenusFlyTrap() {
-		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"VenusFlyTrap");
+	public PeaShooter() {
+		super(FULL_TIME, STRENGTH, FULL_HEALTH, PRICE, "PeaShooter");
 	}
 
+	/**
+	 * This method is when the Pea Shooter shoots a zombie.
+	 */
+	@Override
+	public void go(Board board) {
+		for (int i = board.getX(this); i < Board.GRID_WIDTH; i++) {
+			if (board.getObject(board.getY(this), i) instanceof Zombie) {
+				attack((Zombie) board.getObject(board.getY(this), i));
+			}
+		}
+	}
+	
+	/**
+	 * This method decrements the plant's static timer.
+	 */
 	@Override
 	public void newTurn() {
 		if (currentTime != 0)

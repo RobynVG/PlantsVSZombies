@@ -1,6 +1,5 @@
 package model;
 
-
 public abstract class GridObject {
 	String objectTitle;
 

@@ -2,11 +2,11 @@ package model;
 
 public class SunFlower extends Plant {
 
-	protected static final int FULL_TIME = 0;	//Actually this # - 1. So if 3, its 2 turns.
+	protected static final int FULL_TIME = 0;	
 	protected static final int STRENGTH = 0;
 	protected static final int FULL_HEALTH = 100;
-	protected static final int PRICE = 2;
-	public static final int COIN_BONUS = 1;
+	protected static final int PRICE = 50;
+	public static final int COIN_BONUS = 25;
 	static int currentTime = 0;
 	
 	/**
@@ -54,5 +54,13 @@ public class SunFlower extends Plant {
 	 */
 	public void setCurrentTime(int currentTime) {
 		SunFlower.currentTime = currentTime;
+	}
+
+	@Override
+	/**
+	 * This method resets the plants static timer.
+	 */
+	public void resetTime() {
+		currentTime = fullTime;
 	}
 }
