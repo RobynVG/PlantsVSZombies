@@ -34,8 +34,10 @@ public abstract class Plant extends GridObject{
 	/**
 	 * This method keeps track of the game turn.
 	 */
-	public void newTurn() { //on every turn should only be called ONCE per plant type.		
+	public void newTurn() {
+		//on every turn should only be called ONCE per plant type.		
 	}
+	
 	
 	/**
 	 * This method reduces the plant's health when a zombie has attack the plant.
@@ -49,8 +51,10 @@ public abstract class Plant extends GridObject{
 	/**
 	 * This method resets the time (Will be overridden by the child class).
 	 */
-	public void resetTime() { //when a plant is placed
+	public void resetTime() {
+		//when a plant is placed
 	}
+	
 	
 	/**
 	 * This method gets the current time (Will be overridden by the child class).
@@ -64,6 +68,7 @@ public abstract class Plant extends GridObject{
 	 * This method makes the plant available (Will be overridden by the child class).
 	 */
 	public void makeAvailable() {
+		
 	}
 	
 	/**
@@ -95,6 +100,7 @@ public abstract class Plant extends GridObject{
 	 * @param zombie (Zombie), a zombie that is being attacked.
 	 */
 	public void attack(Zombie zombie) {
+		
 	}
 	
 	/**
