@@ -2,6 +2,7 @@ package controller;
 
 import model.Level;
 import model.NullSpace;
+import model.PlacePlantCommand;
 import model.Plant;
 import model.SunFlower;
 import model.VenusFlyTrap;
@@ -18,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 
 import model.Board;
+import model.CommandManager;
 import model.GridObject;
 import model.GridObjectFactory;
 import view.View;
@@ -26,6 +28,7 @@ public class Controller {
 	static Scanner reader = new Scanner(System.in);
 	private Board board;
 	private View view;
+	private CommandManager commandManager;
 	private State gridState;
 	
 	public enum State {
@@ -35,9 +38,10 @@ public class Controller {
 	}
 	
 	
-	public Controller(Board board, View view) {
+	public Controller(Board board, View view, CommandManager cm) {
 		this.view = view;
 		this.board = board;
+		commandManager = cm;
 		startGame();
 	}
 	
@@ -109,6 +113,7 @@ public class Controller {
 					view.getPlants().clearSelection();
 					return;
 				}
+
 				//If this statement is reached the user has chosen a valid plant. Enable the grid so it can be placed
 				gridCond(State.POSITIONS);
 			}	
@@ -138,8 +143,7 @@ public class Controller {
 		//Clear the plant list selection so once enabled the user can select a new plant
 		view.getPlants().clearSelection();
 		//Add the plant to the board
-		board.placePlant((Plant)GridObjectFactory.createNewGridObject(plantSelected), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
-		//addPlant(plantSelected, Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1]));
+		commandManager.executeCommand(new PlacePlantCommand(board,(Plant)GridObjectFactory.createNewGridObject(plantSelected), Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1])));
 		//Display coins
 		view.getCoins().setText("       Sun Points: " + Level.coins);
 		//Allow player to check current stats of any object
