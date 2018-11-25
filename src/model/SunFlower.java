@@ -55,4 +55,12 @@ public class SunFlower extends Plant {
 	public void setCurrentTime(int currentTime) {
 		SunFlower.currentTime = currentTime;
 	}
+
+	@Override
+	/**
+	 * This method resets the plants static timer.
+	 */
+	public void resetTime() {
+		currentTime = fullTime;
+	}
 }

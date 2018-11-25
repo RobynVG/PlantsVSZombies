@@ -27,7 +27,7 @@ public class PlacePlantCommand implements Command{
      * @param row
      * @param col
      */
-    public PlacePlantCommand(Board board, Plant p, int row, int col) {
+    public PlacePlantCommand(Board board, Plant p, int col, int row) {
     	this.board = board;
     	this.row = row;
     	this.col = col;
@@ -46,7 +46,7 @@ public class PlacePlantCommand implements Command{
         		nextGridState[i][j] = o;
         	}
         }
-        nextGridState[row][col] = p;
+        nextGridState[col][row] = p;
         
         for (GridObject object: board.gridObjects) {
         	previousGridObjects.add(object);

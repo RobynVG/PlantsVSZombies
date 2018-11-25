@@ -16,60 +16,50 @@ public class Potatoe extends Plant {
 	}
 	
 	/**
-	 * This method reduces the amount of money the player has when purchasing a Potatoe.
+	 * This method decrements the plant's static timer.
 	 */
-	public void purchase() {
-		Level.coins -= price;
-	}
-	
-	/**
-	 * This method checks if the player has the appropriate amount of coins to purchase
-	 * the Potatoe.
-	 * @return True, if the player has enough coins otherwise false.
-	 */
-	public boolean isAffordable() {
-		return (price <= Level.coins);
-	}
-	
-	/**
-	 * This method keeps track of how many game turns have occurred in order
-	 * to make the Potatoe available for the player. 
-	 */
+	@Override
 	public void newTurn() {
-		if(currentTime != 0)
-				currentTime = currentTime - 1;
+		if (currentTime != 0)
+			currentTime = currentTime - 1;
 	}
-	
+
 	/**
-	 * This method check for when the Potatoe is available for the player to purchase
-	 * and use in the game.
+	 * This method check for when the pea shooter is available for the player to
+	 * purchase and use in the game.
+	 * 
 	 * @return True if the current time is equal to zero otherwise false.
 	 */
+	@Override
 	public boolean isAvailable() {
 		return (currentTime == 0);
 	}
-	
-	/**
-	 * This method sets the current time of the Potatoe to zero.
-	 */
-	public void makeAvailable() { //Not used but might need at some point?
-		currentTime = 0;
-	}
-	
+
 	/**
 	 * This method gets the current time.
+	 * 
 	 * @return A int which is the current time.
 	 */
+	@Override
 	public int getCurrentTime() {
 		return currentTime;
 	}
-	
+
 	/**
-	 * This method sets the Potatoe's current time.
+	 * This method sets the pea shooter's current time.
+	 * 
 	 * @param currentTime
 	 */
+	@Override
 	public void setCurrentTime(int currentTime) {
-		Potatoe.currentTime = currentTime;
+		PeaShooter.currentTime = currentTime;
 	}
 
+	/**
+	 * This method resets the plants static timer.
+	 */
+	@Override
+	public void resetTime() {
+		currentTime = fullTime;
+	}
 }

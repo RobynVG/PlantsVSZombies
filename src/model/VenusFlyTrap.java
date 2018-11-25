@@ -14,45 +14,48 @@ public class VenusFlyTrap extends Plant {
 		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"VenusFlyTrap");
 	}
 
-	
-	/**
-	 *  This method only attacks zombies in front of them.  
-	 */
-	public void attack(Zombie zombie) {
-		zombie.loseHealth(strength);
-	}
-	
-	
-	//Can't inherit the function since this one deals with static vars. Can override though
-	/**
-	 * This method keeps track of the turns for when the venus flytrap is available again.
-	 */
+	@Override
 	public void newTurn() {
-		if (currentTime!= 0)
+		if (currentTime != 0)
 			currentTime = currentTime - 1;
 	}
-	
+
 	/**
-	 * This method checks if the venus flytrap is available.
-	 * @return A boolean, true if it is available otherwise false.
+	 * This method check for when the pea shooter is available for the player to
+	 * purchase and use in the game.
+	 * 
+	 * @return True if the current time is equal to zero otherwise false.
 	 */
+	@Override
 	public boolean isAvailable() {
 		return (currentTime == 0);
 	}
-	
+
 	/**
 	 * This method gets the current time.
-	 * @return A int, returns the current time.
+	 * 
+	 * @return A int which is the current time.
 	 */
+	@Override
 	public int getCurrentTime() {
 		return currentTime;
 	}
-	
+
 	/**
-	 * This method sets the current time for the VenusFlyTrap class.
-	 * This methods sets the current time.
+	 * This method sets the pea shooter's current time.
+	 * 
+	 * @param currentTime
 	 */
+	@Override
 	public void setCurrentTime(int currentTime) {
-		VenusFlyTrap.currentTime = currentTime;
+		PeaShooter.currentTime = currentTime;
+	}
+
+	/**
+	 * This method resets the plants static timer.
+	 */
+	@Override
+	public void resetTime() {
+		currentTime = fullTime;
 	}
 }
