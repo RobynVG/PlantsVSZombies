@@ -19,8 +19,6 @@ import model.Plant;
 import model.Zombie;
 
 public class View extends JFrame {
-	public static final int GRID_HEIGHT = 4;// The Height of the board.
-	public static final int GRID_WIDTH = 7;// The Width of the board.
 
 	// Menu
 	private JMenuBar menuBar;// The menu bar

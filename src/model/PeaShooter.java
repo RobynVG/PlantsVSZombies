@@ -71,11 +71,9 @@ public class PeaShooter extends Plant {
 	 * This method is when the Pea Shooter shoots a zombie.
 	 */
 	public void go(Board board) {
-		while (this.health != 0) {
-			for (int i = board.getX(this); i < board.GRID_WIDTH; i++) {
-				if (board.getObject(i, board.getY(this)) instanceof Zombie) {
-					attack((Zombie) board.getObject(i, board.getY(this)));
-				}
+		for (int i = board.getX(this); i < board.GRID_WIDTH; i++) {
+			if (board.getObject(board.getY(this), i) instanceof Zombie) {
+				attack((Zombie) board.getObject(board.getY(this), i));
 			}
 		}
 	}

@@ -280,6 +280,7 @@ public class Controller {
 					break;
 				case DISABLED:
 					button.setEnabled(false);
+					//TODO: ADD BUTTONS HERE.
 					break;
 				}
 			}

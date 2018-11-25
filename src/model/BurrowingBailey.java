@@ -9,7 +9,7 @@ public class BurrowingBailey extends Zombie{
 	}
 	
 	/**
-	 * This method allows the zombies to move on the board.
+	 * This method allows BurrowingBailey to move on the board.
 	 */
 	public void go(Board board) {
 		GridObject l = board.toTheLeft(this);
