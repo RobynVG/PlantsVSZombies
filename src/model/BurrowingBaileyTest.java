@@ -45,6 +45,7 @@ public class BurrowingBaileyTest extends TestCase {
 		board.placeZombie(b1, 1, 5);
 		board.placePlant(v1, 1, 4);
 		board.placePlant(s1, 1, 3);
+		board.boardTurn();
 		assertEquals(v1.getHealth(),v1.getFullHealth()-b1.getStrength());
 	}
 }
