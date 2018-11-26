@@ -17,8 +17,6 @@ public abstract class Plant extends GridObject{
 		this.health = health;
 		this.objectTitle = objectTitle;
 		this.price = price;
-		
-		resetTime(); //Reset for particular plant when they are born (Wait until you can plant another)
 	}
 	
 	/**

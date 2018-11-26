@@ -17,7 +17,7 @@ public class BoardTest extends TestCase {
 		v1 = new VenusFlyTrap();
 		g1 = new GenericZombie();
 		g2 = new GenericZombie();
-		board = new Board();
+		board = new Board(new CommandManager());
 		board.setupGrid();
 		Level.level1();
 	}

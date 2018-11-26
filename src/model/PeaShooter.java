@@ -66,7 +66,6 @@ public class PeaShooter extends Plant {
 	@Override
 	public void setCurrentTime(int currentTime) {
 		PeaShooter.currentTime = currentTime;
-		System.out.println(PeaShooter.currentTime);
 	}
 
 	/**
@@ -75,6 +74,5 @@ public class PeaShooter extends Plant {
 	@Override
 	public void resetTime() {
 		currentTime = fullTime;
-		System.out.println("REACHED RESET");
 	}
 }
