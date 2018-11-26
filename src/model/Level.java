@@ -63,7 +63,7 @@ public class Level {
 		return allZombies;
 	}
 	
-	/*
+	/**
 	 * This method sets all the zombies that are to be played for the current level.
 	 * @param zombies.
 	 */
@@ -71,7 +71,7 @@ public class Level {
 		allZombies = zombies;
 	}
 	
-	/*
+	/**
 	 * This method checks if there are no more zombies left to play for the current level.
 	 * @return boolean
 	 */
