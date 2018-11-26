@@ -45,7 +45,7 @@ public class Board {
 		if (Level.getAllZombies().isEmpty())
 			return;
 		
-		int yPos = ThreadLocalRandom.current().nextInt(0, 3);
+		int yPos = ThreadLocalRandom.current().nextInt(0, Board.GRID_HEIGHT-1);
 		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.getAllZombies().size());
 		Zombie zombie = Level.getAllZombies().remove(randZombie); 
 
