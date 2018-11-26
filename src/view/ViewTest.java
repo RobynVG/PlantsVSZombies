@@ -85,11 +85,6 @@ public class ViewTest extends TestCase {
 			JPanel venusflytrapPanel = new JPanel();
 			assertNotNull(sunflowerPanel);
 			assertNotNull(venusflytrapPanel);
-				
-				
-				
-		
-		
 	}
 
 	/*
