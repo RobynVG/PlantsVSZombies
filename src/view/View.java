@@ -24,6 +24,8 @@ public class View extends JFrame {
 
 	// Menu
 	private JMenuBar menuBar;// The menu bar
+	
+
 	private JMenu menu; // The menu
 	private JMenuItem start, restart, help; // Menu items
 
@@ -451,6 +453,67 @@ public class View extends JFrame {
 
 	public void setRedoTurn(JButton nextTurn) {
 		this.redoTurn = nextTurn;
+	}
+	
+
+	public void setMenuBar(JMenuBar menuBar) {
+		this.menuBar = menuBar;
+	}
+
+	public JMenu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(JMenu menu) {
+		this.menu = menu;
+	}
+
+	public JMenuItem getStart() {
+		return start;
+	}
+
+	public void setStart(JMenuItem start) {
+		this.start = start;
+	}
+
+	public JMenuItem getRestart() {
+		return restart;
+	}
+
+	public void setRestart(JMenuItem restart) {
+		this.restart = restart;
+	}
+
+	public JPanel getGridLayoutButtons() {
+		return gridLayoutButtons;
+	}
+
+	public void setGridLayoutButtons(JPanel gridLayoutButtons) {
+		this.gridLayoutButtons = gridLayoutButtons;
+	}
+
+	public JList<JPanel> getMenuList() {
+		return menuList;
+	}
+
+	public void setMenuList(JList<JPanel> menuList) {
+		this.menuList = menuList;
+	}
+
+	public void setHelp(JMenuItem help) {
+		this.help = help;
+	}
+
+	public void setCoins(JLabel coins) {
+		this.coins = coins;
+	}
+
+	public static void setButtons(JButton[][] buttons) {
+		View.buttons = buttons;
+	}
+
+	public void setAnimationThread(Thread animationThread) {
+		this.animationThread = animationThread;
 	}
 
 }
