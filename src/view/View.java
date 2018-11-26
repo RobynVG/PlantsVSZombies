@@ -42,7 +42,7 @@ public class View extends JFrame {
 	private Thread animationThread;
 
 	/**
-	 * Constructor to construct the view.
+	 * This constructor, constructs the view of the game.
 	 */
 	public View() {
 		// Sets the main layout as a BorderLayout.
@@ -259,6 +259,10 @@ public class View extends JFrame {
 		infoFrame.setVisible(true);
 	}
 
+	/**
+	 * This method displays the stats of the GridObject.
+	 * @param o
+	 */
 	public void displayStats(GridObject o) {
 		if (o instanceof Plant)
 			displayPlantStats((Plant) o);
@@ -266,6 +270,10 @@ public class View extends JFrame {
 			displayZombieStats((Zombie) o);
 	}
 
+	/**
+	 * This method displays the plant's states.
+	 * @param plant
+	 */
 	private void displayPlantStats(Plant plant) {
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Plant Stats");
@@ -285,6 +293,10 @@ public class View extends JFrame {
 		dialog.setVisible(true);
 	}
 
+	/**
+	 * This method displays the zombie's stats.
+	 * @param zombie
+	 */
 	private void displayZombieStats(Zombie zombie) {
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Zombie Stats");
@@ -303,10 +315,9 @@ public class View extends JFrame {
 	}
 
 	/**
-	 * This method updates the button in the grid with its corresponding grid object
-	 * 
+	 * This method updates the button in the grid with the corresponding gridObject.
 	 * @param button
-	 * @param o
+	 * @param o, GridObject
 	 */
 	public void updateButton(JButton button, GridObject o) {
 		// If button is to display a nullspce the button is cleared (null space has no
@@ -329,6 +340,11 @@ public class View extends JFrame {
 		}
 	}
 
+	/**
+	 * This method executes the animation.
+	 * @param button
+	 * @param o, The gridObject
+	 */
 	public void playAnimation(JButton button, GridObject o) {
 		// Get the image icon corresponding to the name of the object parameter (Frame
 		// 0)
@@ -376,10 +392,9 @@ public class View extends JFrame {
 		animationThread.start();
 	}
 
-	/*
-	 * Thread Delay
-	 * 
-	 * @param the delay Time for the thread
+	/**
+	 * This method delays the time for the thread.
+	 * @param delayTime
 	 */
 	private void addDelay(int delayTime) {
 		try {
@@ -391,7 +406,6 @@ public class View extends JFrame {
 
 	/**
 	 * This method gets the buttons
-	 * 
 	 * @return JButtons
 	 */
 	public JButton[][] getButtons() {
@@ -399,8 +413,7 @@ public class View extends JFrame {
 	}
 
 	/**
-	 * This method gets the list of plants that are stored.
-	 * 
+	 * This method gets the list of plants that are stored in menuList.
 	 * @return menuList
 	 */
 	public JList<JPanel> getPlants() {
@@ -409,7 +422,6 @@ public class View extends JFrame {
 
 	/**
 	 * This method gets JLabel that displays the coins.
-	 * 
 	 * @return coins
 	 */
 	public JLabel getCoins() {
@@ -417,38 +429,65 @@ public class View extends JFrame {
 	}
 
 	/**
-	 * This method gets the menu item help.
-	 * 
+	 * This method gets the menu itemHelp.
 	 * @return help
 	 */
 	public JMenuItem getHelp() {
 		return help;
 	}
 
+	/**
+	 * This gets undoTurns.
+	 * @return undoTurns
+	 */
 	public JButton getUndoTurn() {
 		return undoTurn;
 	}
 
+	/**
+	 * This gets the animationThread.
+	 * @return animationThread
+	 */
 	public Thread getAnimationThread() {
 		return animationThread;
 	}
 
+	/**
+	 * This sets the last turn.
+	 * @param lastTurn
+	 */
 	public void setUndoTurn(JButton lastTurn) {
 		this.undoTurn = lastTurn;
 	}
 
+	/**
+	 * This gets the endTurn.
+	 * @return endTurn
+	 */
 	public JButton getEndTurn() {
 		return endTurn;
 	}
 
+	/**
+	 * This method sets the endTurn.
+	 * @param endTurn
+	 */
 	public void setEndTurn(JButton endTurn) {
 		this.endTurn = endTurn;
 	}
 
+	/**
+	 * This method gets the redoTurn.
+	 * @return redoTurn
+	 */
 	public JButton getRedoTurn() {
 		return redoTurn;
 	}
 
+	/**
+	 * This method sets the redoTurn.
+	 * @param nextTurn
+	 */
 	public void setRedoTurn(JButton nextTurn) {
 		this.redoTurn = nextTurn;
 	}

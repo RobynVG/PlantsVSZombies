@@ -41,8 +41,8 @@ public class ViewTest extends TestCase {
 	
 	
 	
-	/*
-	 * this method tests the View gui
+	/**
+	 * This method tests the overall view of the game.
 	 */
 	public void testView() {
 			View v = new View();
@@ -87,8 +87,8 @@ public class ViewTest extends TestCase {
 			assertNotNull(venusflytrapPanel);
 	}
 
-	/*
-	 * this method tests the information frame gui
+	/**
+	 * This method tests the makeInfoFrame() method in the view.
 	 */
 	public void testMakeInfoFrame() {
 		(new View()).makeInfoFrame();
