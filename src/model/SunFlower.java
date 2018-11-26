@@ -10,7 +10,7 @@ public class SunFlower extends Plant {
 	static int currentTime = 0;
 	
 	/**
-	 * This constructs a sunflower.
+	 * The constructor, constructs a SunFlower by calling the plant class with a super method.
 	 */
 	public SunFlower() {
 		super(FULL_TIME,STRENGTH,FULL_HEALTH,PRICE,"SunFlower");

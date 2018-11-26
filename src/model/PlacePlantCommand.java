@@ -82,7 +82,7 @@ public class PlacePlantCommand implements Command{
     }
     
     /**
-     * This method redoes a place plant command.
+     * This method re-does a place plant command.
      */
     public void redo() {
     	p.setCurrentTime(p.fullTime);

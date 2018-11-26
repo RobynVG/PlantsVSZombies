@@ -40,7 +40,6 @@ public class PeaShooter extends Plant {
 	/**
 	 * This method check for when the pea shooter is available for the player to
 	 * purchase and use in the game.
-	 * 
 	 * @return True if the current time is equal to zero otherwise false.
 	 */
 	@Override
@@ -49,9 +48,8 @@ public class PeaShooter extends Plant {
 	}
 
 	/**
-	 * This method gets the current time.
-	 * 
-	 * @return A int which is the current time.
+	 * This method gets the current time. 
+	 * @return currentTime.
 	 */
 	@Override
 	public int getCurrentTime() {
@@ -60,7 +58,6 @@ public class PeaShooter extends Plant {
 
 	/**
 	 * This method sets the pea shooter's current time.
-	 * 
 	 * @param currentTime
 	 */
 	@Override
