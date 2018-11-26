@@ -48,7 +48,7 @@ public class VenusFlyTrap extends Plant {
 	 */
 	@Override
 	public void setCurrentTime(int currentTime) {
-		PeaShooter.currentTime = currentTime;
+		VenusFlyTrap.currentTime = currentTime;
 	}
 
 	/**
