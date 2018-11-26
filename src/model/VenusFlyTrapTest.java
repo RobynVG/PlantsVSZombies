@@ -90,7 +90,7 @@ public class VenusFlyTrapTest extends TestCase {
 	 * This method tests the purchase method.
 	 */
 	public void testPurchase() {
-		Level.coins = 6;
+		Level.coins = VenusFlyTrap.PRICE+1;
 		v1.purchase();
 		assertEquals(1, Level.coins);
 	}
