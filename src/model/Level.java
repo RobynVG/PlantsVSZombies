@@ -29,8 +29,9 @@ public class Level {
 		allZombies.add(new FrankTheTank());
 		allZombies.add(new BurrowingBailey());
 		
-		for(Plant plant: allPlants)
+		for(Plant plant: allPlants) {
 			plant.setCurrentTime(0);
+		}
 	}
 	
 	/**

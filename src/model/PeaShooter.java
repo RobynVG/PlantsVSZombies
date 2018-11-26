@@ -6,7 +6,7 @@ public class PeaShooter extends Plant {
 	protected static final int STRENGTH = 150;
 	protected static final int FULL_HEALTH = 500;
 	protected static final int PRICE = 100;
-	static int currentTime = 0;
+	private static int currentTime = 0;
 	
 	/**
 	 * This constructor, constructs a pea shooter by calling the plant class with a
@@ -66,6 +66,7 @@ public class PeaShooter extends Plant {
 	@Override
 	public void setCurrentTime(int currentTime) {
 		PeaShooter.currentTime = currentTime;
+		System.out.println(PeaShooter.currentTime);
 	}
 
 	/**
@@ -74,5 +75,6 @@ public class PeaShooter extends Plant {
 	@Override
 	public void resetTime() {
 		currentTime = fullTime;
+		System.out.println("REACHED RESET");
 	}
 }

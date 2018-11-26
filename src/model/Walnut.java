@@ -5,7 +5,7 @@ public class Walnut extends Plant {
 	protected static final int STRENGTH = 0; 
 	protected static final int FULL_HEALTH = 1000;
 	protected static final int PRICE = 50;
-	static int currentTime = 0;
+	private static int currentTime = 0;
 	
 	/**
 	 * The constructor, constructs a Walnut by calling the plant class with a super method.
@@ -48,7 +48,7 @@ public class Walnut extends Plant {
 	 */
 	@Override
 	public void setCurrentTime(int currentTime) {
-		PeaShooter.currentTime = currentTime;
+		Walnut.currentTime = currentTime;
 	}
 
 	/**

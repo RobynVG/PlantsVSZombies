@@ -3,7 +3,6 @@ package model;
 public abstract class Plant extends GridObject{
 	public int fullHealth;
 	public int fullTime; 
-	public int currentTime; //available again at 0, when used counts down from full time;
 	protected int health;
 	protected int strength;
 	protected int price;
@@ -155,9 +154,7 @@ public abstract class Plant extends GridObject{
 	 * This method sets current time.
 	 * @param currentTime
 	 */
-	public void setCurrentTime(int currentTime) {
-		this.currentTime = currentTime;
-	}
+	public abstract void setCurrentTime(int currentTime);
 	
 	/**
 	 * This method gets the fullHealth
@@ -179,7 +176,7 @@ public abstract class Plant extends GridObject{
 			return false;
 		if (!(plant.health == health))
 			return false;
-		if (!(plant.getCurrentTime() == currentTime))
+		if (!(plant.getCurrentTime() == getCurrentTime()))
 			return false;
 		return true;
 	}
