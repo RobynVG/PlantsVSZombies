@@ -243,7 +243,6 @@ public class Controller {
 				case STATS:
 					if (!board.isEmpty(i, j)) {
 						button.setEnabled(true);
-						button.setContentAreaFilled(true);
 					} else
 						button.setEnabled(false);
 					break;
