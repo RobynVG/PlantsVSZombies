@@ -1,6 +1,8 @@
 package model;
 
-public abstract class Plant extends GridObject{
+import java.io.Serializable;
+
+public abstract class Plant extends GridObject implements Serializable{
 	public int fullHealth;
 	public int fullTime; 
 	protected int health;
@@ -35,22 +37,6 @@ public abstract class Plant extends GridObject{
 	 */
 	public void loseHealth(int zombieStrength) {
 		health = health - zombieStrength;
-	}
-	
-	/**
-	 * This method checks if the player can afford the plant.
-	 * @return A boolean, true if it is affordable otherwise false.
-	 */
-	public boolean isAffordable() {
-		return price <= Level.coins;
-	}
-	
-	/**
-	 * This method is when a player wants to purchase a plant. 
-	 * The player can only purchase the  plant if they have enough coins (Will be overridden by the child class).
-	 */
-	public void purchase() {
-		Level.coins -= price;
 	}
 	
 	/**

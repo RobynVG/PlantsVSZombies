@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
 import controller.Controller.State;
 
-public class Board {
+public class Board implements Serializable{
 	public static final int GRID_HEIGHT = 6;
 	public static final int GRID_WIDTH = 9;
 	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I" }; // Must be same length as GRID_WIDTH
@@ -17,6 +18,8 @@ public class Board {
 	public ArrayList<Zombie> zombiesOnBoard = new ArrayList<Zombie>();
 	public ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
 	public CommandManager commandManager;
+	
+	public Level level;
 	
 	//Use this constructor for tests only
 	public Board() {
@@ -42,12 +45,12 @@ public class Board {
 	 * This method spawns the zombies on the board.
 	 */
 	public void spawnZombies() {
-		if (Level.getAllZombies().isEmpty())
+		if (level.getAllZombies().isEmpty())
 			return;
 		
 		int yPos = ThreadLocalRandom.current().nextInt(0, Board.GRID_HEIGHT-1);
-		int randZombie = ThreadLocalRandom.current().nextInt(0, Level.getAllZombies().size());
-		Zombie zombie = Level.getAllZombies().remove(randZombie); 
+		int randZombie = ThreadLocalRandom.current().nextInt(0, level.getAllZombies().size());
+		Zombie zombie = level.getAllZombies().remove(randZombie); 
 
 		if (isEmpty(yPos, Board.GRID_WIDTH - 1))
 			placeZombie(zombie, yPos, Board.GRID_WIDTH - 1);
@@ -57,7 +60,7 @@ public class Board {
 	 * This method starts the board's turn in the command manager
 	 */
 	public void startBoardTurn() {
-		commandManager.executeCommand(new BoardTurnCommand(this));
+		commandManager.executeCommand(new BoardTurnCommand(this, level));
 	}
 	
 	/**
@@ -86,9 +89,9 @@ public class Board {
 	public void prepareNextTurn() {
 		for (Plant plant: plantsOnBoard) {
 			if (plant instanceof SunFlower)
-				Level.coins = Level.coins + SunFlower.COIN_BONUS;
+				level.coins = level.coins + SunFlower.COIN_BONUS;
 		}
-		for (Plant plant: Level.allPlants) {
+		for (Plant plant: level.allPlants) {
 			plant.newTurn();
 		}
 	}
@@ -119,7 +122,7 @@ public class Board {
 		grid[posX][posY] = plant;
 		plantsOnBoard.add(plant);
 		gridObjects.add(plant);
-		Level.coins -= plant.getPrice();
+		level.coins -= plant.getPrice();
 		plant.setCurrentTime(plant.getFullTime());
 	}
 
@@ -333,6 +336,10 @@ public class Board {
 	 */
 	public void setPlantsOnBoard(ArrayList<Plant> plantsOnBoard) {
 		this.plantsOnBoard = plantsOnBoard;
+	}
+	
+	public void setLevel(Level lvl) {
+		this.level = lvl;
 	}
 
 	

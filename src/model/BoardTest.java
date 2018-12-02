@@ -10,6 +10,7 @@ public class BoardTest extends TestCase {
 	public VenusFlyTrap v1;
 	public GenericZombie g1,g2;
 	public Board board;
+	public Level level;
 	
 	protected void setUp() {
 		s1 = new SunFlower();
@@ -19,7 +20,9 @@ public class BoardTest extends TestCase {
 		g2 = new GenericZombie();
 		board = new Board(new CommandManager());
 		board.setupGrid();
-		Level.level1();
+		level = new Level(1);
+		board.setLevel(level);
+
 	}
 
 	/**
@@ -39,7 +42,7 @@ public class BoardTest extends TestCase {
 	 * This test the spawnZombiesEmpty() method.
 	 */
 	public void testSpawnZombiesEmpty() {
-		Level.setAllZombies(new ArrayList<Zombie>());
+		level.setAllZombies(new ArrayList<Zombie>());
 		board.spawnZombies();
 		boolean zombieInG = false;
 		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
@@ -57,11 +60,11 @@ public class BoardTest extends TestCase {
 		board.placePlant(s1, 2, 2);
 		board.placePlant(s2, 1, 1);
 		board.placePlant(v1, 3, 3);
-		Level.coins = 0;
+		level.coins = 0;
 		
 		board.prepareNextTurn();
 		
-		assertEquals(Level.coins, SunFlower.COIN_BONUS * 2);		
+		assertEquals(level.coins, SunFlower.COIN_BONUS * 2);		
 	}
 	
 	/**

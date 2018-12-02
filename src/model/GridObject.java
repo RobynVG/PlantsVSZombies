@@ -1,6 +1,8 @@
 package model;
 
-public abstract class GridObject {
+import java.io.Serializable;
+
+public abstract class GridObject implements Serializable{
 	String objectTitle;
 
 	/**

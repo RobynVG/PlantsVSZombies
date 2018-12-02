@@ -7,6 +7,7 @@ public class VenusFlyTrapTest extends TestCase {
 	private SunFlower s1;
 	private VenusFlyTrap v1,v2;
 	private Board board;
+	private Level level;
 	
 	protected void setUp() {
 		board = new Board();
@@ -15,6 +16,8 @@ public class VenusFlyTrapTest extends TestCase {
 		s1 = new SunFlower();
 		v1 = new VenusFlyTrap();
 		v2 = new VenusFlyTrap();
+		level = new Level(1);
+		board.setLevel(level);
 	}
 	
 	/**
@@ -68,31 +71,6 @@ public class VenusFlyTrapTest extends TestCase {
 	public void testIsAvailableFalse() {
 		v1.setCurrentTime(3);
 		assertEquals(v1.isAvailable(),false);
-	}
-	
-	/**
-	 * This method tests the isAffordable method if the price < coins.
-	 */
-	public void testIsAffordableTrue() {
-		Level.coins = 1000;
-		assertEquals(v1.isAffordable(),true);
-	}
-	
-	/**
-	 * This method tests the isAffordable method if the price = coins.
-	 */
-	public void testIsAffordableFalse() {
-		Level.coins = 5;
-		assertEquals(v1.isAffordable(),false);
-	}
-	
-	/**
-	 * This method tests the purchase method.
-	 */
-	public void testPurchase() {
-		Level.coins = VenusFlyTrap.PRICE+1;
-		v1.purchase();
-		assertEquals(1, Level.coins);
 	}
 	
 	/**
