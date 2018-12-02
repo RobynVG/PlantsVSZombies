@@ -70,7 +70,7 @@ public class Level implements Serializable{
 		return allZombies;
 	}
 	
-	/*
+	/**
 	 * This method sets all the zombies that are to be played for the current level.
 	 * @param zombies.
 	 */
@@ -78,7 +78,7 @@ public class Level implements Serializable{
 		allZombies = zombies;
 	}
 	
-	/*
+	/**
 	 * This method checks if there are no more zombies left to play for the current level.
 	 * @return boolean
 	 */

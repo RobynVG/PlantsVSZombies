@@ -98,9 +98,7 @@ public class Board implements Serializable{
 
 	/**
 	 * This method checks if there is any zombies in the first column.
-	 * 
-	 * @return A boolean, true is there is any zombies in the first column otherwise
-	 *         false.
+     * @return A boolean, true is there is any zombies in the first column otherwise false.
 	 */
 	public boolean zombiesInFirstColumn() {
 		for (int i = 0; i < GRID_Y.length; i++) {
@@ -113,7 +111,6 @@ public class Board implements Serializable{
 
 	/**
 	 * This method places a plant on the grid.
-	 * 
 	 * @param plant (Plant), a plant.
 	 * @param posY  (int), the y-coordinate of the grid.
 	 * @param posX  (int), the x-coordinate of the grid.
@@ -128,7 +125,6 @@ public class Board implements Serializable{
 
 	/**
 	 * This method places a zombie on the grid.
-	 * 
 	 * @param zombie (Zombie), a zombie.
 	 * @param posY   (int), the y-coordinate of the grid.
 	 * @param posX   (int), the x-coordinate of the grid.
@@ -141,7 +137,6 @@ public class Board implements Serializable{
 
 	/**
 	 * This method gets the object to the left.
-	 * 
 	 * @param zombie (Zombie), a zombie.
 	 * @return gridOject (GridObject), an object on the grid.
 	 */
@@ -155,7 +150,6 @@ public class Board implements Serializable{
 
 	/**
 	 * This method gets the object to the right.
-	 * 
 	 * @param plant (Plant), a plant.
 	 * @return gridObject (GridObject), an object on the grid.
 	 */
@@ -170,7 +164,6 @@ public class Board implements Serializable{
 
 	/**
 	 * This method moves a grid object on the board.
-	 * 
 	 * @param gridObject (GridObject), the object on the grid.
 	 * @param nullSpace  (NullSpace), empty space.
 	 */
@@ -184,8 +177,7 @@ public class Board implements Serializable{
 	}
 
 	/**
-	 * This method moves a grid object on the board.
-	 * 
+	 * This method moves a grid object on the board. 
 	 * @param gridObject (GridObject), the object on the grid.
 	 * @param nullSpace  (NullSpace), empty space.
 	 */
@@ -209,8 +201,7 @@ public class Board implements Serializable{
 	}
 
 	/**
-	 * This method gets the x-coordinate of the gridObject.
-	 * 
+	 * This method gets the x-coordinate of the gridObject. 
 	 * @param gridObject (Grid Object), the object on the grid.
 	 * @return A int, the x-coordinate of the gridObject.
 	 */
@@ -227,7 +218,6 @@ public class Board implements Serializable{
 
 	/**
 	 * This method gets the y-coordinate of the gridObject.
-	 * 
 	 * @param gridObject (GridObject), the object on the grid.
 	 * @return A int, the y-coordinate of the gridObject.
 	 */
@@ -271,7 +261,6 @@ public class Board implements Serializable{
 
 	/**
 	 * This method checks if a location from the grid is empty.
-	 * 
 	 * @param posY (int), the y-coordinate on the grid.
 	 * @param posX (int), the x-coordinate on the grid.
 	 * @return A boolean, true if the position is empty otherwise false.
@@ -282,7 +271,6 @@ public class Board implements Serializable{
 
 	/**
 	 * This method gets the object that is stored in the grid.
-	 * 
 	 * @param i (int), this is the x coordinate of the grid.
 	 * @param j (int), this is the y coordinate of the grid.
 	 * @return A GridObject, the item on the grid.

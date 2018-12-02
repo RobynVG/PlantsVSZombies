@@ -7,6 +7,12 @@ public abstract class Zombie extends GridObject implements Serializable {
 	protected int strength; //The amount of health taken off a plant from 1 attack
 	protected int health;
 	
+	/**
+	 * This constructor, construct a zombie.
+	 * @param strength
+	 * @param health
+	 * @param objectTitle
+	 */
 	public Zombie(int strength, int health, String objectTitle) {
 		this.fullHealth = health;
 		this.strength = strength;

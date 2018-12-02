@@ -6,12 +6,10 @@ public class ViewTest extends TestCase {
 	
 	private View view;
 	
-	
 	protected void setUp() {
 		view= new View();
 	}
 	
-
 	public void testView() {
 		assertNotNull(view.getMenuList());
 		assertNotNull(view.getMenu());

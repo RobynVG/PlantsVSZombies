@@ -149,6 +149,9 @@ public class BoardTest extends TestCase {
 		assertEquals(isNullSpace, true);
 	}
 	
+	/**
+	 * This test removing an object not on the board.
+	 */
 	public void testRemoveObjectNotOnBoard() {
 		board.placeZombie(g1, 2, 2);
 		assertEquals(false,board.remove(g2));
@@ -162,6 +165,9 @@ public class BoardTest extends TestCase {
 		assertEquals(board.commandManager.isUndoAvailable(), true);
 	}
 	
+	/**
+	 * This method test BoardTurnDeadPlant.
+	 */
 	public void testBoardTurnDeadPlant() {
 		board.placePlant(s1, 0, 0);
 		board.placeZombie(g1, 0, 1);
@@ -169,6 +175,9 @@ public class BoardTest extends TestCase {
 		assertEquals(true, board.getPlantsOnBoard().isEmpty());
 	}
 	
+	/**
+	 * This method test BoardTurnDeadZombie.
+	 */
 	public void testBoardTurnDeadZombie() {
 		board.placePlant(v1, 0, 0);
 		board.placeZombie(g1, 0, 1);

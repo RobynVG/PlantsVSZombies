@@ -46,6 +46,12 @@ public class Controller {
 		POSITIONS, STATS, DISABLED;
 	}
 
+	/**
+	 * The constructor, constructs the controller.
+	 * @param board
+	 * @param view
+	 * @param cm
+	 */
 	public Controller(Board board, View view, CommandManager cm) {
 		this.view = view;
 		this.board = board;
@@ -64,7 +70,7 @@ public class Controller {
 	}
 
 	/**
-	 * Initialize GUI's Action Listeners
+	 * This method initialize GUI's Action Listeners
 	 */
 	public void initController() {
 		// Initialize action listener for the help tab to generate information panel
@@ -139,7 +145,10 @@ public class Controller {
 		}
 	}
 
-	// Player selects a position on the grid
+	/**
+	 * This method corresponds to the players selected position on the grid.
+	 * @param e
+	 */
 	private void gridPositionSelected(ActionEvent e) {
 		// Action command corresponds to i j
 		String s = e.getActionCommand();
@@ -180,6 +189,9 @@ public class Controller {
 		plantButtonsEnabled(true);
 	}
 
+	/**
+	 * This method ends the turn.
+	 */
 	private void endTurn() {
 		// Plants and zombies attack then zombies spawn
 		board.startBoardTurn();
@@ -236,14 +248,17 @@ public class Controller {
 
 	/**
 	 * This is the action listener for clicking on an object on the grid to view its
-	 * stats. Spawns a dialog displaying stats
+	 * stats. Spawns a dialog displaying stats.
 	 */
 	private void spawnInfoFrame() {
 		view.makeInfoFrame();
 	}
 
-	// Refresh the board and set the unnocupied buttons to enabled or disabled
-	// according to the parameter passed
+	/**
+	 * This method refreshes the board and sets the unoccupied buttons to enabled or disabled
+	 * according to the parameter passed.
+	 * @param state
+	 */
 	private void gridCond(State state) {
 		gridState = state;
 		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
@@ -321,7 +336,10 @@ public class Controller {
 	      }
 	}
 
-	// Enable or disable all of the plant buttons
+	/**
+	 * This enables or disables all of the plant's buttons.
+	 * @param enabled
+	 */
 	private void plantButtonsEnabled(boolean enabled) {
 		view.getPlants().setEnabled(enabled);
 	}
