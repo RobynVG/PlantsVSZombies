@@ -319,6 +319,7 @@ public class Controller {
 		System.out.print("\n");
 		board.printGrid(boardIn.grid);
 		board = boardIn;
+		level = boardIn.getLevel();
 		gridCond(State.DISABLED);
 	}
 	

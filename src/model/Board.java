@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
-import controller.Controller.State;
-
 public class Board implements Serializable{
 	public static final int GRID_HEIGHT = 6;
 	public static final int GRID_WIDTH = 9;
@@ -328,6 +326,10 @@ public class Board implements Serializable{
 	
 	public void setLevel(Level lvl) {
 		this.level = lvl;
+	}
+	
+	public Level getLevel() {
+		return level;
 	}
 
 	
