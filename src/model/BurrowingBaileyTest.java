@@ -7,6 +7,7 @@ public class BurrowingBaileyTest extends TestCase {
 	private SunFlower s1;
 	private VenusFlyTrap v1,v2;
 	private Board board;
+	private Level level;
 
 	protected void setUp() {
 		board = new Board();
@@ -15,7 +16,8 @@ public class BurrowingBaileyTest extends TestCase {
 		s1 = new SunFlower();
 		v1 = new VenusFlyTrap();
 		v2 = new VenusFlyTrap();
-		Level.level1();
+		level = new Level(1);
+		board.setLevel(level);
 	}
 	
 	/**

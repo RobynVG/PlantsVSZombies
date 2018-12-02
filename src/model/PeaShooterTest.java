@@ -6,10 +6,11 @@ public class PeaShooterTest extends TestCase {
 
 	private PeaShooter peaShooter;
 	private Board board;
+	private Level level;
 	
 	protected void setUp() {
 		peaShooter = new PeaShooter();
-		Level.level1();
+		level = new Level(1);
 	}
 	
 	/**

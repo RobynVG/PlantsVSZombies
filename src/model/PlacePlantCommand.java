@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlacePlantCommand implements Command{
+public class PlacePlantCommand implements Command, Serializable{
 	private Board board;
+	private Level level;
 	private int row;
 	private int col;
 	private Plant p;
@@ -27,8 +29,9 @@ public class PlacePlantCommand implements Command{
      * @param row
      * @param col
      */
-    public PlacePlantCommand(Board board, Plant p, int col, int row) {
+    public PlacePlantCommand(Board board, Level level, Plant p, int col, int row) {
     	this.board = board;
+    	this.level = level;
     	this.row = row;
     	this.col = col;
     	this.p = p;
@@ -59,8 +62,8 @@ public class PlacePlantCommand implements Command{
         nextPlantsOnBoard.add(p);
         nextGridObjects.add(p);
         
-        previousCoins = Level.coins;
-        nextCoins = Level.coins - p.getPrice();
+        previousCoins = level.coins;
+        nextCoins = level.coins - p.getPrice();
     }
     
     /**
@@ -78,7 +81,7 @@ public class PlacePlantCommand implements Command{
     	board.grid = previousGridState;
     	board.gridObjects = previousGridObjects;
     	board.plantsOnBoard = previousPlantsOnBoard;
-    	Level.coins = previousCoins;
+    	level.coins = previousCoins;
     }
     
     /**
@@ -89,6 +92,6 @@ public class PlacePlantCommand implements Command{
     	board.grid = nextGridState;
     	board.gridObjects = nextGridObjects;
     	board.plantsOnBoard = nextPlantsOnBoard;
-    	Level.coins = nextCoins;
+    	level.coins = nextCoins;
     }
 }

@@ -6,10 +6,11 @@ public class WalnutTest extends TestCase {
 	
 	private Walnut walnut;
 	private Board board;
+	private Level level;
 	
 	protected void setUp() {
 		walnut = new Walnut();
-		Level.level1();
+		level = new Level(1);
 	}
 	
 	/**

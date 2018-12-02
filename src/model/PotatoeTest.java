@@ -5,10 +5,11 @@ import junit.framework.TestCase;
 public class PotatoeTest extends TestCase {
 	private Potatoe potatoe;
 	private Board board;
+	private Level level;
 	
 	protected void setUp() {
 		potatoe = new Potatoe();
-		Level.level1();
+		level = new Level(1);
 	}
 	
 	/**

@@ -7,6 +7,7 @@ public class BoardTurnCommandTest extends TestCase{
 	private SunFlower s1;
 	private VenusFlyTrap v1,v2;
 	private Board board;
+	private Level level;
 	
 	protected void setUp() {
 		board = new Board();
@@ -15,7 +16,8 @@ public class BoardTurnCommandTest extends TestCase{
 		s1 = new SunFlower();
 		v1 = new VenusFlyTrap();
 		v2 = new VenusFlyTrap();
-		Level.level1();
+		level = new Level(1);
+		board.setLevel(level);
 	}
 	
 	/**
@@ -28,7 +30,7 @@ public class BoardTurnCommandTest extends TestCase{
 		v1.setStrength(10);
 		g1.setHealth(100);
 		v1.setHealth(100);
-		new BoardTurnCommand(board).execute();
+		new BoardTurnCommand(board, level).execute();
 		assertEquals(90, g1.getHealth());
 		assertEquals(90, v1.getHealth());
 	}
@@ -43,7 +45,7 @@ public class BoardTurnCommandTest extends TestCase{
 		v1.setStrength(10);
 		g1.setHealth(100);
 		v1.setHealth(100);
-		BoardTurnCommand btc = new BoardTurnCommand(board);
+		BoardTurnCommand btc = new BoardTurnCommand(board, level);
 		btc.execute();
 		btc.undo();
 		assertEquals(100, ((Zombie)board.getObject(0, 5)).getHealth());
@@ -60,7 +62,7 @@ public class BoardTurnCommandTest extends TestCase{
 		v1.setStrength(10);
 		g1.setHealth(100);
 		v1.setHealth(100);
-		BoardTurnCommand btc = new BoardTurnCommand(board);
+		BoardTurnCommand btc = new BoardTurnCommand(board, level);
 		btc.execute();
 		btc.undo();
 		btc.redo();
@@ -74,7 +76,7 @@ public class BoardTurnCommandTest extends TestCase{
 	public void testPlantTimerExecute() {
 		board.placePlant(v1, 0, 4);
 		v1.setCurrentTime(5);
-		BoardTurnCommand btc = new BoardTurnCommand(board);
+		BoardTurnCommand btc = new BoardTurnCommand(board, level);
 		btc.execute();
 		assertEquals(4, ((Plant)board.getObject(0, 4)).getCurrentTime());
 	}
@@ -85,7 +87,7 @@ public class BoardTurnCommandTest extends TestCase{
 	public void testPlantTimerUndo() {
 		board.placePlant(v1, 0, 4);
 		v1.setCurrentTime(5);
-		BoardTurnCommand btc = new BoardTurnCommand(board);
+		BoardTurnCommand btc = new BoardTurnCommand(board, level);
 		btc.execute();
 		btc.undo();
 		assertEquals(5, ((Plant)board.getObject(0, 4)).getCurrentTime());
@@ -97,7 +99,7 @@ public class BoardTurnCommandTest extends TestCase{
 	public void testPlantTimerRedo() {
 		board.placePlant(v1, 0, 4);
 		v1.setCurrentTime(5);
-		BoardTurnCommand btc = new BoardTurnCommand(board);
+		BoardTurnCommand btc = new BoardTurnCommand(board, level);
 		btc.execute();
 		btc.undo();
 		btc.redo();
@@ -112,7 +114,7 @@ public class BoardTurnCommandTest extends TestCase{
 		board.placePlant(v1, 0, 4);
 		board.placeZombie(g1, 0, 5);
 		v1.setCurrentTime(5);
-		BoardTurnCommand btc = new BoardTurnCommand(board);
+		BoardTurnCommand btc = new BoardTurnCommand(board, level);
 		btc.execute();
 		assertEquals(true,(board.getObject(0, 4) instanceof NullSpace));
 	}
@@ -125,7 +127,7 @@ public class BoardTurnCommandTest extends TestCase{
 		board.placePlant(v1, 0, 4);
 		board.placeZombie(g1, 0, 5);
 		v1.setCurrentTime(5);
-		BoardTurnCommand btc = new BoardTurnCommand(board);
+		BoardTurnCommand btc = new BoardTurnCommand(board, level);
 		btc.execute();
 		btc.undo();
 		assertEquals(true,(board.getObject(0, 4) instanceof VenusFlyTrap));
@@ -139,7 +141,7 @@ public class BoardTurnCommandTest extends TestCase{
 		board.placePlant(v1, 0, 4);
 		board.placeZombie(g1, 0, 5);
 		v1.setCurrentTime(5);
-		BoardTurnCommand btc = new BoardTurnCommand(board);
+		BoardTurnCommand btc = new BoardTurnCommand(board, level);
 		btc.execute();
 		btc.undo();
 		btc.redo();

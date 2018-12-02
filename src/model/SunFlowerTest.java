@@ -6,10 +6,11 @@ public class SunFlowerTest extends TestCase {
 	
 	private SunFlower sunFlower;
 	private Board board;
+	private Level level;
 	
 	protected void setUp() {
 		sunFlower = new SunFlower();
-		Level.level1();
+		level = new Level(1);
 	}
 	
 	/**

@@ -15,6 +15,11 @@ import model.Walnut;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 import javax.swing.ImageIcon;
@@ -35,6 +40,7 @@ public class Controller {
 	private View view;
 	private CommandManager commandManager;
 	private State gridState;
+	private Level level;
 
 	public enum State {
 		POSITIONS, STATS, DISABLED;
@@ -58,7 +64,8 @@ public class Controller {
 	 */
 	public void startGame() {
 		// Initialize the level and grid
-		Level.level1();
+		level = new Level(1);
+		board.setLevel(level);
 		board.setupGrid();
 	}
 
@@ -68,6 +75,10 @@ public class Controller {
 	public void initController() {
 		// Initialize action listener for the help tab to generate information panel
 		view.getHelp().addActionListener(e -> spawnInfoFrame());
+		
+		view.getImportOption().addActionListener(e -> importFromFile());
+		
+		view.getExportOption().addActionListener(e -> exportToFile());
 		// Initialize action listener for all plant buttons
 		view.getPlants().addListSelectionListener(e -> plantSelected(e));
 
@@ -104,7 +115,7 @@ public class Controller {
 		String plantName = ((JLabel) view.getPlants().getSelectedValue().getComponent(0)).getText();
 
 		// For all of the plants available in current level
-		for (Plant plant : Level.allPlants) {
+		for (Plant plant : level.allPlants) {
 			// Continue for loop until we find an instance of plant selected
 			if (plantName != plant.getObjectTitle())
 				continue;
@@ -120,7 +131,7 @@ public class Controller {
 				}
 				// If the plant is not affordable notify the user, disable the grid, and clear
 				// the selection
-				if (!plant.isAffordable()) {
+				if (plant.getPrice() > level.coins) {
 					JOptionPane.showMessageDialog(null, "You cannot afford this plant");
 					gridCond(State.STATS);
 					view.getPlants().clearSelection();
@@ -168,10 +179,10 @@ public class Controller {
 		view.getPlants().clearSelection();
 		// Add the plant to the board
 		commandManager.executeCommand(
-				new PlacePlantCommand(board, (Plant) GridObjectFactory.createNewGridObject(plantSelected),
+				new PlacePlantCommand(board, level, (Plant) GridObjectFactory.createNewGridObject(plantSelected),
 						Integer.parseInt(rowcol[0]), Integer.parseInt(rowcol[1])));
 		// Display coins
-		view.getCoins().setText("       Sun Points: " + Level.coins);
+		view.getCoins().setText("       Sun Points: " + level.coins);
 		// Allow player to check current stats of any object
 		gridCond(State.STATS);
 		// Enable the flower buttons in case player would like to plant enother plant
@@ -185,23 +196,25 @@ public class Controller {
 		// Plants and zombies attack then zombies spawn
 		board.startBoardTurn();
 		// Update the coins on the GUI
-		view.getCoins().setText("       Sun Points: " + Level.coins);
+		view.getCoins().setText("       Sun Points: " + level.coins);
 		// Update the grid
 		gridCond(State.DISABLED);
 		// Check if a win or loss has occured
 		playerWinLose();
-		// If no plant is affordable player must wait for the board to perform another
-		// turn
-		// until they accumulate enough sun points to go
-		if (!Level.plantAffordable()) {
-			JOptionPane.showMessageDialog(view, "Wow you just found " + (50 - Level.coins) + " Sun Points...");
-			Level.coins = 50;
+		// If no plant is affordable the player is gifted coins.
+		if (!level.plantAffordable()) {
+			JOptionPane.showMessageDialog(view, "Wow you just found " + (50 - level.coins) + " Sun Points...");
+			level.coins = 50;
 		}
+		
+		
 		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
 			for (int j = 0; j < Board.GRID_WIDTH; j++) {
 				view.playAnimation(view.getButtons()[i][j], board.grid[i][j]);
 			}
 		}
+		
+		
 		// Board turn has ended, allow the player to pick another plant
 		plantButtonsEnabled(true);
 		gridCond(State.STATS);
@@ -213,7 +226,7 @@ public class Controller {
 	private void playerWinLose() {
 		// If Player Wins the Level because there are no zombies to be spawned an no
 		// zombies on the board
-		if (Level.zombiesEmpty() && board.zombiesOnBoard.isEmpty()) {
+		if (level.zombiesEmpty() && board.zombiesOnBoard.isEmpty()) {
 			// Spawn a dialog to inform user
 			JOptionPane.showMessageDialog(null, "!!!!!!!YOU WON!!!!!!!!");
 			// Dispose of the GUI. Game has ended
@@ -277,7 +290,7 @@ public class Controller {
 				}
 			}
 		}
-		view.getCoins().setText("       Sun Points: " + Level.coins);
+		view.getCoins().setText("       Sun Points: " + level.coins);
 
 		view.getUndoTurn().setEnabled(board.commandManager.isUndoAvailable());
 		view.getRedoTurn().setEnabled(board.commandManager.isRedoAvailable());
@@ -285,6 +298,43 @@ public class Controller {
 		// Refresh the GUI
 		view.revalidate();
 		view.repaint();
+	}
+	
+	private void importFromFile() {
+		Board boardIn = null;
+		try {
+	         FileInputStream fileIn = new FileInputStream("C:/Users/Robyn/Desktop/School Work/Fall 2018/SYSC 3110/OutputFile.txt");
+	         ObjectInputStream in = new ObjectInputStream(fileIn);
+	         boardIn = (Board) in.readObject();
+	         in.close();
+	         fileIn.close();
+	      } catch (IOException i) {
+	         i.printStackTrace();
+	         return;
+	      } catch (ClassNotFoundException c) {
+	         System.out.println("Board class not found");
+	         c.printStackTrace();
+	         return;
+	      }
+		System.out.print("\n");
+		board.printGrid(boardIn.grid);
+		board = boardIn;
+		level = boardIn.getLevel();
+		gridCond(State.DISABLED);
+	}
+	
+	private void exportToFile() {
+		try {
+	         FileOutputStream fileOut =
+	         new FileOutputStream("C:/Users/Robyn/Desktop/School Work/Fall 2018/SYSC 3110/OutputFile.txt");
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(board);
+	         out.close();
+	         fileOut.close();
+	         System.out.printf("Serialized data is saved in /tmp/employee.ser");
+	      } catch (IOException i) {
+	         i.printStackTrace();
+	      }
 	}
 
 	/**

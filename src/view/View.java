@@ -27,7 +27,7 @@ public class View extends JFrame {
 	
 
 	private JMenu menu; // The menu
-	private JMenuItem start, restart, help; // Menu items
+	private JMenuItem start, restart, help, importOption, exportOption; // Menu items
 
 	private JLabel coins; // label to hold coin values
 
@@ -57,6 +57,9 @@ public class View extends JFrame {
 		start = new JMenuItem("Start"); // Start Menu Item, to first start the game.
 		restart = new JMenuItem("Restart"); // Restart Menu Item, reset the game.
 		help = new JMenuItem("Help"); // Help Menu item, instructions for the user if they need help.
+		importOption = new JMenuItem("Import");
+		exportOption = new JMenuItem("Export");
+		
 		// Initialize help menu item enabled only when plant information panel is not
 		// already displayed.
 		help.setEnabled(false);
@@ -64,6 +67,8 @@ public class View extends JFrame {
 		menu.add(start);
 		menu.add(restart);
 		menu.add(help);
+		menu.add(importOption);
+		menu.add(exportOption);
 		// Adding Menu to Menu Bar
 		menuBar.add(menu);
 		// Adding Menu Bar
@@ -553,6 +558,14 @@ public class View extends JFrame {
 
 	public void setAnimationThread(Thread animationThread) {
 		this.animationThread = animationThread;
+	}
+	
+	public JMenuItem getImportOption() {
+		return importOption;
+	}
+	
+	public JMenuItem getExportOption() {
+		return exportOption;
 	}
 
 }

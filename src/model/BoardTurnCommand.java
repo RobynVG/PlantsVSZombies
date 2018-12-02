@@ -1,11 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-class BoardTurnCommand implements Command{
+class BoardTurnCommand implements Command, Serializable{
 	private Board board;
+	private Level level;
     //objects on board plants on board zombies on board.
     //levelPlants levelZombies
 	private int					previousCoins;
@@ -28,8 +30,9 @@ class BoardTurnCommand implements Command{
      * the board's turn.
      * @param board
      */
-    public BoardTurnCommand(Board board) {
+    public BoardTurnCommand(Board board, Level level) {
     	this.board = board;
+    	this.level = level;
     	previousGridObjects = new ArrayList<GridObject>();
     	previousPlantsOnBoard = new ArrayList<Plant>();
     	previousZombiesOnBoard = new ArrayList<Zombie>();
@@ -40,9 +43,9 @@ class BoardTurnCommand implements Command{
     	nextZombiesOnBoard = new ArrayList<Zombie>();
     	nextLevelZombies = new ArrayList<Zombie>();
     	
-    	previousCoins = Level.coins;
+    	previousCoins = level.coins;
     	
-    	for (Zombie zombie: Level.getAllZombies())
+    	for (Zombie zombie: level.getAllZombies())
     		previousLevelZombies.add(zombie);
     	
         previousGridState = new GridObject[Board.GRID_HEIGHT][Board.GRID_WIDTH];
@@ -74,7 +77,7 @@ class BoardTurnCommand implements Command{
      
         board.boardTurn();
            
-        nextCoins = Level.coins;
+        nextCoins = level.coins;
         
         for (GridObject o: board.gridObjects) {
     		if (o instanceof Plant) {
@@ -87,7 +90,7 @@ class BoardTurnCommand implements Command{
     		}
     	}
         
-        for (Zombie zombie: Level.getAllZombies())
+        for (Zombie zombie: level.getAllZombies())
     		nextLevelZombies.add(zombie);
     	
         for (int i = 0; i < Board.GRID_HEIGHT; i++) {
@@ -116,7 +119,7 @@ class BoardTurnCommand implements Command{
     		}
     	}
     	
-    	for (Plant plant: Level.allPlants) {
+    	for (Plant plant: level.getAllPlants()) {
     		for (Plant decPlant: previousPlantsWillDecrement) {
     			if (plant.getClass() == decPlant.getClass()) {
     				plant.setCurrentTime(plant.getCurrentTime()+1);
@@ -125,8 +128,8 @@ class BoardTurnCommand implements Command{
     		}
     	}
     	
-    	Level.coins = previousCoins;
-    	Level.setAllZombies(previousLevelZombies);
+    	level.coins = previousCoins;
+    	level.setAllZombies(previousLevelZombies);
     	board.gridObjects = previousGridObjects;
     	board.plantsOnBoard = previousPlantsOnBoard;
     	board.zombiesOnBoard = previousZombiesOnBoard;	
@@ -142,11 +145,11 @@ class BoardTurnCommand implements Command{
     			board.grid[i][j] = nextGridState[i][j];
     		}
     	}
-    	for (Plant plant: Level.allPlants) {
+    	for (Plant plant: level.allPlants) {
     		plant.newTurn();
     	}
-    	Level.coins = nextCoins;
-    	Level.setAllZombies(nextLevelZombies);
+    	level.coins = nextCoins;
+    	level.setAllZombies(nextLevelZombies);
     	board.gridObjects = nextGridObjects;
     	board.plantsOnBoard = nextPlantsOnBoard;
     	board.zombiesOnBoard = nextZombiesOnBoard;

@@ -1,15 +1,22 @@
 package model;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Level {
-	public static ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
-	private static ArrayList<Zombie> allZombies; //Actually all zombies
-	public static int coins = 50; 
+public class Level implements Serializable{
+	public ArrayList<Plant> allPlants; //Not actually all plants, its all plant TYPES (1 instance of each)
+	private ArrayList<Zombie> allZombies; //Actually all zombies
+	public int coins = 50; 
+	
+	public Level(int lvl) {
+		if (lvl == 1)
+			level1();
+	}
+	
 	
 	/**
 	 * This method is the first level of the game.
 	 */
-	public static void level1() {	
+	public void level1() {	
 		startLevel();
 		int numOfZombies = 2;
 
@@ -37,7 +44,7 @@ public class Level {
 	/**
 	 * This method initialize the plant and zombie array.
 	 */
-	public static void startLevel() {
+	public void startLevel() {
 		//something to clean the board here;
 		allZombies = new ArrayList<Zombie>();
 		allPlants = new ArrayList<Plant>();
@@ -47,9 +54,9 @@ public class Level {
 	 * This method checks that a player has a plant they can play.
 	 * @return A boolean, true if the player can affod a plant or false if there if they are all too expensive.
 	 */
-	public static boolean plantAffordable() {
+	public boolean plantAffordable() {
 		for (Plant plant: allPlants) {
-			if (plant.isAffordable())
+			if (plant.getPrice() < coins)
 				return true;
 		}
 		return false;		
@@ -59,7 +66,7 @@ public class Level {
 	 * This method returns all the zombies that are to be played for the current level.
 	 * @return allZombies
 	 */
-	public static ArrayList<Zombie> getAllZombies(){
+	public ArrayList<Zombie> getAllZombies(){
 		return allZombies;
 	}
 	
@@ -67,7 +74,7 @@ public class Level {
 	 * This method sets all the zombies that are to be played for the current level.
 	 * @param zombies.
 	 */
-	public static void setAllZombies(ArrayList<Zombie> zombies) {
+	public void setAllZombies(ArrayList<Zombie> zombies) {
 		allZombies = zombies;
 	}
 	
@@ -75,7 +82,12 @@ public class Level {
 	 * This method checks if there are no more zombies left to play for the current level.
 	 * @return boolean
 	 */
-	public static boolean zombiesEmpty() {
+	public boolean zombiesEmpty() {
 		return (allZombies.isEmpty());
+	}
+
+
+	public ArrayList<Plant> getAllPlants() {
+		return allPlants;
 	}
 }
