@@ -12,23 +12,30 @@ import model.SunFlower;
 import model.VenusFlyTrap;
 import model.Walnut;
 
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 
 import model.Board;
+import model.Board.State;
 import model.CommandManager;
 import model.GridObject;
 import model.GridObjectFactory;
@@ -39,12 +46,7 @@ public class Controller {
 	private Board board;
 	private View view;
 	private CommandManager commandManager;
-	private State gridState;
 	private Level level;
-
-	public enum State {
-		POSITIONS, STATS, DISABLED;
-	}
 
 	/**
 	 * The constructor, constructs the controller.
@@ -113,11 +115,10 @@ public class Controller {
 			return;
 		// Extract the name of the plant from the list item selected
 		String plantName = ((JLabel) view.getPlants().getSelectedValue().getComponent(0)).getText();
-
 		// For all of the plants available in current level
 		for (Plant plant : level.allPlants) {
 			// Continue for loop until we find an instance of plant selected
-			if (plantName != plant.getObjectTitle())
+			if (!plantName.equals(plant.getObjectTitle()))
 				continue;
 			else {
 				// If the plant is not affordable notify the user, disable the grid, and clear
@@ -137,10 +138,10 @@ public class Controller {
 					view.getPlants().clearSelection();
 					return;
 				}
-
 				// If this statement is reached the user has chosen a valid plant. Enable the
 				// grid so it can be placed
 				gridCond(State.POSITIONS);
+				return;
 			}
 		}
 	}
@@ -159,7 +160,7 @@ public class Controller {
 
 		// If the grid is in the STATS state the player has selected an
 		// area on the board to view an objects stats
-		if (gridState == State.STATS) {
+		if (board.getGridState() == State.STATS) {
 			// Get the grid object and display its stats
 			GridObject selected = board.getObject(i, j);
 			view.displayStats(selected);
@@ -202,17 +203,17 @@ public class Controller {
 		// Check if a win or loss has occured
 		playerWinLose();
 		// If no plant is affordable the player is gifted coins.
-		if (!level.plantAffordable()) {
+		if (!level.plantAffordable() && board.noSunflowers()) {
 			JOptionPane.showMessageDialog(view, "Wow you just found " + (50 - level.coins) + " Sun Points...");
 			level.coins = 50;
 		}
 		
 		
-		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
-			for (int j = 0; j < Board.GRID_WIDTH; j++) {
-				view.playAnimation(view.getButtons()[i][j], board.grid[i][j]);
-			}
-		}
+//		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
+//			for (int j = 0; j < Board.GRID_WIDTH; j++) {
+//				view.playAnimation(view.getButtons()[i][j], board.grid[i][j]);
+//			}
+//		}
 		
 		
 		// Board turn has ended, allow the player to pick another plant
@@ -260,7 +261,7 @@ public class Controller {
 	 * @param state
 	 */
 	private void gridCond(State state) {
-		gridState = state;
+		board.setGridState(state);
 		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
 			for (int j = 0; j < Board.GRID_WIDTH; j++) {
 				JButton button = view.getButtons()[i][j];
@@ -301,9 +302,28 @@ public class Controller {
 	}
 	
 	private void importFromFile() {
+		String PVZDirectory = System.getenv("APPDATA") + "/PlantsVsZombies/";
+		File file = new File(PVZDirectory);
+		
+		if (!file.exists()||file.list().length==0) {
+			JOptionPane.showMessageDialog(view, "You have no saved games");
+			return;
+		}
+		
+		String[] fileNameArray = file.list();
+		
+		for (int i = 0; i < fileNameArray.length; i++) {
+			fileNameArray[i] = fileNameArray[i].substring(0, fileNameArray[i].length()-4);
+		}
+				
+		int selection = JOptionPane.showOptionDialog(view, "Please Select A Save", "", JOptionPane.DEFAULT_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null, fileNameArray,fileNameArray[0]);
+		if (selection == -1)
+			return;
+		
 		Board boardIn = null;
 		try {
-	         FileInputStream fileIn = new FileInputStream("C:/Users/Robyn/Desktop/School Work/Fall 2018/SYSC 3110/OutputFile.txt");
+	         FileInputStream fileIn = new FileInputStream(PVZDirectory + file.list()[selection]);
 	         ObjectInputStream in = new ObjectInputStream(fileIn);
 	         boardIn = (Board) in.readObject();
 	         in.close();
@@ -316,22 +336,38 @@ public class Controller {
 	         c.printStackTrace();
 	         return;
 	      }
-		System.out.print("\n");
-		board.printGrid(boardIn.grid);
 		board = boardIn;
 		level = boardIn.getLevel();
-		gridCond(State.DISABLED);
+		commandManager = boardIn.getCommandManager();
+		view.getPlants().clearSelection();
+		gridCond(boardIn.getGridState());
 	}
 	
 	private void exportToFile() {
+		String PVZDirectory = System.getenv("APPDATA") + "/PlantsVsZombies/";
+		String exportFile = JOptionPane.showInputDialog("Please enter a name for your save");
+		
+		boolean specialCharacter = true;
+		while (specialCharacter) {
+			if (exportFile == null)
+				return;
+			Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+			Matcher m = p.matcher(exportFile);
+			specialCharacter = m.find();
+			if (specialCharacter)
+				exportFile = JOptionPane.showInputDialog("No special characters...nice try");
+		}
+		
+		
+		new File(PVZDirectory).mkdirs();
+		
 		try {
 	         FileOutputStream fileOut =
-	         new FileOutputStream("C:/Users/Robyn/Desktop/School Work/Fall 2018/SYSC 3110/OutputFile.txt");
+	         new FileOutputStream(PVZDirectory + exportFile + ".ser");
 	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	         out.writeObject(board);
 	         out.close();
 	         fileOut.close();
-	         System.out.printf("Serialized data is saved in /tmp/employee.ser");
 	      } catch (IOException i) {
 	         i.printStackTrace();
 	      }

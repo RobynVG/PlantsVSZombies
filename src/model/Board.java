@@ -8,8 +8,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Board implements Serializable{
 	public static final int GRID_HEIGHT = 6;
 	public static final int GRID_WIDTH = 9;
-	public static final String GRID_X[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I" }; // Must be same length as GRID_WIDTH
-	public static final String GRID_Y[] = { "1", "2", "3", "4", "5", "6" };
+	private State gridState;
+	
+	public enum State implements Serializable{
+		POSITIONS, STATS, DISABLED;
+	}
 	
 	public GridObject[][] grid;
 	public ArrayList<GridObject> gridObjects = new ArrayList<GridObject>();
@@ -99,7 +102,7 @@ public class Board implements Serializable{
      * @return A boolean, true is there is any zombies in the first column otherwise false.
 	 */
 	public boolean zombiesInFirstColumn() {
-		for (int i = 0; i < GRID_Y.length; i++) {
+		for (int i = 0; i < GRID_HEIGHT; i++) {
 			if (getObject(i, 0) instanceof Zombie) {
 				return true;
 			}
@@ -255,6 +258,14 @@ public class Board implements Serializable{
 			}
 		}
 	} 	
+	
+	public boolean noSunflowers() {
+		for (Plant plant: plantsOnBoard) {
+			if (plant instanceof SunFlower)
+				return false;
+		}
+		return true;
+	}
 
 
 	/**
@@ -332,32 +343,44 @@ public class Board implements Serializable{
 		return level;
 	}
 
+	public State getGridState() {
+		return gridState;
+	}
+
+	public void setGridState(State gridState) {
+		this.gridState = gridState;
+	}
+
+	public CommandManager getCommandManager() {
+		return commandManager;
+	}
+
 	
 	//Used for debugging
 	/**
 	 * This method prints the grid. Used for debugging
 	 * @param objects
 	 */
-	public void printGrid(GridObject[][] objects) {
-		for (int i = 0; i < GRID_HEIGHT; i++) {
-			for (int j = 0; j < GRID_WIDTH; j++) {
-				if (objects[i][j] instanceof GenericZombie)
-					System.out.print("[ g ]");
-				else if (objects[i][j] instanceof SunFlower)
-					System.out.print("[ S ]");
-				else if (objects[i][j] instanceof VenusFlyTrap)
-					System.out.print("[ V ]");
-				else if(objects[i][j] instanceof PeaShooter)
-					System.out.print("[ PS ]");
-				else if(objects[i][j] instanceof Potatoe)
-					System.out.print("[ P ]");
-				else if(objects[i][j] instanceof Walnut)
-					System.out.print("[ W ]");
-				else
-					System.out.print("[   ]");
-			}
-			System.out.print("\n");
-		}	
-	}
+//	public void printGrid(GridObject[][] objects) {
+//		for (int i = 0; i < GRID_HEIGHT; i++) {
+//			for (int j = 0; j < GRID_WIDTH; j++) {
+//				if (objects[i][j] instanceof GenericZombie)
+//					System.out.print("[ g ]");
+//				else if (objects[i][j] instanceof SunFlower)
+//					System.out.print("[ S ]");
+//				else if (objects[i][j] instanceof VenusFlyTrap)
+//					System.out.print("[ V ]");
+//				else if(objects[i][j] instanceof PeaShooter)
+//					System.out.print("[ PS ]");
+//				else if(objects[i][j] instanceof Potatoe)
+//					System.out.print("[ P ]");
+//				else if(objects[i][j] instanceof Walnut)
+//					System.out.print("[ W ]");
+//				else
+//					System.out.print("[   ]");
+//			}
+//			System.out.print("\n");
+//		}	
+//	}
 
 }

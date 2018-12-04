@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 public class SunFlower extends Plant {
 
 	protected static final int FULL_TIME = 0;	

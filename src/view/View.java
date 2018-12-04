@@ -57,8 +57,8 @@ public class View extends JFrame {
 		start = new JMenuItem("Start"); // Start Menu Item, to first start the game.
 		restart = new JMenuItem("Restart"); // Restart Menu Item, reset the game.
 		help = new JMenuItem("Help"); // Help Menu item, instructions for the user if they need help.
-		importOption = new JMenuItem("Import");
-		exportOption = new JMenuItem("Export");
+		importOption = new JMenuItem("Load");
+		exportOption = new JMenuItem("Save");
 		
 		// Initialize help menu item enabled only when plant information panel is not
 		// already displayed.
