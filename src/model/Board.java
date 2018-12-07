@@ -20,7 +20,7 @@ public class Board implements Serializable{
 	public ArrayList<Plant> plantsOnBoard = new ArrayList<Plant>();
 	public CommandManager commandManager;
 	
-	public Level level;
+	private Level level;
 	
 	//Use this constructor for tests only
 	public Board() {

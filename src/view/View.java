@@ -29,9 +29,11 @@ public class View extends JFrame {
 	private JMenu menu; // The menu
 	private JMenuItem start, restart, help, importOption, exportOption; // Menu items
 
+	private JMenu levels;
+	public JMenuItem editLevel, level1, level2, level3;
 	private JLabel coins; // label to hold coin values
 
-	private JButton undoTurn, endTurn, redoTurn;
+	private JButton undoTurn, endTurn, redoTurn,confirm;
 
 	// Buttons(Plant VS Zombies Grid)
 	private JPanel gridLayoutButtons;
@@ -42,6 +44,11 @@ public class View extends JFrame {
 
 	// animationThread
 	private Thread animationThread;
+	
+	//Checkbox for zombies
+	private JCheckBox genericZombieCB,frankTheTankCB,burrowingBaileyCB;
+	private ArrayList<JCheckBox> availableZombies;
+	private JTextArea numOfZombies;
 
 	/**
 	 * This constructor, constructs the view of the game.
@@ -53,12 +60,21 @@ public class View extends JFrame {
 		menuBar = new JMenuBar();
 		// Menu
 		menu = new JMenu("Menu");
+		levels = new JMenu("Levels");
 		// Menu Item
 		start = new JMenuItem("Start"); // Start Menu Item, to first start the game.
 		restart = new JMenuItem("Restart"); // Restart Menu Item, reset the game.
 		help = new JMenuItem("Help"); // Help Menu item, instructions for the user if they need help.
 		importOption = new JMenuItem("Load");
 		exportOption = new JMenuItem("Save");
+		
+		// Level Menu Item
+		editLevel = new JMenuItem("Level Editor");
+		level1 = new JMenuItem("Level 1");
+		level2 = new JMenuItem("Level 2");
+		level2.setEnabled(false);
+		level3 = new JMenuItem("Level 3");
+		level3.setEnabled(false);
 		
 		// Initialize help menu item enabled only when plant information panel is not
 		// already displayed.
@@ -71,6 +87,14 @@ public class View extends JFrame {
 		menu.add(exportOption);
 		// Adding Menu to Menu Bar
 		menuBar.add(menu);
+		
+		levels.add(editLevel);
+		levels.add(level1);
+		levels.add(level2);
+		levels.add(level3);
+		confirm = new JButton("Confirm");
+		//Adding Levels to Menu Bar
+		menuBar.add(levels);
 		// Adding Menu Bar
 		add(menuBar, BorderLayout.NORTH);
 
@@ -180,7 +204,54 @@ public class View extends JFrame {
 		// calls the information frame method
 		makeInfoFrame();
 	}
-
+	
+	/*
+	 * This method makes the level editor's frame
+	 */
+	public void makeLevelEditor() {
+		JDialog levelEditorFrame = new JDialog(this);
+		levelEditorFrame.setTitle("Level Editor");
+		levelEditorFrame.setResizable(false);
+		
+		JPanel panel = new JPanel(new BorderLayout(1, 2));
+		
+		GridLayout gl = new GridLayout(0,1);
+		JPanel editorPanel = new JPanel(gl);
+		
+		//create the zombies checkboxes
+		setGenericZombieCB(new JCheckBox("Generic Zombie", false));
+		setFrankTheTankCB(new JCheckBox("Frank The Tank", false));
+		setBurrowingBaileyCB(new JCheckBox("Burrowing Bailey", false));
+		
+		availableZombies = new ArrayList<JCheckBox>();
+		availableZombies.add(genericZombieCB);
+		availableZombies.add(frankTheTankCB);
+		availableZombies.add(burrowingBaileyCB);
+		
+		JLabel title = new JLabel("CHECK THE BOX TO INCLUDE ZOMBIE IN NEXT LEVEL!");
+		title.setFont(new Font("MONOSPACED",Font.ROMAN_BASELINE, 20));
+		title.setForeground(Color.RED);
+		
+		panel.add(title, BorderLayout.NORTH);
+		//add checkboxes to the panel
+		for(JCheckBox cb :availableZombies) {
+			editorPanel.add(cb);
+		}
+		
+		numOfZombies = new JTextArea("How Many Zombies?",1,5);
+		editorPanel.add(confirm);
+		
+		panel.add(numOfZombies, BorderLayout.CENTER);
+		//add the panel to the center
+		panel.add(editorPanel, BorderLayout.SOUTH);
+		
+		levelEditorFrame.add(panel); 
+		levelEditorFrame.pack();
+		levelEditorFrame.setLocation(0, 100);
+		levelEditorFrame.setSize(600, 180);
+		levelEditorFrame.setVisible(true);
+	}
+	
 	/**
 	 * This method is the information frame that displays the plants prices.
 	 */
@@ -566,6 +637,50 @@ public class View extends JFrame {
 	
 	public JMenuItem getExportOption() {
 		return exportOption;
+	}
+
+	public JCheckBox getGenericZombieCB() {
+		return genericZombieCB;
+	}
+
+	public void setGenericZombieCB(JCheckBox genericZombieCB) {
+		this.genericZombieCB = genericZombieCB;
+	}
+
+	public JCheckBox getBurrowingBaileyCB() {
+		return burrowingBaileyCB;
+	}
+
+	public void setBurrowingBaileyCB(JCheckBox burrowingBaileyCB) {
+		this.burrowingBaileyCB = burrowingBaileyCB;
+	}
+
+	public JCheckBox getFrankTheTankCB() {
+		return frankTheTankCB;
+	}
+
+	public void setFrankTheTankCB(JCheckBox frankTheTankCB) {
+		this.frankTheTankCB = frankTheTankCB;
+	}
+
+	public ArrayList<JCheckBox> getAvailableZombies() {
+		return availableZombies;
+	}
+
+	public void setAvailableZombies(ArrayList<JCheckBox> availableZombies) {
+		this.availableZombies = availableZombies;
+	}
+
+	public JTextArea getNumOfZombies() {
+		return numOfZombies;
+	}
+
+	public void setNumOfZombies(JTextArea numOfZombies) {
+		this.numOfZombies = numOfZombies;
+	}
+	
+	public JButton getConfirm() {
+		return confirm;
 	}
 
 }

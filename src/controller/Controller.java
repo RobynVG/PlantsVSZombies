@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -47,7 +48,7 @@ public class Controller {
 	private View view;
 	private CommandManager commandManager;
 	private Level level;
-
+	private boolean isStartOfLevel;
 	/**
 	 * The constructor, constructs the controller.
 	 * @param board
@@ -58,15 +59,15 @@ public class Controller {
 		this.view = view;
 		this.board = board;
 		commandManager = cm;
-		startGame();
+		startGame(1);
 	}
 
 	/**
 	 * This method starts the game for Plant Versus Zombies.
 	 */
-	public void startGame() {
+	public void startGame(int levelNo) {
 		// Initialize the level and grid
-		level = new Level(1);
+		level = new Level(levelNo);
 		board.setLevel(level);
 		board.setupGrid();
 	}
@@ -77,13 +78,19 @@ public class Controller {
 	public void initController() {
 		// Initialize action listener for the help tab to generate information panel
 		view.getHelp().addActionListener(e -> spawnInfoFrame());
-		
 		view.getImportOption().addActionListener(e -> importFromFile());
 		
 		view.getExportOption().addActionListener(e -> exportToFile());
 		// Initialize action listener for all plant buttons
 		view.getPlants().addListSelectionListener(e -> plantSelected(e));
-
+		
+		view.level1.addActionListener(e -> initLevel(1));
+		view.level2.addActionListener(e -> initLevel(2));
+		view.level3.addActionListener(e -> initLevel(3));
+		
+		view.editLevel.addActionListener(e -> editLevel());
+		view.getConfirm().addActionListener(e -> confirmLevelChoices());
+		
 		// Initialize action listener for all of the grid buttons
 		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
 			for (int j = 0; j < Board.GRID_WIDTH; j++)
@@ -106,6 +113,19 @@ public class Controller {
 				gridCond(State.STATS);
 			}
 		});
+	}
+
+	private void confirmLevelChoices() {
+		level.setNumOfZombies(Integer.parseInt(view.getNumOfZombies().getText()));
+		JOptionPane.showMessageDialog(null,"Confirmed Choices!" + level.getNumOfZombies());
+	}
+
+	private void editLevel() {
+		view.makeLevelEditor();
+	}
+
+	private void initLevel(int levelNo) {
+		board.setLevel(new Level(levelNo));
 	}
 
 	// Action listener for plant buttons
@@ -194,6 +214,7 @@ public class Controller {
 	 * This method ends the turn.
 	 */
 	private void endTurn() {
+		isStartOfLevel = false;
 		// Plants and zombies attack then zombies spawn
 		board.startBoardTurn();
 		// Update the coins on the GUI
@@ -230,6 +251,12 @@ public class Controller {
 		if (level.zombiesEmpty() && board.zombiesOnBoard.isEmpty()) {
 			// Spawn a dialog to inform user
 			JOptionPane.showMessageDialog(null, "!!!!!!!YOU WON!!!!!!!!");
+			if(level.nextLevelExists())
+			{
+				startGame(level.getLevelNo() + 1);
+				JOptionPane.showMessageDialog(null, "Starting Level " + (level.getLevelNo()));
+				return;
+			}
 			// Dispose of the GUI. Game has ended
 			view.dispose();
 			System.exit(0);
