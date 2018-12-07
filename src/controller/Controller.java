@@ -11,6 +11,7 @@ import model.Potatoe;
 import model.SunFlower;
 import model.VenusFlyTrap;
 import model.Walnut;
+import model.Zombie;
 
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -22,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +39,10 @@ import javax.swing.event.ListSelectionEvent;
 
 import model.Board;
 import model.Board.State;
+import model.BurrowingBailey;
 import model.CommandManager;
+import model.FrankTheTank;
+import model.GenericZombie;
 import model.GridObject;
 import model.GridObjectFactory;
 import view.View;
@@ -49,8 +54,10 @@ public class Controller {
 	private CommandManager commandManager;
 	private Level level;
 	private boolean isStartOfLevel;
+
 	/**
 	 * The constructor, constructs the controller.
+	 * 
 	 * @param board
 	 * @param view
 	 * @param cm
@@ -79,18 +86,18 @@ public class Controller {
 		// Initialize action listener for the help tab to generate information panel
 		view.getHelp().addActionListener(e -> spawnInfoFrame());
 		view.getImportOption().addActionListener(e -> importFromFile());
-		
+
 		view.getExportOption().addActionListener(e -> exportToFile());
 		// Initialize action listener for all plant buttons
 		view.getPlants().addListSelectionListener(e -> plantSelected(e));
-		
+
 		view.level1.addActionListener(e -> initLevel(1));
 		view.level2.addActionListener(e -> initLevel(2));
 		view.level3.addActionListener(e -> initLevel(3));
-		
+
 		view.editLevel.addActionListener(e -> editLevel());
 		view.getConfirm().addActionListener(e -> confirmLevelChoices());
-		
+
 		// Initialize action listener for all of the grid buttons
 		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
 			for (int j = 0; j < Board.GRID_WIDTH; j++)
@@ -117,7 +124,22 @@ public class Controller {
 
 	private void confirmLevelChoices() {
 		level.setNumOfZombies(Integer.parseInt(view.getNumOfZombies().getText()));
-		JOptionPane.showMessageDialog(null,"Confirmed Choices!" + level.getNumOfZombies());
+		int countZombies = level.getNumOfZombies();
+		ArrayList<Zombie> userZombie = new ArrayList<Zombie>();
+		for (int i = 0; i < countZombies; i++) {
+			if (view.getBurrowingBaileyCB().isSelected()) {
+				userZombie.add(new BurrowingBailey());
+			} else if (view.getFrankTheTankCB().isSelected()) {
+				userZombie.add(new FrankTheTank());
+			} else if (view.getGenericZombieCB().isSelected()) {
+				userZombie.add(new GenericZombie());
+			}else if(!view.getGenericZombieCB().isSelected() && !view.getFrankTheTankCB().isSelected()&& !view.getBurrowingBaileyCB().isSelected()) {
+				JOptionPane.showMessageDialog(null, "Please Check off a zombie you wish to play against.");
+			}
+		}
+		level.beginLevels(userZombie);
+		board.setupGrid();
+		JOptionPane.showMessageDialog(null, "Confirmed Choices!" + level.getNumOfZombies());
 	}
 
 	private void editLevel() {
@@ -168,6 +190,7 @@ public class Controller {
 
 	/**
 	 * This method corresponds to the players selected position on the grid.
+	 * 
 	 * @param e
 	 */
 	private void gridPositionSelected(ActionEvent e) {
@@ -228,15 +251,13 @@ public class Controller {
 			JOptionPane.showMessageDialog(view, "Wow you just found " + (50 - level.coins) + " Sun Points...");
 			level.coins = 50;
 		}
-		
-		
-//		for (int i = 0; i < Board.GRID_HEIGHT; i++) {
-//			for (int j = 0; j < Board.GRID_WIDTH; j++) {
-//				view.playAnimation(view.getButtons()[i][j], board.grid[i][j]);
-//			}
-//		}
-		
-		
+
+		// for (int i = 0; i < Board.GRID_HEIGHT; i++) {
+		// for (int j = 0; j < Board.GRID_WIDTH; j++) {
+		// view.playAnimation(view.getButtons()[i][j], board.grid[i][j]);
+		// }
+		// }
+
 		// Board turn has ended, allow the player to pick another plant
 		plantButtonsEnabled(true);
 		gridCond(State.STATS);
@@ -251,8 +272,7 @@ public class Controller {
 		if (level.zombiesEmpty() && board.zombiesOnBoard.isEmpty()) {
 			// Spawn a dialog to inform user
 			JOptionPane.showMessageDialog(null, "!!!!!!!YOU WON!!!!!!!!");
-			if(level.nextLevelExists())
-			{
+			if (level.nextLevelExists()) {
 				startGame(level.getLevelNo() + 1);
 				JOptionPane.showMessageDialog(null, "Starting Level " + (level.getLevelNo()));
 				return;
@@ -283,8 +303,9 @@ public class Controller {
 	}
 
 	/**
-	 * This method refreshes the board and sets the unoccupied buttons to enabled or disabled
-	 * according to the parameter passed.
+	 * This method refreshes the board and sets the unoccupied buttons to enabled or
+	 * disabled according to the parameter passed.
+	 * 
 	 * @param state
 	 */
 	private void gridCond(State state) {
@@ -327,53 +348,53 @@ public class Controller {
 		view.revalidate();
 		view.repaint();
 	}
-	
+
 	private void importFromFile() {
 		String PVZDirectory = System.getenv("APPDATA") + "/PlantsVsZombies/";
 		File file = new File(PVZDirectory);
-		
-		if (!file.exists()||file.list().length==0) {
+
+		if (!file.exists() || file.list().length == 0) {
 			JOptionPane.showMessageDialog(view, "You have no saved games");
 			return;
 		}
-		
+
 		String[] fileNameArray = file.list();
-		
+
 		for (int i = 0; i < fileNameArray.length; i++) {
-			fileNameArray[i] = fileNameArray[i].substring(0, fileNameArray[i].length()-4);
+			fileNameArray[i] = fileNameArray[i].substring(0, fileNameArray[i].length() - 4);
 		}
-				
+
 		int selection = JOptionPane.showOptionDialog(view, "Please Select A Save", "", JOptionPane.DEFAULT_OPTION,
-				JOptionPane.PLAIN_MESSAGE, null, fileNameArray,fileNameArray[0]);
+				JOptionPane.PLAIN_MESSAGE, null, fileNameArray, fileNameArray[0]);
 		if (selection == -1)
 			return;
-		
+
 		Board boardIn = null;
 		try {
-	         FileInputStream fileIn = new FileInputStream(PVZDirectory + file.list()[selection]);
-	         ObjectInputStream in = new ObjectInputStream(fileIn);
-	         boardIn = (Board) in.readObject();
-	         in.close();
-	         fileIn.close();
-	      } catch (IOException i) {
-	         i.printStackTrace();
-	         return;
-	      } catch (ClassNotFoundException c) {
-	         System.out.println("Board class not found");
-	         c.printStackTrace();
-	         return;
-	      }
+			FileInputStream fileIn = new FileInputStream(PVZDirectory + file.list()[selection]);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			boardIn = (Board) in.readObject();
+			in.close();
+			fileIn.close();
+		} catch (IOException i) {
+			i.printStackTrace();
+			return;
+		} catch (ClassNotFoundException c) {
+			System.out.println("Board class not found");
+			c.printStackTrace();
+			return;
+		}
 		board = boardIn;
 		level = boardIn.getLevel();
 		commandManager = boardIn.getCommandManager();
 		view.getPlants().clearSelection();
 		gridCond(boardIn.getGridState());
 	}
-	
+
 	private void exportToFile() {
 		String PVZDirectory = System.getenv("APPDATA") + "/PlantsVsZombies/";
 		String exportFile = JOptionPane.showInputDialog("Please enter a name for your save");
-		
+
 		boolean specialCharacter = true;
 		while (specialCharacter) {
 			if (exportFile == null)
@@ -384,24 +405,23 @@ public class Controller {
 			if (specialCharacter)
 				exportFile = JOptionPane.showInputDialog("No special characters...nice try");
 		}
-		
-		
+
 		new File(PVZDirectory).mkdirs();
-		
+
 		try {
-	         FileOutputStream fileOut =
-	         new FileOutputStream(PVZDirectory + exportFile + ".ser");
-	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-	         out.writeObject(board);
-	         out.close();
-	         fileOut.close();
-	      } catch (IOException i) {
-	         i.printStackTrace();
-	      }
+			FileOutputStream fileOut = new FileOutputStream(PVZDirectory + exportFile + ".ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(board);
+			out.close();
+			fileOut.close();
+		} catch (IOException i) {
+			i.printStackTrace();
+		}
 	}
 
 	/**
 	 * This enables or disables all of the plant's buttons.
+	 * 
 	 * @param enabled
 	 */
 	private void plantButtonsEnabled(boolean enabled) {

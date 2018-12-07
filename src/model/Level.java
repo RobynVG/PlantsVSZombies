@@ -20,15 +20,24 @@ public class Level implements Serializable {
 		else
 			level3();
 	}
+	
+	/**
+	 * This method is the for when the user generates the game.
+	 */
+	public void beginLevels(ArrayList<Zombie> zombies) {
+		this.coins = 50;
+		allPlants = new ArrayList<Plant>();
+		this.allZombies = zombies;
+	}
 
-	/*
+	/**s
 	 * sets the num of zombies
 	 */
 	public void setNumOfZombies(int num) {
 		numOfZombies = num; 
 	}
 
-	/*
+	/**
 	 * gets the num of zombies
 	 */
 	public int getNumOfZombies() {
@@ -138,9 +147,7 @@ public class Level implements Serializable {
 
 	/**
 	 * This method checks that a player has a plant they can play.
-	 * 
-	 * @return A boolean, true if the player can affod a plant or false if there if
-	 *         they are all too expensive.
+	 * @return True if the player can afford a plant otherwise false.
 	 */
 	public boolean plantAffordable() {
 		for (Plant plant : allPlants) {
@@ -153,7 +160,6 @@ public class Level implements Serializable {
 	/**
 	 * This method returns all the zombies that are to be played for the current
 	 * level.
-	 * 
 	 * @return allZombies
 	 */
 	public ArrayList<Zombie> getAllZombies() {
@@ -162,7 +168,6 @@ public class Level implements Serializable {
 
 	/**
 	 * This method sets all the zombies that are to be played for the current level.
-	 * 
 	 * @param zombies.
 	 */
 	public void setAllZombies(ArrayList<Zombie> zombies) {
@@ -171,14 +176,17 @@ public class Level implements Serializable {
 
 	/**
 	 * This method checks if there are no more zombies left to play for the current
-	 * level.
-	 * 
-	 * @return boolean
+	 * level. 
+	 * @return True if the array of zombies is empty otherwise false.
 	 */
 	public boolean zombiesEmpty() {
 		return (allZombies.isEmpty());
 	}
 
+	/**
+	 * This method gets all the plants array.
+	 * @return plant array.
+	 */
 	public ArrayList<Plant> getAllPlants() {
 		return allPlants;
 	}
