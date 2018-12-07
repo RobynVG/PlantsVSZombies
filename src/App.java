@@ -9,7 +9,6 @@ public class App {
 		Board m = new Board(cm);
 		View v = new View();
 		Controller c = new Controller(m,v,cm);
-		
 		c.initController();
 	}
 }
