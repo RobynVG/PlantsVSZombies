@@ -122,7 +122,7 @@ public class Controller {
 		});
 	}
 
-	private void confirmLevelChoices() {
+	private void confirmLevelChoices() { 
 		level.setNumOfZombies(Integer.parseInt(view.getNumOfZombies().getText()));
 		int countZombies = level.getNumOfZombies();
 		ArrayList<Zombie> userZombie = new ArrayList<Zombie>();
@@ -137,9 +137,11 @@ public class Controller {
 				JOptionPane.showMessageDialog(null, "Please Check off a zombie you wish to play against.");
 			}
 		}
-		level.beginLevels(userZombie);
+		level = new Level(userZombie);
+		board.setLevel(level);
 		board.setupGrid();
-		JOptionPane.showMessageDialog(null, "Confirmed Choices!" + level.getNumOfZombies());
+		endTurn();
+		JOptionPane.showMessageDialog(null, "Confirmed Choices!");
 	}
 
 	private void editLevel() {
@@ -272,7 +274,7 @@ public class Controller {
 		if (level.zombiesEmpty() && board.zombiesOnBoard.isEmpty()) {
 			// Spawn a dialog to inform user
 			JOptionPane.showMessageDialog(null, "!!!!!!!YOU WON!!!!!!!!");
-			if (level.nextLevelExists()) {
+			if (level.nextLevelExists() && !level.isCustomLevel()) {
 				startGame(level.getLevelNo() + 1);
 				JOptionPane.showMessageDialog(null, "Starting Level " + (level.getLevelNo()));
 				return;
