@@ -46,10 +46,14 @@ public class View extends JFrame {
 	private Thread animationThread;
 	
 	//Checkbox for zombies
-	private JCheckBox genericZombieCB,frankTheTankCB,burrowingBaileyCB;
-	private ArrayList<JCheckBox> availableZombies;
+	private JTextField genericZombieCB,frankTheTankCB,burrowingBaileyCB;
+	private ArrayList<JTextField> availableZombies;
 	private JTextArea numOfZombies;
+	
+	private JPanel genericZombiePanel, frankTheTankPanel, burrowingBaileyPanel;
+	private JLabel genericZombieLabel, frankTheTankLabel, burrowingBaileyLabel;
 
+	private JDialog levelEditorFrame;
 	/**
 	 * This constructor, constructs the view of the game.
 	 */
@@ -209,7 +213,7 @@ public class View extends JFrame {
 	 * This method makes the level editor's frame
 	 */
 	public void makeLevelEditor() {
-		JDialog levelEditorFrame = new JDialog(this);
+		levelEditorFrame = new JDialog(this);
 		levelEditorFrame.setTitle("Level Editor");
 		levelEditorFrame.setResizable(false);
 		
@@ -218,36 +222,55 @@ public class View extends JFrame {
 		GridLayout gl = new GridLayout(0,1);
 		JPanel editorPanel = new JPanel(gl);
 		
-		//create the zombies checkboxes
-		setGenericZombieCB(new JCheckBox("Generic Zombie", false));
-		setFrankTheTankCB(new JCheckBox("Frank The Tank", false));
-		setBurrowingBaileyCB(new JCheckBox("Burrowing Bailey", false));
+		genericZombiePanel = new JPanel();
+		frankTheTankPanel = new JPanel();
+		burrowingBaileyPanel = new JPanel();
 		
-		availableZombies = new ArrayList<JCheckBox>();
+		//create the zombie labels
+		genericZombieLabel = new JLabel("Generic Zombie: ");
+		frankTheTankLabel = new JLabel("Frank The Tank: ");
+		burrowingBaileyLabel = new JLabel("Burrowing Bailey: ");
+		
+		//create the zombie text fields
+		setGenericZombieCB(new JTextField("0"));
+		genericZombieCB.setPreferredSize(new Dimension(20,20));
+		setFrankTheTankCB(new JTextField("0"));
+		frankTheTankCB.setPreferredSize(new Dimension(20,20));
+		setBurrowingBaileyCB(new JTextField("0"));
+		burrowingBaileyCB.setPreferredSize(new Dimension(20,20));
+		
+		//add label and text field to panels
+		genericZombiePanel.add(genericZombieLabel);
+		genericZombiePanel.add(genericZombieCB);
+		frankTheTankPanel.add(frankTheTankLabel);
+		frankTheTankPanel.add(frankTheTankCB);
+		burrowingBaileyPanel.add(burrowingBaileyLabel);
+		burrowingBaileyPanel.add(burrowingBaileyCB);
+		
+		
+		availableZombies = new ArrayList<JTextField>();
 		availableZombies.add(genericZombieCB);
 		availableZombies.add(frankTheTankCB);
 		availableZombies.add(burrowingBaileyCB);
 		
-		JLabel title = new JLabel("CHECK THE BOX TO INCLUDE ZOMBIE IN NEXT LEVEL!");
+		JLabel title = new JLabel("HOW MANY ZOMBIES TO INCLUDE IN NEXT LEVEL!?");
 		title.setFont(new Font("MONOSPACED",Font.ROMAN_BASELINE, 20));
 		title.setForeground(Color.RED);
 		
 		panel.add(title, BorderLayout.NORTH);
 		//add checkboxes to the panel
-		for(JCheckBox cb :availableZombies) {
-			editorPanel.add(cb);
-		}
+		editorPanel.add(genericZombiePanel);
+		editorPanel.add(frankTheTankPanel);
+		editorPanel.add(burrowingBaileyPanel);
 		
-		numOfZombies = new JTextArea("How Many Zombies?",1,5);
 		editorPanel.add(confirm);
 		
-		panel.add(numOfZombies, BorderLayout.CENTER);
 		//add the panel to the center
 		panel.add(editorPanel, BorderLayout.SOUTH);
 		
 		levelEditorFrame.add(panel); 
 		levelEditorFrame.pack();
-		levelEditorFrame.setLocation(0, 100);
+		levelEditorFrame.setLocationRelativeTo(this);
 		levelEditorFrame.setSize(600, 180);
 		levelEditorFrame.setVisible(true);
 	}
@@ -639,35 +662,35 @@ public class View extends JFrame {
 		return exportOption;
 	}
 
-	public JCheckBox getGenericZombieCB() {
+	public JTextField getGenericZombieCB() {
 		return genericZombieCB;
 	}
 
-	public void setGenericZombieCB(JCheckBox genericZombieCB) {
+	public void setGenericZombieCB(JTextField genericZombieCB) {
 		this.genericZombieCB = genericZombieCB;
 	}
 
-	public JCheckBox getBurrowingBaileyCB() {
+	public JTextField getBurrowingBaileyCB() {
 		return burrowingBaileyCB;
 	}
 
-	public void setBurrowingBaileyCB(JCheckBox burrowingBaileyCB) {
+	public void setBurrowingBaileyCB(JTextField burrowingBaileyCB) {
 		this.burrowingBaileyCB = burrowingBaileyCB;
 	}
 
-	public JCheckBox getFrankTheTankCB() {
+	public JTextField getFrankTheTankCB() {
 		return frankTheTankCB;
 	}
 
-	public void setFrankTheTankCB(JCheckBox frankTheTankCB) {
+	public void setFrankTheTankCB(JTextField frankTheTankCB) {
 		this.frankTheTankCB = frankTheTankCB;
 	}
 
-	public ArrayList<JCheckBox> getAvailableZombies() {
+	public ArrayList<JTextField> getAvailableZombies() {
 		return availableZombies;
 	}
 
-	public void setAvailableZombies(ArrayList<JCheckBox> availableZombies) {
+	public void setAvailableZombies(ArrayList<JTextField> availableZombies) {
 		this.availableZombies = availableZombies;
 	}
 
@@ -681,6 +704,10 @@ public class View extends JFrame {
 	
 	public JButton getConfirm() {
 		return confirm;
+	}
+	
+	public JDialog getLevelEditorFrame() {
+		return levelEditorFrame;
 	}
 
 }

@@ -77,6 +77,7 @@ public class Controller {
 		level = new Level(levelNo);
 		board.setLevel(level);
 		board.setupGrid();
+		board.clear();
 	}
 
 	/**
@@ -123,25 +124,45 @@ public class Controller {
 	}
 
 	private void confirmLevelChoices() { 
-		level.setNumOfZombies(Integer.parseInt(view.getNumOfZombies().getText()));
-		int countZombies = level.getNumOfZombies();
-		ArrayList<Zombie> userZombie = new ArrayList<Zombie>();
-		for (int i = 0; i < countZombies; i++) {
-			if (view.getBurrowingBaileyCB().isSelected()) {
-				userZombie.add(new BurrowingBailey());
-			} else if (view.getFrankTheTankCB().isSelected()) {
-				userZombie.add(new FrankTheTank());
-			} else if (view.getGenericZombieCB().isSelected()) {
-				userZombie.add(new GenericZombie());
-			}else if(!view.getGenericZombieCB().isSelected() && !view.getFrankTheTankCB().isSelected()&& !view.getBurrowingBaileyCB().isSelected()) {
-				JOptionPane.showMessageDialog(null, "Please Check off a zombie you wish to play against.");
-			}
+		int numGenericZombie = 0;
+		int numFrankTheTank = 0;
+		int numBurrowingBailey = 0;
+		
+		try {
+			numGenericZombie = Integer.parseInt(view.getGenericZombieCB().getText());
+			numFrankTheTank = Integer.parseInt(view.getFrankTheTankCB().getText());
+			numBurrowingBailey = Integer.parseInt(view.getBurrowingBaileyCB().getText());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null,"You may only enter numbers in the fields");
+			return;
 		}
+		
+		if (numGenericZombie == 0 && numFrankTheTank == 0 && numBurrowingBailey == 0) {
+			JOptionPane.showMessageDialog(null,"You must select at least 1 zombie");
+			return;
+		}
+		
+		if (numGenericZombie < 0 || numFrankTheTank < 0 || numBurrowingBailey < 0) {
+			JOptionPane.showMessageDialog(null,"You cannot select negative zombies");
+			return;
+		}
+		
+		ArrayList<Zombie> userZombie = new ArrayList<Zombie>();
+		
+		for (int i = 0; i < numGenericZombie; i++)
+			userZombie.add(new GenericZombie());
+		for (int i = 0; i < numFrankTheTank; i++)
+			userZombie.add(new FrankTheTank());
+		for (int i = 0; i < numBurrowingBailey; i++)
+			userZombie.add(new BurrowingBailey());
+		
 		level = new Level(userZombie);
 		board.setLevel(level);
+		board.clear();
 		board.setupGrid();
 		endTurn();
 		JOptionPane.showMessageDialog(null, "Confirmed Choices!");
+		view.getLevelEditorFrame().dispose();
 	}
 
 	private void editLevel() {

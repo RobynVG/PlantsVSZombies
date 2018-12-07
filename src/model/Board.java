@@ -266,6 +266,12 @@ public class Board implements Serializable{
 		}
 		return true;
 	}
+	
+	public void clear() {
+		plantsOnBoard = new ArrayList<Plant>();
+		zombiesOnBoard = new ArrayList<Zombie>();
+		gridObjects = new ArrayList<GridObject>();
+	}
 
 
 	/**

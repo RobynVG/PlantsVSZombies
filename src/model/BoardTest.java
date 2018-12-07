@@ -184,7 +184,6 @@ public class BoardTest extends TestCase {
 		board.placePlant(s1,3,3);
 		g1.setHealth(1);
 		board.boardTurn();		
-		board.printGrid(board.grid);
 		assertEquals(true, !board.getZombiesOnBoard().contains(g1));
 	}
 }
