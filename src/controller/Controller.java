@@ -54,7 +54,7 @@ public class Controller {
 	private CommandManager commandManager;
 	private Level level;
 	private boolean isStartOfLevel;
-	public static int waveTurn;
+
 	
 	/**
 	 * The constructor, constructs the controller.
@@ -66,7 +66,6 @@ public class Controller {
 		this.view = view;
 		this.board = board;
 		commandManager = cm;
-		waveTurn = 0;
 		startGame(1);
 	}
 
@@ -131,12 +130,10 @@ public class Controller {
 		int numGenericZombie = 0;
 		int numFrankTheTank = 0;
 		int numBurrowingBailey = 0;
-		int waveTime = 0;
 		try {
 			numGenericZombie = Integer.parseInt(view.getGenericZombieCB().getText());
 			numFrankTheTank = Integer.parseInt(view.getFrankTheTankCB().getText());
 			numBurrowingBailey = Integer.parseInt(view.getBurrowingBaileyCB().getText());
-			waveTime = Integer.parseInt(view.getWaveTime().getText());
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null,"You may only enter numbers in the fields");
 			return;
@@ -147,7 +144,7 @@ public class Controller {
 			return;
 		}
 		
-		if (numGenericZombie < 0 || numFrankTheTank < 0 || numBurrowingBailey < 0 || waveTime < 0) {
+		if (numGenericZombie < 0 || numFrankTheTank < 0 || numBurrowingBailey < 0) {
 			JOptionPane.showMessageDialog(null,"You cannot select negative zombies or wave time.");
 			return;
 		}
@@ -289,7 +286,6 @@ public class Controller {
 			level.coins = 50;
 		}
 
-		waveTurn--;
 		// for (int i = 0; i < Board.GRID_HEIGHT; i++) {
 		// for (int j = 0; j < Board.GRID_WIDTH; j++) {
 		// view.playAnimation(view.getButtons()[i][j], board.grid[i][j]);

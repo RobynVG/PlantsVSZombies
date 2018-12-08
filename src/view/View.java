@@ -46,12 +46,12 @@ public class View extends JFrame {
 	private Thread animationThread;
 	
 	//Checkbox for zombies
-	private JTextField genericZombieCB,frankTheTankCB,burrowingBaileyCB, waveTime;
+	private JTextField genericZombieCB,frankTheTankCB,burrowingBaileyCB;
 	private ArrayList<JTextField> availableZombies;
 	private JTextArea numOfZombies;
 	
-	private JPanel genericZombiePanel, frankTheTankPanel, burrowingBaileyPanel,waveTimePanel;
-	private JLabel genericZombieLabel, frankTheTankLabel, burrowingBaileyLabel,waveTimeLabel;
+	private JPanel genericZombiePanel, frankTheTankPanel, burrowingBaileyPanel;
+	private JLabel genericZombieLabel, frankTheTankLabel, burrowingBaileyLabel;
 
 	private JDialog levelEditorFrame;
 	
@@ -222,13 +222,11 @@ public class View extends JFrame {
 		genericZombiePanel = new JPanel();
 		frankTheTankPanel = new JPanel();
 		burrowingBaileyPanel = new JPanel();
-		waveTimePanel = new JPanel();
 		
 		//create the zombie labels
 		genericZombieLabel = new JLabel("Generic Zombie: ");
 		frankTheTankLabel = new JLabel("Frank The Tank: ");
 		burrowingBaileyLabel = new JLabel("Burrowing Bailey: ");
-		waveTimeLabel = new JLabel("Wave Timing: ");
 		
 		//create the zombie text fields
 		setGenericZombieCB(new JTextField("0"));
@@ -237,8 +235,6 @@ public class View extends JFrame {
 		frankTheTankCB.setPreferredSize(new Dimension(20,20));
 		setBurrowingBaileyCB(new JTextField("0"));
 		burrowingBaileyCB.setPreferredSize(new Dimension(20,20));
-		setWaveTime(new JTextField("0"));
-		waveTime.setPreferredSize(new Dimension(20,20));
 		
 		//add label and text field to panels
 		genericZombiePanel.add(genericZombieLabel);
@@ -247,26 +243,22 @@ public class View extends JFrame {
 		frankTheTankPanel.add(frankTheTankCB);
 		burrowingBaileyPanel.add(burrowingBaileyLabel);
 		burrowingBaileyPanel.add(burrowingBaileyCB);
-		waveTimePanel.add(waveTimeLabel);
-		waveTimePanel.add(waveTime);
 		
 		
 		availableZombies = new ArrayList<JTextField>();
 		availableZombies.add(genericZombieCB);
 		availableZombies.add(frankTheTankCB);
 		availableZombies.add(burrowingBaileyCB);
-		availableZombies.add(waveTime);
 		
 		JLabel title = new JLabel("HOW MANY ZOMBIES TO INCLUDE IN NEXT LEVEL!?");
 		title.setFont(new Font("MONOSPACED",Font.ROMAN_BASELINE, 20));
 		title.setForeground(Color.RED);
 		
 		panel.add(title, BorderLayout.NORTH);
-		//add checkboxes to the panel
+	
 		editorPanel.add(genericZombiePanel);
 		editorPanel.add(frankTheTankPanel);
 		editorPanel.add(burrowingBaileyPanel);
-		editorPanel.add(waveTimePanel);
 		
 		editorPanel.add(confirm);
 		
@@ -276,7 +268,7 @@ public class View extends JFrame {
 		levelEditorFrame.add(panel); 
 		levelEditorFrame.pack();
 		levelEditorFrame.setLocationRelativeTo(this);
-		levelEditorFrame.setSize(600, 215);
+		levelEditorFrame.setSize(600, 180);
 		levelEditorFrame.setVisible(true);
 	}
 	
@@ -749,22 +741,6 @@ public class View extends JFrame {
 	 */
 	public void setFrankTheTankCB(JTextField frankTheTankCB) {
 		this.frankTheTankCB = frankTheTankCB;
-	}
-	
-	/**
-	 * This method gets the waveTime.
-	 * @return waveTime
-	 */
-	public JTextField getWaveTime() {
-		return waveTime;
-	}
-	
-	/**
-	 * This method sets the waveTime.
-	 * @param wave
-	 */
-	public void setWaveTime(JTextField wave) {
-		this.waveTime = wave;
 	}
 
 	/**

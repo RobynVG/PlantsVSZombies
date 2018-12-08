@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
+import controller.Controller;
+
 public class Board implements Serializable{
 	public static final int GRID_HEIGHT = 6;
 	public static final int GRID_WIDTH = 9;
@@ -46,7 +48,7 @@ public class Board implements Serializable{
 	 * This method spawns the zombies on the board.
 	 */
 	public void spawnZombies() {
-		if (level.getAllZombies().isEmpty())
+		if (level.getAllZombies().isEmpty()) 
 			return;
 		
 		int yPos = ThreadLocalRandom.current().nextInt(0, Board.GRID_HEIGHT-1);

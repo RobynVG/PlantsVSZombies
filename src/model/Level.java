@@ -94,15 +94,12 @@ public class Level implements Serializable {
 
 		// zombies type/amount needs to be generated/level
 
-		if (Controller.waveTurn == 0) {
-			for (int i = 0; i < numOfZombies; i++) {
-				allZombies.add(new GenericZombie());
-			}
+		for (int i = 0; i < numOfZombies; i++) {
+			allZombies.add(new GenericZombie());
+		}
 
-			for (Plant plant : allPlants) {
-				plant.setCurrentTime(0);
-			}
-			Controller.waveTurn = 6;
+		for (Plant plant : allPlants) {
+			plant.setCurrentTime(0);
 		}
 
 	}
@@ -123,17 +120,13 @@ public class Level implements Serializable {
 		coins = previousCoins;
 
 		// zombies type/amount needs to be generated/level
+		for (int i = 0; i < numOfZombies; i++) {
+			allZombies.add(new GenericZombie());
+			allZombies.add(new FrankTheTank());
+		}
 
-		if (Controller.waveTurn == 0) {
-			for (int i = 0; i < numOfZombies; i++) {
-				allZombies.add(new GenericZombie());
-				allZombies.add(new FrankTheTank());
-			}
-
-			for (Plant plant : allPlants) {
-				plant.setCurrentTime(0);
-			}
-			Controller.waveTurn = 6;
+		for (Plant plant : allPlants) {
+			plant.setCurrentTime(0);
 		}
 
 	}
@@ -155,17 +148,14 @@ public class Level implements Serializable {
 
 		// zombies type/amount needs to be generated/level
 
-		if (Controller.waveTurn == 0) {
-			for (int i = 0; i < numOfZombies; i++) {
-				allZombies.add(new GenericZombie());
-				allZombies.add(new FrankTheTank());
-				allZombies.add(new BurrowingBailey());
-			}
+		for (int i = 0; i < numOfZombies; i++) {
+			allZombies.add(new GenericZombie());
+			allZombies.add(new FrankTheTank());
+			allZombies.add(new BurrowingBailey());
+		}
 
-			for (Plant plant : allPlants) {
-				plant.setCurrentTime(0);
-			}
-			Controller.waveTurn = 6;
+		for (Plant plant : allPlants) {
+			plant.setCurrentTime(0);
 		}
 
 	}
