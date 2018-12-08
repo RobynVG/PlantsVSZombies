@@ -390,10 +390,10 @@ public class Board implements Serializable{
 
 	
 	//Used for debugging
-	/**
-	 * This method prints the grid. Used for debugging
-	 * @param objects
-	 */
+//	/**
+//	 * This method prints the grid. Used for debugging
+//	 * @param objects
+//	 */
 //	public void printGrid(GridObject[][] objects) {
 //		for (int i = 0; i < GRID_HEIGHT; i++) {
 //			for (int j = 0; j < GRID_WIDTH; j++) {
