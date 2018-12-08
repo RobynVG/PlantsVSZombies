@@ -259,6 +259,10 @@ public class Board implements Serializable{
 		}
 	} 	
 	
+	/**
+	 * This method checks if there is no sunflowers.
+	 * @return True if there is sunflowers otherwise false.
+	 */
 	public boolean noSunflowers() {
 		for (Plant plant: plantsOnBoard) {
 			if (plant instanceof SunFlower)
@@ -267,6 +271,9 @@ public class Board implements Serializable{
 		return true;
 	}
 	
+	/**
+	 * This method clears the board.
+	 */
 	public void clear() {
 		plantsOnBoard = new ArrayList<Plant>();
 		zombiesOnBoard = new ArrayList<Zombie>();
@@ -341,22 +348,42 @@ public class Board implements Serializable{
 		this.plantsOnBoard = plantsOnBoard;
 	}
 	
+	/**
+	 * This method sets the level.
+	 * @param lvl
+	 */
 	public void setLevel(Level lvl) {
 		this.level = lvl;
 	}
 	
+	/**
+	 * This method gets level.
+	 * @return
+	 */
 	public Level getLevel() {
 		return level;
 	}
 
+	/**
+	 * This method gets gridState.
+	 * @return gridState
+	 */
 	public State getGridState() {
 		return gridState;
 	}
 
+	/**
+	 * This method sets gridState
+	 * @param gridState
+	 */
 	public void setGridState(State gridState) {
 		this.gridState = gridState;
 	}
 
+	/**
+	 * This method gets commandManager.
+	 * @return
+	 */
 	public CommandManager getCommandManager() {
 		return commandManager;
 	}

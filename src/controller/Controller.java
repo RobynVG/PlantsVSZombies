@@ -54,10 +54,10 @@ public class Controller {
 	private CommandManager commandManager;
 	private Level level;
 	private boolean isStartOfLevel;
-
+	public static int waveTurn;
+	
 	/**
 	 * The constructor, constructs the controller.
-	 * 
 	 * @param board
 	 * @param view
 	 * @param cm
@@ -66,6 +66,7 @@ public class Controller {
 		this.view = view;
 		this.board = board;
 		commandManager = cm;
+		waveTurn = 0;
 		startGame(1);
 	}
 
@@ -123,15 +124,19 @@ public class Controller {
 		});
 	}
 
+	/**
+	 * This method implements the user choice for there customized game.
+	 */
 	private void confirmLevelChoices() { 
 		int numGenericZombie = 0;
 		int numFrankTheTank = 0;
 		int numBurrowingBailey = 0;
-		
+		int waveTime = 0;
 		try {
 			numGenericZombie = Integer.parseInt(view.getGenericZombieCB().getText());
 			numFrankTheTank = Integer.parseInt(view.getFrankTheTankCB().getText());
 			numBurrowingBailey = Integer.parseInt(view.getBurrowingBaileyCB().getText());
+			waveTime = Integer.parseInt(view.getWaveTime().getText());
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null,"You may only enter numbers in the fields");
 			return;
@@ -142,8 +147,8 @@ public class Controller {
 			return;
 		}
 		
-		if (numGenericZombie < 0 || numFrankTheTank < 0 || numBurrowingBailey < 0) {
-			JOptionPane.showMessageDialog(null,"You cannot select negative zombies");
+		if (numGenericZombie < 0 || numFrankTheTank < 0 || numBurrowingBailey < 0 || waveTime < 0) {
+			JOptionPane.showMessageDialog(null,"You cannot select negative zombies or wave time.");
 			return;
 		}
 		
@@ -165,15 +170,25 @@ public class Controller {
 		view.getLevelEditorFrame().dispose();
 	}
 
+	/**
+	 * This method calls makeLevelEditor method from the view class.
+	 */
 	private void editLevel() {
 		view.makeLevelEditor();
 	}
 
+	/**
+	 * This method initialize a level.
+	 * @param levelNo
+	 */
 	private void initLevel(int levelNo) {
 		board.setLevel(new Level(levelNo));
 	}
 
-	// Action listener for plant buttons
+	/**
+	 * This method is an action listener for plant buttons.
+	 * @param arg0
+	 */
 	private void plantSelected(ListSelectionEvent arg0) {
 		// If statements deals with multiple events fired by one click
 		if (arg0.getValueIsAdjusting() || view.getPlants().getSelectedValue() == null)
@@ -213,7 +228,6 @@ public class Controller {
 
 	/**
 	 * This method corresponds to the players selected position on the grid.
-	 * 
 	 * @param e
 	 */
 	private void gridPositionSelected(ActionEvent e) {
@@ -275,6 +289,7 @@ public class Controller {
 			level.coins = 50;
 		}
 
+		waveTurn--;
 		// for (int i = 0; i < Board.GRID_HEIGHT; i++) {
 		// for (int j = 0; j < Board.GRID_WIDTH; j++) {
 		// view.playAnimation(view.getButtons()[i][j], board.grid[i][j]);
@@ -328,7 +343,6 @@ public class Controller {
 	/**
 	 * This method refreshes the board and sets the unoccupied buttons to enabled or
 	 * disabled according to the parameter passed.
-	 * 
 	 * @param state
 	 */
 	private void gridCond(State state) {
@@ -372,6 +386,9 @@ public class Controller {
 		view.repaint();
 	}
 
+	/**
+	 * This method imports the saved game from file.
+	 */
 	private void importFromFile() {
 		String PVZDirectory = System.getenv("APPDATA") + "/PlantsVsZombies/";
 		File file = new File(PVZDirectory);
@@ -414,6 +431,9 @@ public class Controller {
 		gridCond(boardIn.getGridState());
 	}
 
+	/**
+	 * This method exports the information to save the game.
+	 */
 	private void exportToFile() {
 		String PVZDirectory = System.getenv("APPDATA") + "/PlantsVsZombies/";
 		String exportFile = JOptionPane.showInputDialog("Please enter a name for your save");
@@ -444,7 +464,6 @@ public class Controller {
 
 	/**
 	 * This enables or disables all of the plant's buttons.
-	 * 
 	 * @param enabled
 	 */
 	private void plantButtonsEnabled(boolean enabled) {

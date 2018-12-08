@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import controller.Controller;
+
 public class Level implements Serializable {
 	public ArrayList<Plant> allPlants; // Not actually all plants, its all plant TYPES (1 instance of each)
 	private ArrayList<Zombie> allZombies;
@@ -18,10 +20,10 @@ public class Level implements Serializable {
 			level1();
 		else if (levelNo == 2)
 			level2();
-		else if(levelNo == 3)
+		else if (levelNo == 3)
 			level3();
 	}
-	
+
 	/**
 	 * Custom Level Builder
 	 * @param zombies
@@ -41,22 +43,22 @@ public class Level implements Serializable {
 		}
 	}
 
-	/**s
-	 * sets the num of zombies
+	/**
+	 * This method sets numOfZombies
 	 */
 	public void setNumOfZombies(int num) {
-		numOfZombies = num; 
+		numOfZombies = num;
 	}
 
 	/**
-	 * gets the num of zombies
+	 * This method gets numOfZombies.
 	 */
 	public int getNumOfZombies() {
 		return numOfZombies;
 	}
-
+	
 	/**
-	 * if next level exists return true, false otherwise
+	 *If next level exists return true, false otherwise
 	 */
 	public boolean nextLevelExists() {
 		if (levelNo < 3) {
@@ -65,10 +67,14 @@ public class Level implements Serializable {
 		return false;
 	}
 
+	/**
+	 * This method gets the levelNo.
+	 * @return levelNo
+	 */
 	public int getLevelNo() {
 		return levelNo;
 	}
-	
+
 	/**
 	 * This method is the first level of the game.
 	 */
@@ -85,12 +91,17 @@ public class Level implements Serializable {
 		coins = previousCoins;
 
 		// zombies type/amount needs to be generated/level
-		for (int i = 0; i < numOfZombies; i++) {
-			allZombies.add(new GenericZombie());
-		}
+		for (int w = 0; w < 2; w++) {
+			if (Controller.waveTurn == 0) {
+				for (int i = 0; i < numOfZombies; i++) {
+					allZombies.add(new GenericZombie());
+				}
 
-		for (Plant plant : allPlants) {
-			plant.setCurrentTime(0);
+				for (Plant plant : allPlants) {
+					plant.setCurrentTime(0);
+				}
+				Controller.waveTurn = 6;
+			}
 		}
 	}
 
@@ -110,13 +121,18 @@ public class Level implements Serializable {
 		coins = previousCoins;
 
 		// zombies type/amount needs to be generated/level
-		for (int i = 0; i < numOfZombies; i++) {
-			allZombies.add(new GenericZombie());
-			allZombies.add(new FrankTheTank());
-		}
-
-		for (Plant plant : allPlants) {
-			plant.setCurrentTime(0);
+		for(int w = 0; w < 2; w++) {
+			if(Controller.waveTurn == 0) {
+				for (int i = 0; i < numOfZombies; i++) {
+					allZombies.add(new GenericZombie());
+					allZombies.add(new FrankTheTank());
+				}
+	
+				for (Plant plant : allPlants) {
+					plant.setCurrentTime(0);
+				}
+				Controller.waveTurn = 6;
+			}
 		}
 	}
 
@@ -136,14 +152,19 @@ public class Level implements Serializable {
 		coins = previousCoins;
 
 		// zombies type/amount needs to be generated/level
-		for (int i = 0; i < numOfZombies; i++) {
-			allZombies.add(new GenericZombie());
-			allZombies.add(new FrankTheTank());
-			allZombies.add(new BurrowingBailey());
-		}
-
-		for (Plant plant : allPlants) {
-			plant.setCurrentTime(0);
+		for(int w = 0; w < 2; w++) {
+			if(Controller.waveTurn == 0) {
+				for (int i = 0; i < numOfZombies; i++) {
+					allZombies.add(new GenericZombie());
+					allZombies.add(new FrankTheTank());
+					allZombies.add(new BurrowingBailey());
+				}
+		
+				for (Plant plant : allPlants) {
+					plant.setCurrentTime(0);
+				}
+				Controller.waveTurn = 6;
+			}
 		}
 	}
 
@@ -187,7 +208,7 @@ public class Level implements Serializable {
 
 	/**
 	 * This method checks if there are no more zombies left to play for the current
-	 * level. 
+	 * level.
 	 * @return True if the array of zombies is empty otherwise false.
 	 */
 	public boolean zombiesEmpty() {
@@ -196,16 +217,25 @@ public class Level implements Serializable {
 
 	/**
 	 * This method gets all the plants array.
+	 * 
 	 * @return plant array.
 	 */
 	public ArrayList<Plant> getAllPlants() {
 		return allPlants;
 	}
 
+	/**
+	 * This method determines wheather a game has been customized.
+	 * @return True if customize otherwise false.
+	 */
 	public boolean isCustomLevel() {
 		return isCustomLevel;
 	}
 
+	/**
+	 * This method sets if the game has been customized or not.
+	 * @param isCustomLevel Sets True if customize otherwise false.
+	 */
 	public void setCustomLevel(boolean isCustomLevel) {
 		this.isCustomLevel = isCustomLevel;
 	}
